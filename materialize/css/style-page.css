@@ -33,6 +33,7 @@ section {
     margin-left: 10%;
     margin-right: 10%;
     display: flex;
+    margin-bottom: 15px;
 }
 
 .pictures-line .picture img {
