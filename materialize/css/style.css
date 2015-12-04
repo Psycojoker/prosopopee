@@ -58,7 +58,7 @@ body {
     bottom: 0px;
     text-align: center;
     z-index: 3;
-    background: transparent -moz-linear-gradient(center top , rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
+    background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
     padding: 20% 0 0;
 }
 
