@@ -1,0 +1,26 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.full-picture {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    min-height: 250px;
+}
+
+.bordered-picture {
+    height: 80%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 3em;
+    margin-bottom: 5em;
+}
