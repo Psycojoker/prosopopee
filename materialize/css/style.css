@@ -2,6 +2,7 @@ body {
     color: #222;
     font-family: sans-serif;
     background-color: #FBFBFB;
+    margin: 0;
 }
 
 .galleries-grid {
@@ -126,17 +127,20 @@ body {
 }
 
 footer {
-    padding-top: 7em;
+    margin-top: 7em;
     text-align: center;
     position: relative;
     font-family: serif;
+    font-size: 11px;
     color: #555;
+    background-color: #EEE;
+    border-top: solid 2px #DDD;
+    padding-bottom: 10px;
+    padding-top: 14px;
 }
 
-footer hr {
-    width: 6%;
-    margin-bottom: 2em;
-    color: #BBB;
+footer p {
+    margin: 0;
 }
 
 footer a {
