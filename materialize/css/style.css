@@ -1,3 +1,8 @@
+body {
+    color: #222;
+    font-family: sans-serif;
+}
+
 .galleries-grid {
     width: 100%;
     height: 100%;
@@ -47,4 +52,43 @@
     text-align: center;
     margin-top: 10em;
     margin-bottom: 8em;
+}
+
+.gallery-header > h1 {
+    font-size: 2.6vw;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0;
+}
+
+.gallery-header > h4 {
+    font-size: 1.4vw;
+    color: #444;
+    font-style: italic;
+    font-weight: normal;
+    font-family: serif;
+    margin-top: .5em;
+}
+
+.gallery-title > h2 {
+    text-transform: uppercase;
+    margin-bottom: .2em;
+    letter-spacing: 2px;
+    font-size: 1.7vw;
+}
+
+.gallery-title > h3 {
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: .7em;
+    font-family: serif;
+    font-weight: normal;
+}
+
+.gallery-datetime {
+    margin-bottom: 1em;
+    font-family: serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
 }
