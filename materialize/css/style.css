@@ -36,7 +36,15 @@ body {
     height: 100%;
 }
 
+@keyframes darken {
+    from {background-color: rgba(0, 0, 0, 0);}
+    to {background-color: rgba(0, 0, 0, 0.3);}
+}
+
 .gallery-square > a:hover {
+    animation-name: darken;
+    animation-duration: 0.15s;
+    animation-iteration-count: 1;
     background-color: rgba(0, 0, 0, 0.3);
 }
 
