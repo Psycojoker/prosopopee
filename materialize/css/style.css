@@ -75,6 +75,12 @@ body {
     margin-top: .5em;
 }
 
+.gallery-header > hr {
+    width: 14%;
+    margin-top: 3.5em;
+    color: #BBB;
+}
+
 .gallery-title > h2 {
     text-transform: uppercase;
     margin-bottom: .2em;
