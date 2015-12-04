@@ -103,3 +103,24 @@ body {
     letter-spacing: 2px;
     font-size: 11px;
 }
+
+footer {
+    padding-top: 7em;
+    text-align: center;
+    position: relative;
+    font-family: serif;
+    color: #555;
+}
+
+footer hr {
+    width: 6%;
+    margin-bottom: 2em;
+    color: #BBB;
+}
+
+footer a {
+    text-decoration: none;
+    font-weight: 600;
+    font-family: sans-serif;
+    color: #111;
+}
