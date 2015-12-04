@@ -36,6 +36,10 @@ body {
     height: 100%;
 }
 
+.gallery-square > a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .gallery-cover {
     position: absolute;
     top: 0px;
