@@ -27,6 +27,19 @@ section {
     margin-top: 3em;
 }
 
+.pictures-line {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.pictures-line img {
+    position: relative;
+    display: inline;
+    width: 33%;
+    height: auto;
+}
+
 footer {
     margin-top: 7em;
     text-align: center;
