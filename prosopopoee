@@ -6,7 +6,7 @@ import sys
 
 def main():
     if not os.path.exists("settings.yaml") or not os.path.exists("settings.yml"):
-        sys.stderr.write("I can't find a settings.yaml or settings.yml, abort")
+        sys.stderr.write("I can't find a settings.yaml or settings.yml, abort\n")
         sys.exit(1)
 
     if not os.path.exists("build"):
