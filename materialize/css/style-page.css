@@ -40,6 +40,30 @@ section {
     display: flex;
 }
 
+.full-picture h1 {
+    text-transform: uppercase;
+    font-size: 5.5vw;
+    letter-spacing: 4px;
+    font-family: sans-serif;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 1px;
+}
+
+.full-picture h2 {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 2.2vw;
+    font-family: serif;
+    margin-top: 1px;
+}
+
+.full-picture .datetime {
+    text-transform: uppercase;
+    font-family: serif;
+    letter-spacing: 2px;
+}
+
 .bordered-picture img {
     height: 80%;
     width: 80%;
