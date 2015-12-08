@@ -4,6 +4,7 @@ import os
 import sys
 import yaml
 
+from dateutil.parser import parse
 
 
 def error(test, error_message):
@@ -23,12 +24,28 @@ def main():
 
     title = settings["title"]
     sub_title = settings.get("sub_title", "")
+    front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    if not dirs:
-        sys.stderr.write("I can't find at least one directory with a settings.yaml in the current working directory, you don't have any gallery?\nAbort\n")
-        sys.exit(1)
+    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory, you don't have any gallery?\nAbort")
+
+    for gallery in dirs:
+        gallery_settings = yaml.safe_load(os.path.join(os.getcwd(), gallery, "settings.yaml"))
+
+        error(isinstance(gallery_settings, dict), "Your settings.yaml should be a dict")
+        error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
+        error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
+
+        gallery_title = gallery_settings["title"]
+        gallery_sub_title = gallery_settings.get("sub_title", "")
+        gallery_date = parse(gallery_settings.get["date"]) if "date" in gallery_settings else ""
+
+        front_page_galleries_cover.append({
+            "title": gallery_title,
+            "sub_title": gallery_sub_title,
+            "date": gallery_date,
+        })
 
     if not os.path.exists("build"):
         os.makedirs("build")
