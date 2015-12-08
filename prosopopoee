@@ -4,7 +4,6 @@ import os
 import sys
 import yaml
 
-from dateutil.parser import parse
 from jinja2 import Environment, FileSystemLoader
 
 templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
@@ -45,7 +44,7 @@ def main():
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
-        gallery_date = parse(gallery_settings["date"]) if "date" in gallery_settings else ""
+        gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
 
         front_page_galleries_cover.append({
             "title": gallery_title,
