@@ -5,15 +5,22 @@ import sys
 import yaml
 
 
-def main():
-    if not os.path.exists(os.path.join(os.getcwd(), "settings.yaml")):
-        sys.stderr.write("I can't find a settings.yaml in the current working directory, abort\n")
+
+def error(test, error_message):
+    if not test:
+        sys.stderr.write(error_message)
+        sys.stderr.write("\n")
         sys.exit(1)
+
+
+def main():
+    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a settings.yaml in the current working directory, abort")
 
     settings = yaml.safe_load("settings.yaml")
 
-    assert isinstance(settings, dict), "Your settings.yaml should be a dict"
-    assert settings.get("title"), "You should specify a title in your main settings.yaml"
+    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
+    error(settings.get("title"), "You should specify a title in your main settings.yaml")
+
     title = settings["title"]
     sub_title = settings.get("sub_title", "")
 
