@@ -64,12 +64,12 @@ def main():
             "date": gallery_date,
         })
 
-        print gallery_index_template.render(settings=settings, gallery=gallery_settings)
+        if not os.path.exists(os.path.join("build", gallery)):
+            os.makedirs(os.path.join("build", gallery))
+
+        open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, helpers=TemplateFunctions(os.path.join(os.getcwd(), gallery), os.path.join(os.getcwd(), "build", gallery))).encode("Utf-8"))
 
     front_page_galleries_cover = sorted(front_page_galleries_cover, key=lambda x: x["date"])
-
-    if not os.path.exists("build"):
-        os.makedirs("build")
 
 
 if __name__ == '__main__':
