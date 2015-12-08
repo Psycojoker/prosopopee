@@ -12,6 +12,17 @@ index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 
 
+class TemplateFunctions():
+    def __init__(self, base_dir, target_dir):
+        self.base_dir = base_dir
+        self.target_dir = target_dir
+
+    def copy_image(self, image):
+        shutil.copyfile(os.path.join(self.base_dir, image), os.path.join(self.target_dir, image))
+        print os.path.join(self.base_dir, image), "->", os.path.join(self.target_dir, image)
+        return ""
+
+
 def error(test, error_message):
     if not test:
         sys.stderr.write(error_message)
