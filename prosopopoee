@@ -24,11 +24,13 @@ class TemplateFunctions():
 
 
 def error(test, error_message):
-    if not test:
-        sys.stderr.write(error_message)
-        sys.stderr.write("\n")
-        sys.stderr.write("Abort.\n")
-        sys.exit(1)
+    if test:
+        return
+
+    sys.stderr.write(error_message)
+    sys.stderr.write("\n")
+    sys.stderr.write("Abort.\n")
+    sys.exit(1)
 
 
 def main():
