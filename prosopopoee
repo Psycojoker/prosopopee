@@ -45,7 +45,7 @@ def main():
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
-        gallery_date = parse(gallery_settings.get["date"]) if "date" in gallery_settings else ""
+        gallery_date = parse(gallery_settings["date"]) if "date" in gallery_settings else ""
 
         front_page_galleries_cover.append({
             "title": gallery_title,
