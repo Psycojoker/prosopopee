@@ -7,7 +7,7 @@ import yaml
 
 def main():
     if not os.path.exists(os.path.join(os.getcwd(), "settings.yaml")):
-        sys.stderr.write("I can't find a settings.yaml, abort\n")
+        sys.stderr.write("I can't find a settings.yaml in the current working directory, abort\n")
         sys.exit(1)
 
     settings = yaml.safe_load("settings.yaml")
