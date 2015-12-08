@@ -12,6 +12,12 @@ def main():
 
     settings = yaml.safe_load("settings.yaml")
 
+    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
+
+    if not dirs:
+        sys.stderr.write("I can't find at least one directory with a settings.yaml in the current working directory, you don't have any gallery?\nAbort\n")
+        sys.exit(1)
+
     if not os.path.exists("build"):
         os.makedirs("build")
 
