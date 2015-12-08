@@ -3,6 +3,7 @@
 import os
 import sys
 import yaml
+import shutil
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -34,6 +35,13 @@ def main():
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
     error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory, you don't have any gallery?")
+
+    if not os.path.exists("build"):
+        os.makedirs("build")
+
+    # XXX recursively merge directories
+    shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
+    shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
         gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
