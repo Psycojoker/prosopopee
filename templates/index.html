@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ settings.title }}</title>
+</head>
+
+<body>
+
+  <div class="gallery-header">
+      <img id="logo" src="static/img/logo.svg" />
+      <h1>{{ settings.title }}</h1>
+      {% if settings.sub_title %}<h4>{{ settings.sub_title }}</h4>{% endif %}
+      <hr>
+  </div>
+
+  <div class="galleries-grid">
+      {% for galleries_line in galleries|batch(2) %}
+      <div class="galleries-line">
+          {% for gallery in galleries_line %}
+          <div class="gallery-square">
+              <a href="{{ gallery.link }}">
+                  <div class="gallery-title">
+                      <h2>{{ gallery.title }}</h2>
+                      {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+                      <div class="gallery-datetime">{{ gallery.date }}</div>
+                  </div>
+              </a>
+              <div class="gallery-cover" style="background-image: url('{{ gallery.cover }}');"></div>
+          </div>
+          {% endfor %}
+      </div>
+      {% endfor %}
+  </div>
+
+  <p style="visibility: hidden">.</p>
+
+  <footer>
+      <p>Generate using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="CC-BY-SA">CC-BY-SA</a></p>
+  </footer>
+</body>
+</html>
