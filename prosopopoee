@@ -2,12 +2,18 @@
 
 import os
 import sys
+import yaml
+
+
+SETTINGS_NAME = ("settings.yaml", "settings.yml")
 
 
 def main():
-    if not os.path.exists("settings.yaml") or not os.path.exists("settings.yml"):
+    if not any(map(lambda x: os.path.exists(os.path.join(os.getcwd(), x)), SETTINGS_NAME)):
         sys.stderr.write("I can't find a settings.yaml or settings.yml, abort\n")
         sys.exit(1)
+
+    settings = yaml.safe_load(filter(lambda x: os.path.exists(os.path.join(os.getcwd(), x)), SETTINGS_NAME)[0])
 
     if not os.path.exists("build"):
         os.makedirs("build")
