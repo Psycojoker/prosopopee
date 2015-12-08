@@ -56,6 +56,8 @@ def main():
             "date": gallery_date,
         })
 
+        print gallery_index_template.render(settings=settings, gallery=gallery_settings)
+
     front_page_galleries_cover = sorted(front_page_galleries_cover, key=lambda x: x["date"])
 
     if not os.path.exists("build"):
