@@ -16,6 +16,15 @@
     {% include "sections/" + section.type + ".html" %}
   {% endfor %}
 
+  <div class="back-to-home">
+      <hr>
+      <a href="..">
+          <div id="logo" src="./../static/img/logo.svg"/>
+              HOME
+          </div>
+      </a>
+  </div>
+
   <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
     baguetteBox.run(".baguette", {});
