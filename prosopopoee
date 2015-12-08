@@ -12,6 +12,8 @@ def main():
 
     settings = yaml.safe_load("settings.yaml")
 
+    assert settings.get("title"), "You should specify a title in your main settings.yaml"
+
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
     if not dirs:
