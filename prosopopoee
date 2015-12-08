@@ -61,7 +61,7 @@ def main():
 
         cover_image_path = os.path.join(os.getcwd(), gallery, gallery_settings["cover"])
 
-        error(not os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
+        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
