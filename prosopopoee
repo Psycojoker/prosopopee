@@ -17,7 +17,7 @@ def error(test, error_message):
 def main():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a settings.yaml in the current working directory, abort")
 
-    settings = yaml.safe_load("settings.yaml")
+    settings = yaml.safe_load(open("settings.yaml", "r"))
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
@@ -31,7 +31,7 @@ def main():
     error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory, you don't have any gallery?\nAbort")
 
     for gallery in dirs:
-        gallery_settings = yaml.safe_load(os.path.join(os.getcwd(), gallery, "settings.yaml"))
+        gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml")), "r")
 
         error(isinstance(gallery_settings, dict), "Your settings.yaml should be a dict")
         error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
