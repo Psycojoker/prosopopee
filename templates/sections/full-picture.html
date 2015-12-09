@@ -1,10 +1,12 @@
 {{ helpers.copy_image(section.image) }}
 <section class="full-picture" style="background: transparent url('{{ section.image }}') no-repeat scroll center top / cover;">
-    <div class="picture-text">
-        <div class="picture-text-column">
-            <h1>Some title on the picture</h1>
-            <h2>Some subtitle</h2>
-            <div class="datetime">march 3th 2015</div>
+    {% if section.text %}
+        <div class="picture-text">
+            <div class="picture-text-column">
+                <h1>{{ section.text.title }}</h1>
+                <h2>{{ section.text.sub_title }}</h2>
+                <div class="datetime">{{ section.text.date }}</div>
+            </div>
         </div>
-    </div>
+    {% endif %}
 </section>
