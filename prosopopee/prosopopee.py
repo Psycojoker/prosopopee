@@ -87,7 +87,7 @@ def main():
 
         front_page_galleries_cover.append({
             "title": gallery_title,
-            "link": os.path.join(gallery, "index.html"),
+            "link": gallery,
             "sub_title": gallery_sub_title,
             "date": gallery_date,
             "cover": cover_image_path,
