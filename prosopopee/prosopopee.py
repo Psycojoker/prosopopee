@@ -66,7 +66,8 @@ def main():
         os.makedirs("build")
 
     # XXX recursively merge directories
-    shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
+    if os.path.exists(os.path.join(os.getcwd(), "build", "static")):
+        shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
     shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
