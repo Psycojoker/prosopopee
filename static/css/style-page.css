@@ -90,6 +90,15 @@ section {
     min-width: 15px;
 }
 
+.text {
+    text-align: center;
+    font-size: 25px;
+    margin-left: 15%;
+    margin-right: 15%;
+    color: #333;
+    margin-bottom: 3em;
+}
+
 footer {
     margin-top: 7em;
     text-align: center;
