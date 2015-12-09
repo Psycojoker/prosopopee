@@ -1,0 +1,164 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #FBFBFB;
+    margin: 0;
+}
+
+section {
+    margin-bottom: 4em;
+}
+
+.full-picture {
+    height: 100%;
+    width: 100%;
+    min-height: 250px;
+}
+
+.full-picture > .picture-text {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    z-index: 555;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.full-picture > .picture-text > .picture-text-colum {
+    display: flex;
+}
+
+.full-picture h1 {
+    text-transform: uppercase;
+    font-size: 5.5vw;
+    letter-spacing: 4px;
+    font-family: sans-serif;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 1px;
+}
+
+.full-picture h2 {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 2.2vw;
+    font-family: serif;
+    margin-top: 1px;
+}
+
+.full-picture .datetime {
+    text-transform: uppercase;
+    font-family: serif;
+    letter-spacing: 2px;
+}
+
+.bordered-picture img {
+    height: 80%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 3em;
+}
+
+.pictures-line {
+    min-width: 80%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.pictures-line .picture img {
+    width: 100%;
+    height: 100%;
+}
+
+.pictures-line .separator {
+    min-width: 15px;
+}
+
+.text {
+    text-align: center;
+    font-size: 25px;
+    margin-left: 15%;
+    margin-right: 15%;
+    color: #333;
+    margin-bottom: 3em;
+}
+
+footer {
+    margin-top: 7em;
+    text-align: center;
+    position: relative;
+    font-family: serif;
+    font-size: 11px;
+    color: #555;
+    background-color: #EEE;
+    border-top: solid 2px #DDD;
+    padding-bottom: 10px;
+    padding-top: 14px;
+}
+
+.back-to-home {
+    text-align: center;
+}
+
+.back-to-home hr {
+    width: 14%;
+    margin-top: 8em;
+    color: #DDD;
+}
+
+.back-to-home #logo {
+    background: transparent url("../img/logo.svg") no-repeat scroll center top / cover;
+    border-radius: 100em;
+    border: 7px solid black;
+    margin: auto;
+    margin-top: 1em;
+    height: 150px;
+    width: 150px;
+    color: transparent;
+    font-size: 40px;
+}
+
+.back-to-home a {
+    position: relative;
+    text-decoration: none;
+    color: transparent;
+}
+
+.back-to-home #logo:hover {
+    background-color: black;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: sans-serif;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    text-decoration: none;
+    font-weight: 600;
+    font-family: sans-serif;
+    color: #111;
+}
