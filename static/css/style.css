@@ -19,13 +19,30 @@ body {
     height: 100%;
 }
 
-.gallery-square {
+.covers-1 .gallery-square {
+    width: 47%;
+    height: 100%;
+    margin: auto;
+    padding-bottom: 47%;
+    position: relative;
+}
+
+.covers-2 .gallery-square {
     width: 47%;
     height: 100%;
     float: left;
     margin: 0 1.5% 3%;
     padding-bottom: 47%;
     position: relative;
+}
+
+.covers-3 .gallery-square {
+    width: 33.333333333%;
+    height: 100%;
+    margin: 0;
+    padding-bottom: 47%;
+    position: relative;
+    display: inline-block;
 }
 
 .gallery-square > a {

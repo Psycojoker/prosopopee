@@ -19,20 +19,20 @@
   </div>
 
   <div class="galleries-grid">
-      {% for galleries_line in galleries|batch(2) %}
-      <div class="galleries-line">
-          {% for gallery in galleries_line %}
-          <div class="gallery-square">
-              <a href="{{ gallery.link }}">
-                  <div class="gallery-title">
-                      <h2>{{ gallery.title }}</h2>
-                      {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
-                      {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
-                  </div>
-              </a>
-              <div class="gallery-cover" style="background-image: url('{{ gallery.cover }}');"></div>
-          </div>
-          {% endfor %}
+      {% for galleries_line in galleries|batch(3) %}
+      <div class="galleries-line covers-{{ galleries_line|length }}">
+        {% for gallery in galleries_line %}<!-- comment tricks against space between inline-block
+        --><div class="gallery-square">
+          <a href="{{ gallery.link }}">
+            <div class="gallery-title">
+              <h2>{{ gallery.title }}</h2>
+              {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+              {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+            </div>
+          </a>
+          <div class="gallery-cover" style="background-image: url('{{ gallery.cover }}');"></div>
+        </div><!-- comment tricks against space between inline-block
+        -->{% endfor %}
       </div>
       {% endfor %}
   </div>
