@@ -98,7 +98,7 @@ def main():
 
         open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, helpers=TemplateFunctions(os.path.join(os.getcwd(), gallery), os.path.join(os.getcwd(), "build", gallery), has_gm=has_gm)).encode("Utf-8"))
 
-    front_page_galleries_cover = sorted(front_page_galleries_cover, key=lambda x: x["date"])
+    front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
     open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
