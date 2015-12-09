@@ -27,7 +27,7 @@
                   <div class="gallery-title">
                       <h2>{{ gallery.title }}</h2>
                       {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
-                      <div class="gallery-datetime">{{ gallery.date }}</div>
+                      {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
                   </div>
               </a>
               <div class="gallery-cover" style="background-image: url('{{ gallery.cover }}');"></div>
