@@ -1,0 +1,17 @@
+<section class="pictures-group baguette">
+    {% for line in section.images %}
+        <div class="pictures-line">
+            {% for image in line %}
+                {{ helpers.copy_image(image) }}
+                <div class="picture">
+                    <a href="{{ image }}">
+                        <img src="{{ image }}">
+                    </a>
+                </div>
+            {% if not loop.last %}
+                <div class="separator"></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</section>
