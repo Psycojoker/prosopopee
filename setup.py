@@ -16,4 +16,9 @@ setup(name='prosopopee',
       license= 'GPLv3+',
       scripts=['prosopopee'],
       keywords='',
+      include_package_data=True,
+      package_data={
+            'static': ['*.css', '*.js'],
+            'templates': ['*.html'],
+        },
      )
