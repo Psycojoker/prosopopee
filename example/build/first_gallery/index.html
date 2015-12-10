@@ -111,14 +111,15 @@
       </a>
   </div>
 
+  <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
     baguetteBox.run(".baguette", {});
     $(".panorama").panorama_viewer({
-        repeat: false,
+        repeat: true,
         direction: "horizontal",
-        animationTime: 700,
+        animationTime: 250,
         easing: "ease-out",
         overlay: true
       });
