@@ -85,13 +85,14 @@ def main():
         gallery_sub_title = gallery_settings.get("sub_title", "")
         gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
 
-        front_page_galleries_cover.append({
-            "title": gallery_title,
-            "link": gallery,
-            "sub_title": gallery_sub_title,
-            "date": gallery_date,
-            "cover": cover_image_path,
-        })
+        if gallery_settings.get("public", True):
+            front_page_galleries_cover.append({
+                "title": gallery_title,
+                "link": gallery,
+                "sub_title": gallery_sub_title,
+                "date": gallery_date,
+                "cover": cover_image_path,
+            })
 
         if not os.path.exists(os.path.join("build", gallery)):
             os.makedirs(os.path.join("build", gallery))
