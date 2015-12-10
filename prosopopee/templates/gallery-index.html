@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
 
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -25,9 +26,18 @@
       </a>
   </div>
 
+  <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
     baguetteBox.run(".baguette", {});
+    $(".panorama").panorama_viewer({
+        repeat: true,
+        direction: "horizontal",
+        animationTime: 250,
+        easing: "ease-out",
+        overlay: true
+      });
   </script>
   <footer>
       <p>Generate using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
