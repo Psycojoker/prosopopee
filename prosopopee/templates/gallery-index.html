@@ -30,14 +30,16 @@
   <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-    baguetteBox.run(".baguette", {});
-    $(".panorama").panorama_viewer({
-        repeat: true,
-        direction: "horizontal",
-        animationTime: 150,
-        easing: "linear",
-        overlay: true
-      });
+    $(function() {
+        baguetteBox.run(".baguette", {});
+        $(".panorama").panorama_viewer({
+            repeat: true,
+            direction: "horizontal",
+            animationTime: 150,
+            easing: "linear",
+            overlay: true
+          });
+    });
   </script>
   <footer>
       <p>Generate using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
