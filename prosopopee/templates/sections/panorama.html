@@ -1,4 +1,4 @@
 {{ helpers.copy_image(section.image) }}
 <section class="panorama">
-    <img src="{{ section.image }}">
+    <img src="{{ helpers.generate_thumbnail(section.image, "x800") }}">
 </section>
