@@ -12,7 +12,14 @@ body {
 }
 
 section {
-    margin-bottom: 4em;
+    margin-bottom: 64px;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #222;
+    font-style: italic;
 }
 
 .full-picture {
@@ -69,7 +76,6 @@ section {
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
-    margin-top: 3em;
 }
 
 .pictures-line {
@@ -96,7 +102,6 @@ section {
     margin-left: 15%;
     margin-right: 15%;
     color: #333;
-    margin-bottom: 3em;
 }
 
 footer {
