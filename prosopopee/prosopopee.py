@@ -18,8 +18,15 @@ class TemplateFunctions():
         self.target_dir = target_dir
 
     def copy_image(self, image):
-        shutil.copyfile(os.path.join(self.base_dir, image), os.path.join(self.target_dir, image))
-        print os.path.join(self.base_dir, image), "->", os.path.join(self.target_dir, image)
+        source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, image)
+
+        # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
+        # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
+            # print "Skiped %s since the file hasn't been modified based on file size" % source
+            # return ""
+
+        shutil.copyfile(source, target)
+        print source, "->", target
         return ""
 
     def generate_thumbnail(self, image, gm_geometry):
