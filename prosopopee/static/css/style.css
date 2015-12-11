@@ -31,10 +31,10 @@ body {
 .covers-2 .gallery-square {
     width: 50%;
     height: 100%;
-    float: left;
-    margin: 0 0 3%;
+    margin: 0 0 0;
     padding-bottom: 47%;
     position: relative;
+    display: inline-block;
 }
 
 .covers-3 .gallery-square {
