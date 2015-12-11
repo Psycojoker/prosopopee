@@ -69,10 +69,12 @@ class TemplateFunctions():
 
         if CACHE.thumbnail_needs_to_be_generated(source, target):
             command = "gm convert %s -resize %s %s" % (source, gm_geometry, target)
-            # print command
+            print command
             os.system(command)
 
             CACHE.cache_thumbnail(source, target)
+        else:
+            print "skiped %s since it's already generated (based on source unchanged size)" % target
 
         return thumbnail_name
 
