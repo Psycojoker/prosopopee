@@ -72,19 +72,19 @@ a {
 }
 
 .bordered-picture img {
-    height: 80%;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    height: 76%;
+    width: 76%;
+    margin-left: 12%;
+    margin-right: 12%;
 }
 
 .pictures-line {
-    min-width: 80%;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    min-width: 76%;
+    width: 76%;
+    margin-left: 12%;
+    margin-right: 12%;
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .pictures-line .picture img {
@@ -93,7 +93,7 @@ a {
 }
 
 .pictures-line .separator {
-    min-width: 15px;
+    min-width: 12px;
 }
 
 .text {
