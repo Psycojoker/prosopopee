@@ -1,6 +1,6 @@
 body {
     color: #222;
-    font-family: 'montserratsemi_bold', sans-serif;
+    font-family: 'montserrat', sans-serif;
     background-color: #FBFBFB;
     margin: 0;
 }
@@ -164,6 +164,6 @@ footer p {
 footer a {
     text-decoration: none;
     font-weight: 600;
-    font-family: 'montserratsemi_bold', sans-serif;
+    font-family: 'montserrat', sans-serif;
     color: #111;
 }

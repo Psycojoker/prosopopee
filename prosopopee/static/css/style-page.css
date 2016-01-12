@@ -12,7 +12,7 @@ body {
 }
 
 section {
-    margin-bottom: 64px;
+    margin-bottom: 80px;
 }
 
 a {
@@ -51,7 +51,7 @@ a {
     text-transform: uppercase;
     font-size: 5.5vw;
     letter-spacing: 4px;
-    font-family: 'montserratsemi_bold', sans-serif;
+    font-family: 'montserrat', sans-serif;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 1px;
@@ -99,14 +99,37 @@ a {
 .text {
     text-align: center;
     font-family: 'crimson', serif;
-    font-size: 1.5em;
+    font-size: 1.6em;
+    margin-left: 21%;
+    margin-right: 21%;
+    color: black;
+}
+
+.paragraph {
+    text-align: left;
+    font-family: 'crimson', serif;
+    font-size: 1em;
     margin-left: 21%;
     margin-right: 21%;
     color: #333;
 }
 
+.paragraph h2 {
+    font-family: 'montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 2.5em;
+    text-transform: uppercase;
+    color: black;
+    line-height: 1.4em;
+}
+
+.paragraph p {
+    line-height: 2em;
+
+}
+
 footer {
-    margin-top: 7em;
+    margin-top: 6em;
     text-align: center;
     position: relative;
     font-family: 'crimson', serif;
@@ -155,7 +178,8 @@ footer {
     justify-content: center;
     text-align: center;
     text-transform: uppercase;
-    font-family: 'montserratsemi_bold', sans-serif;
+    font-family: 'montserrat', sans-serif;
+    font-weight: bold;
 }
 
 footer p {
@@ -165,6 +189,6 @@ footer p {
 footer a {
     text-decoration: none;
     font-weight: 600;
-    font-family: 'montserratsemi_bold', sans-serif;
+    font-family: 'montserrat', sans-serif;
     color: #111;
 }
