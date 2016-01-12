@@ -1,6 +1,6 @@
 body {
     color: #222;
-    font-family: sans-serif;
+    font-family: 'montserratsemi_bold', sans-serif;
     background-color: #FBFBFB;
     margin: 0;
 }
@@ -111,7 +111,7 @@ body {
     color: #444;
     font-style: italic;
     font-weight: normal;
-    font-family: serif;
+    font-family: 'crimson', serif;
     margin-top: .5em;
 }
 
@@ -132,13 +132,13 @@ body {
     font-style: italic;
     margin-top: 0;
     margin-bottom: .7em;
-    font-family: serif;
+    font-family: 'crimson', serif;
     font-weight: normal;
 }
 
 .gallery-datetime {
     margin-bottom: 1em;
-    font-family: serif;
+    font-family: 'crimson', serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 11px;
@@ -148,7 +148,7 @@ footer {
     margin-top: 7em;
     text-align: center;
     position: relative;
-    font-family: serif;
+    font-family: 'crimson', serif;
     font-size: 11px;
     color: #555;
     background-color: #EEE;
@@ -164,6 +164,6 @@ footer p {
 footer a {
     text-decoration: none;
     font-weight: 600;
-    font-family: sans-serif;
+    font-family: 'montserratsemi_bold', sans-serif;
     color: #111;
 }
