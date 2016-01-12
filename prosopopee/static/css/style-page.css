@@ -74,15 +74,15 @@ a {
 .bordered-picture img {
     height: 77%;
     width: 77%;
-    margin-left: 12.5%;
-    margin-right: 12.5%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
 }
 
 .pictures-line {
     min-width: 77%;
     width: 77%;
-    margin-left: 12.5%;
-    margin-right: 12.5%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
     display: flex;
     margin-bottom: 6px;
 }
