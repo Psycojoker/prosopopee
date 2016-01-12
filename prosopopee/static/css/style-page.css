@@ -72,19 +72,19 @@ a {
 }
 
 .bordered-picture img {
-    height: 76%;
-    width: 76%;
-    margin-left: 12%;
-    margin-right: 12%;
+    height: 77%;
+    width: 77%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
 }
 
 .pictures-line {
-    min-width: 76%;
-    width: 76%;
-    margin-left: 12%;
-    margin-right: 12%;
+    min-width: 77%;
+    width: 77%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
     display: flex;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .pictures-line .picture img {
@@ -100,8 +100,8 @@ a {
     text-align: center;
     font-family: 'crimson', serif;
     font-size: 1.5em;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 21%;
+    margin-right: 21%;
     color: #333;
 }
 
