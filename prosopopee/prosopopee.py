@@ -60,7 +60,7 @@ class TemplateFunctions():
         print source, "->", target
         return ""
 
-    def generate_thumbnail(self, image, gm_geometry):
+    def generate_thumbnail(self, image, gm_geometry, gm_quality=75):
         thumbnail_name = image.split(".")
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
@@ -68,7 +68,7 @@ class TemplateFunctions():
         source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, thumbnail_name)
 
         if CACHE.thumbnail_needs_to_be_generated(source, target):
-            command = "gm convert %s -resize %s %s" % (source, gm_geometry, target)
+            command = "gm convert %s -resize %s -quality %s" % (source, gm_geometry, gm_quality, target)
             print command
             os.system(command)
 
