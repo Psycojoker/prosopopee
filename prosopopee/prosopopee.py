@@ -2,6 +2,7 @@
 
 import os
 import sys
+import json
 import yaml
 import shutil
 
@@ -12,14 +13,51 @@ index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 
 
+class Cache(object):
+    cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
+
+    def __init__(self):
+        if os.path.exists(os.path.join(os.getcwd(), ".prosopopee_cache")):
+            self.cache = json.load(open(self.cache_file_path, "r"))
+        else:
+            self.cache = {}
+
+    def thumbnail_needs_to_be_generated(self, source, target):
+        if not os.path.exists(target):
+            return True
+
+        if target not in self.cache:
+            return True
+
+        if self.cache[target] != os.path.getsize(source):
+            return True
+
+        return False
+
+    def cache_thumbnail(self, source, target):
+        self.cache[target] = os.path.getsize(source)
+
+    def __del__(self):
+        json.dump(self.cache, open(self.cache_file_path, "w"))
+
+
+CACHE = Cache()
+
 class TemplateFunctions():
     def __init__(self, base_dir, target_dir, has_gm):
         self.base_dir = base_dir
         self.target_dir = target_dir
 
     def copy_image(self, image):
-        shutil.copyfile(os.path.join(self.base_dir, image), os.path.join(self.target_dir, image))
-        print os.path.join(self.base_dir, image), "->", os.path.join(self.target_dir, image)
+        source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, image)
+
+        # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
+        # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
+            # print "Skiped %s since the file hasn't been modified based on file size" % source
+            # return ""
+
+        shutil.copyfile(source, target)
+        print source, "->", target
         return ""
 
     def generate_thumbnail(self, image, gm_geometry, gm_quality=75):
@@ -27,9 +65,17 @@ class TemplateFunctions():
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
 
-        command = "gm convert %s -resize %s -quality %s %s" % (os.path.join(self.base_dir, image), gm_geometry, gm_quality, os.path.join(self.target_dir, thumbnail_name))
-        print command
-        os.system(command)
+        source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, thumbnail_name)
+
+        if CACHE.thumbnail_needs_to_be_generated(source, target):
+            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, gm_quality, target)
+            print command
+            os.system(command)
+
+            CACHE.cache_thumbnail(source, target)
+        else:
+            print "skiped %s since it's already generated (based on source unchanged size)" % target
+
         return thumbnail_name
 
 

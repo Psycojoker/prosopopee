@@ -20,9 +20,9 @@
   </div>
 
   <div class="galleries-grid">
-      {% for galleries_line in galleries|batch(3) %}
+      {% for galleries_line in galleries|reverse|batch(3)|reverse %}
       <div class="galleries-line covers-{{ galleries_line|length }}">
-        {% for gallery in galleries_line %}<!-- comment tricks against space between inline-block
+        {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
         --><div class="gallery-square">
           <a href="{{ gallery.link }}">
             <div class="gallery-title">
