@@ -84,7 +84,7 @@ a {
     margin-left: 11.5%;
     margin-right: 11.5%;
     display: flex;
-    margin-bottom: 6px;
+    margin-bottom: 0.5em;
 }
 
 .pictures-line .picture img {
@@ -93,7 +93,7 @@ a {
 }
 
 .pictures-line .separator {
-    min-width: 12px;
+    min-width: 0.5em;
 }
 
 .text {
