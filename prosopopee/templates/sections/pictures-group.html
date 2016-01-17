@@ -4,7 +4,7 @@
             {% for image in line %}
                 {{ helpers.copy_image(image) }}
                 <div class="picture">
-                    <a href="{{ image }}">
+                    <a href="{{ helpers.get_image_name(image) }}">
                         <img src="{{ helpers.generate_thumbnail(image, "x600") }}">
                     </a>
                 </div>
