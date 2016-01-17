@@ -12,6 +12,15 @@ templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(o
 index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 
+DEFAULT_GM_QUALITY = 75
+
+class CacheKeys(object):
+  SIZE = "size"
+  GM_QUALITY = "gm_quality"
+
+class ImageAttributes(object):
+  NAME = "name"
+  QUALITY = "quality"
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -22,20 +31,25 @@ class Cache(object):
         else:
             self.cache = {}
 
-    def thumbnail_needs_to_be_generated(self, source, target):
+    def thumbnail_needs_to_be_generated(self, source, target, gm_quality):
         if not os.path.exists(target):
             return True
 
         if target not in self.cache:
             return True
 
-        if self.cache[target] != os.path.getsize(source):
+        cache_data = self.cache[target]
+
+        if cache_data[CacheKeys.SIZE] != os.path.getsize(source) or cache_data[CacheKeys.GM_QUALITY] != gm_quality:
             return True
 
         return False
 
-    def cache_thumbnail(self, source, target):
-        self.cache[target] = os.path.getsize(source)
+    def cache_thumbnail(self, source, target, gm_quality):
+        cache_data = {}
+        cache_data[CacheKeys.SIZE] = os.path.getsize(source)
+        cache_data[CacheKeys.GM_QUALITY] = gm_quality
+        self.cache[target] = cache_data
 
     def __del__(self):
         json.dump(self.cache, open(self.cache_file_path, "w"))
@@ -48,33 +62,46 @@ class TemplateFunctions():
         self.base_dir = base_dir
         self.target_dir = target_dir
 
+    def get_image_name(self, image):
+        if ImageAttributes.NAME not in image:
+            return image
+
+        return image[ImageAttributes.NAME]
+
     def copy_image(self, image):
-        source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, image)
+        image_name = self.get_image_name(image)
+        source, target = os.path.join(self.base_dir, image_name), os.path.join(self.target_dir, image_name)
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
             # print "Skiped %s since the file hasn't been modified based on file size" % source
             # return ""
-
         shutil.copyfile(source, target)
+
         print source, "->", target
         return ""
 
-    def generate_thumbnail(self, image, gm_geometry, gm_quality=75):
-        thumbnail_name = image.split(".")
+    def generate_thumbnail(self, image, gm_geometry):
+        image_name = self.get_image_name(image)
+        thumbnail_name = image_name.split(".")
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
 
-        source, target = os.path.join(self.base_dir, image), os.path.join(self.target_dir, thumbnail_name)
+        if ImageAttributes.QUALITY not in image:
+            gm_quality = DEFAULT_GM_QUALITY
+        else:
+            gm_quality = image[ImageAttributes.QUALITY]
 
-        if CACHE.thumbnail_needs_to_be_generated(source, target):
-            command = "gm convert %s -resize %s -quality %s" % (source, gm_geometry, gm_quality, target)
+        source, target = os.path.join(self.base_dir, image_name), os.path.join(self.target_dir, thumbnail_name)
+
+        if CACHE.thumbnail_needs_to_be_generated(source, target, gm_quality):
+            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, gm_quality, target)
             print command
             os.system(command)
 
-            CACHE.cache_thumbnail(source, target)
+            CACHE.cache_thumbnail(source, target, gm_quality)
         else:
-            print "skiped %s since it's already generated (based on source unchanged size)" % target
+            print "skiped %s since it's already generated (based on source unchanged size and thumbnail quality set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
 
