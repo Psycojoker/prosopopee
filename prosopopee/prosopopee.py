@@ -22,12 +22,12 @@ class TemplateFunctions():
         print os.path.join(self.base_dir, image), "->", os.path.join(self.target_dir, image)
         return ""
 
-    def generate_thumbnail(self, image, gm_geometry):
+    def generate_thumbnail(self, image, gm_geometry, gm_quality=75):
         thumbnail_name = image.split(".")
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
 
-        command = "gm convert %s -resize %s %s" % (os.path.join(self.base_dir, image), gm_geometry, os.path.join(self.target_dir, thumbnail_name))
+        command = "gm convert %s -resize %s -quality %s %s" % (os.path.join(self.base_dir, image), gm_geometry, gm_quality, os.path.join(self.target_dir, thumbnail_name))
         print command
         os.system(command)
         return thumbnail_name
