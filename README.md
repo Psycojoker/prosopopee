@@ -70,3 +70,9 @@ sections:
   - type: bordered-picture
     image: another_picture.jpg
 ```
+
+## Credit
+
+> 16:57 &lt;meornithorynque&rt; et tu as besoin d'un nom ?<br>
+> 16:57 &lt;meornithorynque&rt; genre n'importe quoi ?<br>
+> 16:57 &lt;meornithorynque&rt; je propose "Prosopopée"
