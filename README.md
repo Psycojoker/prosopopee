@@ -16,13 +16,16 @@ Gallery building needs graphicsmagick library
 
 1. Create a virtualenv, and activate it
 
-    virtualenv venv
-    source venv/bin/activate
+```
+virtualenv venv
+source venv/bin/activate
+```
 
 2. Download and install Prosopopee
 
-    pip instal git+https://github.com/Psycojoker/prosopopee
-
+```
+pip instal git+https://github.com/Psycojoker/prosopopee
+```
 
 ## Usage
 
