@@ -1,0 +1,169 @@
+body {
+    color: #222;
+    font-family: 'montserrat', sans-serif;
+    background-color: #FBFBFB;
+    margin: 0;
+}
+
+.galleries-grid {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+.galleries-line {
+    width: 100%;
+    height: 100%;
+    margin-bottom: -4px; /* YOLO */
+}
+
+.covers-1 .gallery-square {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding-bottom: 47%;
+    position: relative;
+}
+
+.covers-2 .gallery-square {
+    width: 50%;
+    height: 100%;
+    margin: 0 0 0;
+    padding-bottom: 47%;
+    position: relative;
+    display: inline-block;
+}
+
+.covers-3 .gallery-square {
+    width: 33.333333333%;
+    height: 100%;
+    margin: 0;
+    padding-bottom: 47%;
+    position: relative;
+    display: inline-block;
+}
+
+.gallery-square > a {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 555;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes darken {
+    from {background-color: rgba(0, 0, 0, 0);}
+    to {background-color: rgba(0, 0, 0, 0.3);}
+}
+
+.gallery-square > a:hover {
+    animation-name: darken;
+    animation-duration: 0.15s;
+    animation-iteration-count: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.gallery-cover {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: cover;
+}
+
+.gallery-title {
+    color: white;
+    width: 100%;
+    position: absolute;
+    top: initial;
+    bottom: 0px;
+    text-align: center;
+    z-index: 3;
+    background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
+    padding: 20% 0 0;
+}
+
+.gallery-header {
+    text-align: center;
+    margin-top: 8em;
+    margin-bottom: 6.5em;
+}
+
+#logo {
+    width: 10%;
+}
+
+.gallery-header > h1 {
+    font-size: 2.6vw;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0;
+}
+
+.gallery-header > h4 {
+    font-size: 1.4vw;
+    color: #444;
+    font-style: italic;
+    font-weight: normal;
+    font-family: 'crimson', serif;
+    margin-top: .5em;
+}
+
+.gallery-header > hr {
+    width: 14%;
+    margin-top: 3.5em;
+    color: #BBB;
+}
+
+.gallery-title > h2 {
+    text-transform: uppercase;
+    margin-bottom: .2em;
+    letter-spacing: 2px;
+    font-size: 1.7vw;
+}
+
+.gallery-title > h3 {
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: .7em;
+    font-family: 'crimson', serif;
+    font-weight: normal;
+}
+
+.gallery-datetime {
+    margin-bottom: 1em;
+    font-family: 'crimson', serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+}
+
+footer {
+    margin-top: 7em;
+    text-align: center;
+    position: relative;
+    font-family: 'crimson', serif;
+    font-size: 11px;
+    color: #555;
+    background-color: #EEE;
+    border-top: solid 2px #DDD;
+    padding-bottom: 10px;
+    padding-top: 14px;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    text-decoration: none;
+    font-weight: 600;
+    font-family: 'montserrat', sans-serif;
+    color: #111;
+}
