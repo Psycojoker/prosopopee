@@ -279,6 +279,7 @@ index.html, static files (css & js) and pictures.
 * allow to overwrite static files (for that we need a merge mechanism)
 * be mobile responsivepouetpouet (this mean css + resize pictures)
 * probably moar sections + allows to add legends on pictures or something like that
+* add `--source` & `--destination` command line options
 
 ## Licence
 
