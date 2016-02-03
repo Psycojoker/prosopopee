@@ -27,20 +27,30 @@ source ve/bin/activate
 pip install git+https://github.com/Psycojoker/prosopopee
 ```
 
-## Usage
+## Files organisation
 
-Note: You need to be in an activated virtualenv.
+The files organisation is quite simple:
 
-In a folder containing a proper settings.yaml file, simply do
+* in the root directory of your project you need a settings.yaml file that will contains the title and subtitle of your gallery
+* for each gallery you'll need a folder that also contains a settings.yaml file that will describe how to display the content on your gallery
 
-    prosopopee
+### Root settings.yaml
 
-A `build` folder will be created in the current directory, containing an
-index.html, static files (css & js) and pictures.
+The root settings.yaml should contains 2 keys : one for the title of your website and one for the subtitle. It should looks like that:
 
-### Settings file
+```
+title: My exploration of the outside world
+sub_title: it's a scary place, don't go there
+```
 
-A `settings.yaml` file is required on each gallery folder.
+### Gallery settings.yaml
+
+This settings.yaml will describe:
+
+* the title, subtitle and cover picture of your gallery that will be used on the homepage
+* if your gallery is public
+* the date of your gallery: this will be used on the homepage since **galleries are sorted anti chronologically** on it
+* the list of sections that will contains your gallery. A section will represent either one picture, a group of pictures or text.
 
 Here is an example:
 
@@ -70,6 +80,29 @@ sections:
   - type: bordered-picture
     image: another_picture.jpg
 ```
+
+And here is an example or a **private** gallery (notice the <code>public</code> keyword):
+
+```yaml
+title: Gallery title
+sub_title: Gallery sub-title
+date: 2016-01-15
+cover: my_cover_picture.jpg
+public: false
+sections:
+    - ...
+```
+
+## Build the website
+
+**Note: You need to be in an activated virtualenv.**
+
+In a folder containing the **root** settings.yaml file, simply do
+
+    prosopopee
+
+A `build` folder will be created in the current directory, containing an
+index.html, static files (css & js) and pictures.
 
 ## Credit
 
