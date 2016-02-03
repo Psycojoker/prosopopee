@@ -10,6 +10,10 @@ You can find example usages here:
 * http://such.life
 * http://media.faimaison.net/photos/galerie/
 
+# Why?
+
+I wanted to learn a bit of advanced css and I wanted to self-host my data.
+
 ## Requirements
 
 Installation needs Python, pip and virtualenv
