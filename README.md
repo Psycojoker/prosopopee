@@ -190,6 +190,17 @@ How to use it:
     text: Some text, HTML <b>is allowed</b>.
 ```
 
+#### Panorama
+
+This display a very large pictures with a drag and drop posibility on it.
+
+How to use it:
+
+```yaml
+  - type: panorama
+    image: 7.jpg
+```
+
 ## Build the website
 
 **Note: You need to be in an activated virtualenv.**
