@@ -47,7 +47,7 @@ The files organisation is quite simple:
 
 The root settings.yaml should contains 2 keys : one for the title of your website and one for the subtitle. It should looks like that:
 
-```
+```yaml
 title: My exploration of the outside world
 sub_title: it's a scary place, don't go there
 ```
