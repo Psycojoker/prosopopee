@@ -269,6 +269,17 @@ In a folder containing the **root** settings.yaml file, simply do
 A `build` folder will be created in the current directory, containing an
 index.html, static files (css & js) and pictures.
 
+## TODO
+
+* write documentation on how to overwrite the templates
+* allow to overwrite static files (for that we need a merge mechanism)
+* be mobile responsivepouetpouet (this mean css + resize pictures)
+* probably moar sections + allows to add legends on pictures or something like that
+
+## Licence
+
+GPLv3+
+
 ## Credit
 
 > 16:57 &lt;meornithorynque> et tu as besoin d'un nom ?<br>
