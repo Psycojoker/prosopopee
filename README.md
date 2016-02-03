@@ -1,6 +1,14 @@
 # Prosopopee
 
-More or less a small clone of exposure.co in form of a static generator.
+More or less a small clone of exposure.co in form of a static generator. For
+those of you who don't know what exposure.co is, this more or less allows you
+to organise you picture in a way that more or less tell a story.
+
+You can find example usages here:
+
+* http://outside.browny.pink
+* http://such.life
+* http://media.faimaison.net/photos/galerie/
 
 ## Requirements
 
