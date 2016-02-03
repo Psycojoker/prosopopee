@@ -223,13 +223,13 @@ example
 
 The content of <code>example/settings.yaml</code>:
 
-```
+```yaml
 title: "Example gallery"
 ```
 
 The content of <code>example/first_gallery/settings.yaml</code>:
 
-```
+```yaml
 title: my first gallery
 sub_title: some subtitle
 date: 2015-12-08
