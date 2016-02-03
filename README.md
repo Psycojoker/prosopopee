@@ -17,8 +17,8 @@ Gallery building needs graphicsmagick library
 1. Create a virtualenv, and activate it
 
 ```
-virtualenv venv
-source venv/bin/activate
+virtualenv ve
+source ve/bin/activate
 ```
 
 2. Download and install Prosopopee
