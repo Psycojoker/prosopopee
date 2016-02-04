@@ -280,6 +280,7 @@ index.html, static files (css & js) and pictures.
 * be mobile responsivepouetpouet (this mean css + resize pictures)
 * probably moar sections + allows to add legends on pictures or something like that
 * add `--source` & `--destination` command line options
+* add rss/atom
 
 ## Licence
 
