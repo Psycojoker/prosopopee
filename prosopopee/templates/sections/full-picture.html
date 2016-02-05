@@ -1,5 +1,5 @@
 {{ helpers.copy_image(section.image) }}
-<section class="full-picture" style="background: transparent url('{{ section.image }}') no-repeat scroll center top / cover;">
+<section class="full-picture" style="background: transparent url('{{ helpers.get_image_name(section.image) }}') no-repeat scroll center top / cover;">
     {% if section.text %}
         <div class="picture-text">
             <div class="picture-text-column">
