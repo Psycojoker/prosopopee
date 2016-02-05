@@ -62,7 +62,7 @@ sub_title: it's a scary place, don't go there
 This settings.yaml will describe:
 
 * the title, subtitle and cover picture of your gallery that will be used on the homepage
-* if your gallery is public
+* if your gallery is public (if not, it will still be built but won't appear on the homepage)
 * the date of your gallery: this will be used on the homepage since **galleries are sorted anti chronologically** on it
 * the list of sections that will contains your gallery. A section will represent either one picture, a group of pictures or text. The different kind of sections will be explained in the next README section.
 
