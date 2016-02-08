@@ -14,6 +14,8 @@ gallery_index_template = templates.get_template("gallery-index.html")
 
 DEFAULT_GM_QUALITY = 75
 
+CACHE_VERSION = 1
+
 class CacheKeys(object):
   SIZE = "size"
   GM_QUALITY = "gm_quality"
@@ -29,6 +31,10 @@ class Cache(object):
         if os.path.exists(os.path.join(os.getcwd(), ".prosopopee_cache")):
             self.cache = json.load(open(self.cache_file_path, "r"))
         else:
+            self.cache = {"version": 1}
+
+        if "version" not in self.cache or self.cache["version"] != CACHE_VERSION:
+            print "info: cache format as changed, prune cache"
             self.cache = {}
 
     def thumbnail_needs_to_be_generated(self, source, target, gm_quality):
