@@ -22,12 +22,13 @@
       <nav>
         <div class="nav-wrapper">
           <ul>
-            {% for line in settings.menu -%}
-	    {% if loop.first -%}
-	    <li><a href=# class=first-item-menu>{{ line }}</a></li>
+	    {% if settings.home -%}	  
+	    <li><a href=index.html class=first-item-menu>{{ settings.home }}</a></li>
 	    {% else -%}
-	    <li><a href=# class=item-menu>{{ line }}</a></li>
-            {% endif -%}
+	    <li><a href=index.html class=first-item-menu>HOME</a></li>
+	    {% endif -%}
+            {% for line in settings.menu -%}
+	    <li><a href={{ line.lower().replace(" ", "_") }}.html class=item-menu>{{ line }}</a></li>
             {% endfor -%}
           </ul>
         </div>
