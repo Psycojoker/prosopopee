@@ -1,0 +1,10 @@
+title: "Example gallery" 
+home: Home
+menu:
+  - "Menu 1"
+  - "Menu 2"
+menu_title: "Menu 1" 
+sections:
+  - type: text
+    text: « voici plein de blabla à rajouter et <b>ceci est du gras</b> et encore plein plein plein plein de text car je veux voir comment ça va wrapper car c'est important et il faut pas que j'oublie de mettre des margins en % sinon ça va pas le faire alala là ça devrait aller »
+
