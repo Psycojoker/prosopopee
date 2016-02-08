@@ -5,6 +5,10 @@ body {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 .galleries-grid {
     width: 100%;
     height: 100%;
@@ -95,6 +99,10 @@ body {
     margin-bottom: 6.5em;
 }
 
+.static-header {
+    margin-bottom: 0px;
+}
+
 #logo {
     width: 10%;
 }
@@ -166,4 +174,62 @@ footer a {
     font-weight: 600;
     font-family: 'montserrat', sans-serif;
     color: #111;
+}
+
+nav {
+  background-color: #FBFBFB;
+  width: 100%;
+  height: 56px;
+  line-height: 56px;
+}
+
+nav .nav-wrapper {
+  position: relative;
+  height: 100%;
+  margin: 0px auto;
+  max-width: 1280px;
+}
+
+nav ul {
+  margin: 0;
+}
+
+nav ul li {
+  padding: 0;
+  list-style-type: none;
+  display:inline-block;
+}
+
+nav a.first-item-menu {
+  margin-left: -42px;
+}
+
+nav ul li.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+nav ul a {
+  transition: background-color .3s;
+  font-size: 1rem;
+  display: block;
+  padding: 0 15px;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin: 0px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #424242;
+  font-style: normal !important;
+}
+
+.center, .center-align {
+  text-align: center;
+}
+
+nav ul li > a.item-menu::before {
+    content: "/";
+    margin-right: 22px;
+    font-size: 18px;
+    line-height: 1;
+    color: #ebebeb;
 }

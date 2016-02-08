@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
 index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
-
+menu_template = templates.get_template("menu.html")
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -146,6 +146,11 @@ def main():
         open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, helpers=TemplateFunctions(os.path.join(os.getcwd(), gallery), os.path.join(os.getcwd(), "build", gallery), has_gm=has_gm)).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+
+    if settings.get('menu'):
+        for item in settings["menu"]:
+            item_file = item.replace(" ", "_").lower()
+            open(os.path.join("build", item_file+".html"), "w").write(menu_template.render(settings=yaml.safe_load(open(item_file+".yaml", "r")), galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
     open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
