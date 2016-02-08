@@ -16,13 +16,16 @@ DEFAULT_GM_QUALITY = 75
 
 CACHE_VERSION = 1
 
+
 class CacheKeys(object):
-  SIZE = "size"
-  GM_QUALITY = "gm_quality"
+    SIZE = "size"
+    GM_QUALITY = "gm_quality"
+
 
 class ImageAttributes(object):
-  NAME = "name"
-  QUALITY = "quality"
+    NAME = "name"
+    QUALITY = "quality"
+
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -62,6 +65,7 @@ class Cache(object):
 
 
 CACHE = Cache()
+
 
 class TemplateFunctions():
     def __init__(self, base_dir, target_dir, has_gm):
