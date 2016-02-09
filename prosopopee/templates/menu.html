@@ -1,61 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="static/css/style-page.css"  media="screen,projection"/>
-
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{{ settings.title }}</title>
-</head>
-
-<body>
-
-  <div class="gallery-header static-header">
-      <img id="logo" src="static/img/logo.svg" />
-      <h1>{{ settings.title }}</h1>
-      {% if settings.sub_title -%}<h4>{{ settings.sub_title }}</h4>{% endif -%}
-      <hr>
-      {% if settings.menu -%}
       <nav>
         <div class="nav-wrapper">
           <ul>
-	    {% if settings.home -%}	  
-	    <li><a href=index.html class=first-item-menu>{{ settings.home }}</a></li>
-	    {% else -%}
-	    <li><a href=index.html class=first-item-menu>HOME</a></li>
-	    {% endif -%}
             {% for line in settings.menu -%}
-	    <li><a href={{ line.lower().replace(" ", "_") }}.html class=item-menu>{{ line }}</a></li>
+            {% if loop.first %}
+            <li><a href={{ line }}.html class=first-item-menu>{{ line }}</a></li>
+            {% else %}
+            <li><a href={{ line }}.html class=item-menu>{{ line }}</a></li>
+	    {% endif %}
             {% endfor -%}
           </ul>
         </div>
       </nav>
-      {% endif -%}
-  </div>
-  <section class="text">
-      <h2>{{ settings.menu_title }}</h2>
-  </section>
-
-  {% for section in settings.sections %}
-    {% include "sections/" + section.type + ".html" %}
-  {% endfor %}
-
-  <div class="back-to-home">
-      <hr>
-      <a href="./index.html">
-          <div id="logo" src="static/img/logo.svg"/>
-              HOME
-          </div>
-      </a>
-  </div>
-  
-  <script type="text/javascript" src="static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
-
-  <footer>
-      <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
-  </footer>
-</body>
-</html>

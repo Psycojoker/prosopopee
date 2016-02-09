@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
 index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
-menu_template = templates.get_template("menu.html")
+page_template = templates.get_template("page.html")
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -149,8 +149,10 @@ def main():
 
     if settings.get('menu'):
         for item in settings["menu"]:
-            item_file = item.replace(" ", "_").lower()
-            open(os.path.join("build", item_file+".html"), "w").write(menu_template.render(settings=yaml.safe_load(open(item_file+".yaml", "r")), galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
+            for link in item:
+                item_file = link
+            error(os.path.exists(os.path.join(os.getcwd(), item_file+".yaml")), "I can't find a "+item_file+".yaml in the current working directory")
+            open(os.path.join("build", item_file+".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(item_file+".yaml", "r")), galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
     open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
