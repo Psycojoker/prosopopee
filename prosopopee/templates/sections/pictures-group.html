@@ -2,10 +2,11 @@
     {% for line in section.images %}
         <div class="pictures-line">
             {% for image in line %}
-                {{ helpers.copy_image(image) }}
+                {% set image = Image(image) %}
+                {{ image.copy() }}
                 <div class="picture">
-                    <a href="{{ helpers.get_image_name(image) }}">
-                        <img src="{{ helpers.generate_thumbnail(image, "x600") }}">
+                    <a href="{{ image }}">
+                        <img src="{{ image.generate_thumbnail("x600") }}">
                     </a>
                 </div>
             {% if not loop.last %}

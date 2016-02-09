@@ -31,7 +31,9 @@
               {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
             </div>
           </a>
-          <div class="gallery-cover" style="background-image: url('{{ helpers.generate_thumbnail(gallery.cover, "x900") }}');"></div>
+          {% set cover = Image(gallery.cover) %}
+          {{ cover.copy() }}
+          <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
         </div><!-- comment tricks against space between inline-block
         -->{% endfor %}
       </div>
