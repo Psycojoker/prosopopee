@@ -37,7 +37,7 @@ source ve/bin/activate
 2. Download and install Prosopopee
 
 ```
-pip install git+https://github.com/Psycojoker/prosopopee
+pip install prosopopee
 ```
 
 ## Files organisation
