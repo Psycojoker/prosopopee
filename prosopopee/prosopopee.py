@@ -35,7 +35,12 @@ class Image(object):
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
 
-    def __init__(self):
+    def __init__(self, json):
+        # fix: I need to keep a reference to json because for whatever reason
+        # modules are set to None during python shutdown thus totally breaking
+        # the __del__ call to save the cache
+        # This wonderfully stupid behavior has been fixed in 3.4 (which nobody uses)
+        self.json = json
         if os.path.exists(os.path.join(os.getcwd(), ".prosopopee_cache")):
             self.cache = json.load(open(self.cache_file_path, "r"))
         else:
@@ -63,10 +68,11 @@ class Cache(object):
         self.cache[target] = {"size": os.path.getsize(source), "options": image.options}
 
     def __del__(self):
-        json.dump(self.cache, open(self.cache_file_path, "w"))
+        self.json.dump(self.cache, open(self.cache_file_path, "w"))
 
 
-CACHE = Cache()
+CACHE = Cache(json=json)
+
 
 
 class TemplateFunctions():
