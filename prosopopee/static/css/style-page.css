@@ -193,3 +193,7 @@ footer a {
     font-family: 'montserrat', sans-serif;
     color: #111;
 }
+
+.gallery-header {
+    margin-bottom: 0;
+}
