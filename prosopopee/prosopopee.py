@@ -39,11 +39,11 @@ class Cache(object):
         if os.path.exists(os.path.join(os.getcwd(), ".prosopopee_cache")):
             self.cache = json.load(open(self.cache_file_path, "r"))
         else:
-            self.cache = {"version": 1}
+            self.cache = {"version": CACHE_VERSION}
 
         if "version" not in self.cache or self.cache["version"] != CACHE_VERSION:
             print "info: cache format as changed, prune cache"
-            self.cache = {}
+            self.cache = {"version": CACHE_VERSION}
 
     def thumbnail_needs_to_be_generated(self, source, target, image):
         if not os.path.exists(target):
