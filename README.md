@@ -57,6 +57,23 @@ title: My exploration of the outside world
 sub_title: it's a scary place, don't go there
 ```
 
+If you want a menu add this in settings.yaml:
+
+```yaml
+menu:
+  - about: "About Me"
+  - contact: "Contact"
+```
+
+After you need create ``about.yaml`` and ``contact.yaml`` like this:
+
+```yaml
+title: "Contact"
+sections:
+  - type: text
+    text: Some text, HTML <b>is allowed</b>.
+```
+
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
