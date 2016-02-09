@@ -179,12 +179,11 @@ def main():
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
-    if settings.get('menu'):
-        for item in settings["menu"]:
-            for link in item:
-                item_file = link
-            error(os.path.exists(os.path.join(os.getcwd(), item_file + ".yaml")), "I can't find a " + item_file + ".yaml in the current working directory")
-            open(os.path.join("build", item_file + ".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(item_file + ".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
+    for item in settings.get("menu", []):
+        for link in item:
+            item_file = link
+        error(os.path.exists(os.path.join(os.getcwd(), item_file + ".yaml")), "I can't find a " + item_file + ".yaml in the current working directory")
+        open(os.path.join("build", item_file + ".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(item_file + ".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
 
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
