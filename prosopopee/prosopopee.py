@@ -117,10 +117,9 @@ def error(test, error_message):
 
 
 def main():
-    has_gm = True
     if os.system("which gm > /dev/null") != 0:
-        has_gm = False
-        sys.stderr.write("WARNING: I can't locate the 'gm' binary, I won't be able to resize images.\n")
+        sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize images, please install the 'graphicsmagick' package.\n")
+        sys.exit(1)
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a settings.yaml in the current working directory")
 
