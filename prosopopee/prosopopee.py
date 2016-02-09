@@ -17,14 +17,19 @@ DEFAULT_GM_QUALITY = 75
 CACHE_VERSION = 1
 
 
-class CacheKeys(object):
-    SIZE = "size"
-    GM_QUALITY = "gm_quality"
+class Image(object):
+    def __init__(self, options):
+        # assuming string
+        if not isinstance(options, dict):
+            name = options
+            options = {"name": options}
 
+        self.name = name
+        self.quality = options.get("quality", DEFAULT_GM_QUALITY)
+        self.options = options  # used for caching, if it's modified -> regenerate
 
-class ImageAttributes(object):
-    NAME = "name"
-    QUALITY = "quality"
+    def __repr__(self):
+        return self.name
 
 
 class Cache(object):
@@ -40,25 +45,22 @@ class Cache(object):
             print "info: cache format as changed, prune cache"
             self.cache = {}
 
-    def thumbnail_needs_to_be_generated(self, source, target, gm_quality):
+    def thumbnail_needs_to_be_generated(self, source, target, image):
         if not os.path.exists(target):
             return True
 
         if target not in self.cache:
             return True
 
-        cache_data = self.cache[target]
+        cached_thumbnail = self.cache[target]
 
-        if cache_data[CacheKeys.SIZE] != os.path.getsize(source) or cache_data[CacheKeys.GM_QUALITY] != gm_quality:
+        if cached_thumbnail["size"] != os.path.getsize(source) or cached_thumbnail["options"] != image.options:
             return True
 
         return False
 
-    def cache_thumbnail(self, source, target, gm_quality):
-        cache_data = {}
-        cache_data[CacheKeys.SIZE] = os.path.getsize(source)
-        cache_data[CacheKeys.GM_QUALITY] = gm_quality
-        self.cache[target] = cache_data
+    def cache_thumbnail(self, source, target, image):
+        self.cache[target] = {"size": os.path.getsize(source), "options": image.options}
 
     def __del__(self):
         json.dump(self.cache, open(self.cache_file_path, "w"))
@@ -72,15 +74,9 @@ class TemplateFunctions():
         self.base_dir = base_dir
         self.target_dir = target_dir
 
-    def get_image_name(self, image):
-        if ImageAttributes.NAME not in image:
-            return image
-
-        return image[ImageAttributes.NAME]
-
     def copy_image(self, image):
-        image_name = self.get_image_name(image)
-        source, target = os.path.join(self.base_dir, image_name), os.path.join(self.target_dir, image_name)
+        image = Image(image)
+        source, target = os.path.join(self.base_dir, image.name), os.path.join(self.target_dir, image.name)
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
@@ -92,26 +88,20 @@ class TemplateFunctions():
         return ""
 
     def generate_thumbnail(self, image, gm_geometry):
-        image_name = self.get_image_name(image)
-        thumbnail_name = image_name.split(".")
+        image = Image(image)
+        thumbnail_name = image.name.split(".")
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
 
-        if ImageAttributes.QUALITY not in image:
-            gm_quality = DEFAULT_GM_QUALITY
-        else:
-            gm_quality = image[ImageAttributes.QUALITY]
+        source, target = os.path.join(self.base_dir, image.name), os.path.join(self.target_dir, thumbnail_name)
 
-        source, target = os.path.join(self.base_dir, image_name), os.path.join(self.target_dir, thumbnail_name)
-
-        if CACHE.thumbnail_needs_to_be_generated(source, target, gm_quality):
-            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, gm_quality, target)
+        if CACHE.thumbnail_needs_to_be_generated(source, target, image):
+            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, image.quality, target)
             print command
             os.system(command)
-
-            CACHE.cache_thumbnail(source, target, gm_quality)
+            CACHE.cache_thumbnail(source, target, image)
         else:
-            print "skiped %s since it's already generated (based on source unchanged size and thumbnail quality set in your gallery's settings.yaml)" % target
+            print "skiped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
 
@@ -184,7 +174,7 @@ def main():
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
-    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
+    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, Image=Image, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
 
 
 if __name__ == '__main__':
