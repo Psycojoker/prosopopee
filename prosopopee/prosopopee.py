@@ -184,7 +184,7 @@ def main():
             for link in item:
                 item_file = link
             error(os.path.exists(os.path.join(os.getcwd(), item_file+".yaml")), "I can't find a "+item_file+".yaml in the current working directory")
-            open(os.path.join("build", item_file+".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(item_file+".yaml", "r")), galleries=front_page_galleries_cover, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
+            open(os.path.join("build", item_file+".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(item_file+".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
 
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
