@@ -1,5 +1,4 @@
 title: "Example gallery"
-home: Home
 menu: 
-  - "Menu 1"
-  - "Menu 2"
+  - about: "Menu 1"
+  - contact: "Menu 2"
