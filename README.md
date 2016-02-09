@@ -57,7 +57,9 @@ title: My exploration of the outside world
 sub_title: it's a scary place, don't go there
 ```
 
-If you want a menu add this in settings.yaml:
+#### Menu
+
+It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
 
 ```yaml
 menu:
@@ -65,7 +67,13 @@ menu:
   - contact: "Contact"
 ```
 
-After you need create ``about.yaml`` and ``contact.yaml`` like this:
+The first part (`about` and `contact`) here are the name of the files (without
+the `.yaml`) and the second part are the menu title that will be displayed in
+the templates. So, here, you'll need to create a ``about.yaml`` and a
+``contact.yaml`` files in the root directory. Their content are similar to
+galleries (see [bellow](#gallery-settingsyaml)).
+
+For example, this could be the content of `contact.yaml`:
 
 ```yaml
 title: "Contact"
