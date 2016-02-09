@@ -1,6 +1,7 @@
-{{ helpers.copy_image(section.image) }}
+{% set image = Image(section.image) %}
+{{ image.copy()}}
 <section class="bordered-picture baguette">
-    <a href="{{ section.image }}">
-        <img src="{{ section.image }}">
+    <a href="{{ image }}">
+        <img src="{{ image }}">
     </a>
 </section>

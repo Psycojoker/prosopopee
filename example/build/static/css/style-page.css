@@ -12,7 +12,7 @@ body {
 }
 
 section {
-    margin-bottom: 64px;
+    margin-bottom: 80px;
 }
 
 a {
@@ -51,7 +51,7 @@ a {
     text-transform: uppercase;
     font-size: 5.5vw;
     letter-spacing: 4px;
-    font-family: sans-serif;
+    font-family: 'montserrat', sans-serif;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 1px;
@@ -61,30 +61,30 @@ a {
     font-weight: normal;
     font-style: italic;
     font-size: 2.2vw;
-    font-family: serif;
+    font-family: 'crimson', serif;
     margin-top: 1px;
 }
 
 .full-picture .datetime {
     text-transform: uppercase;
-    font-family: serif;
+    font-family: 'crimson', serif;
     letter-spacing: 2px;
 }
 
 .bordered-picture img {
-    height: 80%;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    height: 77%;
+    width: 77%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
 }
 
 .pictures-line {
-    min-width: 80%;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    min-width: 77%;
+    width: 77%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 0.5em;
 }
 
 .pictures-line .picture img {
@@ -93,22 +93,47 @@ a {
 }
 
 .pictures-line .separator {
-    min-width: 15px;
+    min-width: 0.5em;
 }
 
 .text {
     text-align: center;
-    font-size: 25px;
-    margin-left: 15%;
-    margin-right: 15%;
+    font-family: 'crimson', serif;
+    font-size: 1.6em;
+    line-height: 1.8em;
+    margin-left: 21%;
+    margin-right: 21%;
+    color: black;
+}
+
+.paragraph {
+    text-align: left;
+    font-family: 'crimson', serif;
+    font-size: 1em;
+    margin-left: 21%;
+    margin-right: 21%;
     color: #333;
 }
 
+.paragraph h2 {
+    font-family: 'montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 2.5em;
+    text-transform: uppercase;
+    color: black;
+    line-height: 1.4em;
+}
+
+.paragraph p {
+    line-height: 2em;
+
+}
+
 footer {
-    margin-top: 7em;
+    margin-top: 6em;
     text-align: center;
     position: relative;
-    font-family: serif;
+    font-family: 'crimson', serif;
     font-size: 11px;
     color: #555;
     background-color: #EEE;
@@ -154,7 +179,8 @@ footer {
     justify-content: center;
     text-align: center;
     text-transform: uppercase;
-    font-family: sans-serif;
+    font-family: 'montserrat', sans-serif;
+    font-weight: bold;
 }
 
 footer p {
@@ -164,6 +190,6 @@ footer p {
 footer a {
     text-decoration: none;
     font-weight: 600;
-    font-family: sans-serif;
+    font-family: 'montserrat', sans-serif;
     color: #111;
 }
