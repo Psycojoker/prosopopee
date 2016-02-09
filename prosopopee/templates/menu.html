@@ -2,12 +2,12 @@
         <div class="nav-wrapper">
           <ul>
             {% for line in settings.menu -%}
-	    {% set file_name, menu_name = line.items()[0] %}
+            {% set file_name, menu_name = line.items()[0] %}
             {% if loop.first %}
-	    <li><a href={{ file_name }}.html class=first-item-menu>{{ menu_name }}</a></li>
+            <li><a href={{ file_name }}.html class=first-item-menu>{{ menu_name }}</a></li>
             {% else %}
-	    <li><a href={{ file_name }}.html class=item-menu>{{ menu_name }}</a></li>
-	    {% endif %}
+            <li><a href={{ file_name }}.html class=item-menu>{{ menu_name }}</a></li>
+            {% endif %}
             {% endfor -%}
           </ul>
         </div>
