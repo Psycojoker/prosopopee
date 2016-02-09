@@ -17,21 +17,6 @@ DEFAULT_GM_QUALITY = 75
 CACHE_VERSION = 1
 
 
-class Image(object):
-    def __init__(self, options):
-        # assuming string
-        if not isinstance(options, dict):
-            name = options
-            options = {"name": options}
-
-        self.name = name
-        self.quality = options.get("quality", DEFAULT_GM_QUALITY)
-        self.options = options  # used for caching, if it's modified -> regenerate
-
-    def __repr__(self):
-        return self.name
-
-
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
 
@@ -74,15 +59,23 @@ class Cache(object):
 CACHE = Cache(json=json)
 
 
+class Image(object):
+    base_dir = ""
+    target_dir = ""
 
-class TemplateFunctions():
-    def __init__(self, base_dir, target_dir, has_gm):
-        self.base_dir = base_dir
-        self.target_dir = target_dir
+    def __init__(self, options):
+        # assuming string
+        if not isinstance(options, dict):
+            name = options
+            options = {"name": options}
 
-    def copy_image(self, image):
-        image = Image(image)
-        source, target = os.path.join(self.base_dir, image.name), os.path.join(self.target_dir, image.name)
+        self.name = name
+        self.quality = options.get("quality", DEFAULT_GM_QUALITY)
+        self.options = options.copy()  # used for caching, if it's modified -> regenerate
+        del self.options["name"]
+
+    def copy(self):
+        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
@@ -93,23 +86,25 @@ class TemplateFunctions():
         print source, "->", target
         return ""
 
-    def generate_thumbnail(self, image, gm_geometry):
-        image = Image(image)
-        thumbnail_name = image.name.split(".")
+    def generate_thumbnail(self, gm_geometry):
+        thumbnail_name = self.name.split(".")
         thumbnail_name[-2] += "-small"
         thumbnail_name = ".".join(thumbnail_name)
 
-        source, target = os.path.join(self.base_dir, image.name), os.path.join(self.target_dir, thumbnail_name)
+        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
 
-        if CACHE.thumbnail_needs_to_be_generated(source, target, image):
-            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, image.quality, target)
+        if CACHE.thumbnail_needs_to_be_generated(source, target, self):
+            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, self.quality, target)
             print command
             os.system(command)
-            CACHE.cache_thumbnail(source, target, image)
+            CACHE.cache_thumbnail(source, target, self)
         else:
             print "skiped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
+
+    def __repr__(self):
+        return self.name
 
 
 def error(test, error_message):
@@ -175,11 +170,19 @@ def main():
         if not os.path.exists(os.path.join("build", gallery)):
             os.makedirs(os.path.join("build", gallery))
 
-        open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, helpers=TemplateFunctions(os.path.join(os.getcwd(), gallery), os.path.join(os.getcwd(), "build", gallery), has_gm=has_gm)).encode("Utf-8"))
+        # this should probably be a factory
+        Image.base_dir = os.path.join(os.getcwd(), gallery)
+        Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
+
+        open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
-    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, Image=Image, helpers=TemplateFunctions(os.getcwd(), os.path.join(os.getcwd(), "build"), has_gm=has_gm)).encode("Utf-8"))
+    Image.base_dir = os.getcwd()
+    Image.target_dir = os.path.join(os.getcwd(), "build")
+
+    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, Image=Image).encode("Utf-8"))
+
 
 
 if __name__ == '__main__':
