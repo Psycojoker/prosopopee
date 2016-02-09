@@ -13,7 +13,7 @@ except ImportError:
 
 setup(name='prosopopee',
       version='0.1',
-      description='excposure.co clone in a static web generating tool',
+      description='exposure.co clone in a static web generating tool',
       author='Laurent Peuch',
       long_description=read_md('README.md'),
       author_email='cortex@worlddomination.be',
