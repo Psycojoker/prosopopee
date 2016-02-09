@@ -241,6 +241,17 @@ How to use it:
     text: Some text, HTML <b>is allowed</b>.
 ```
 
+#### HTML
+
+This section is for raw html that will be centered (for example: inlining an OSM iframe).
+
+How to use it:
+
+```yaml
+  - type: html
+    html: <tag>some html stuff</html>
+```
+
 #### Panorama
 
 This display a very large pictures with a drag and drop posibility on it.
