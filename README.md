@@ -228,6 +228,19 @@ How to use it:
     text: Some text, HTML <b>is allowed</b>.
 ```
 
+#### Paragraph
+
+This display a h2 title followed by text. HTML is allowed inside of the text.
+If not title is declared, a separator is added.
+
+How to use it:
+
+```yaml
+  - type: paragraph
+    title: the title
+    text: Some text, HTML <b>is allowed</b>.
+```
+
 #### Panorama
 
 This display a very large pictures with a drag and drop posibility on it.
