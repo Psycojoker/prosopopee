@@ -1,53 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+{% extends "base.html" %}
 
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{{ settings.title }}</title>
-</head>
-
-<body>
-
-  <div class="gallery-header">
-      <img id="logo" src="static/img/logo.svg" />
-      <h1>{{ settings.title }}</h1>
-      {% if settings.sub_title -%}<h4>{{ settings.sub_title }}</h4>{% endif -%}
-      <hr>
-      {% if settings.menu -%}
-      {% include 'menu.html' %}
-      {% endif -%}
+{% block content %}
+<div class="galleries-grid">
+  {% for galleries_line in galleries|reverse|batch(3)|reverse %}
+  <div class="galleries-line covers-{{ galleries_line|length }}">
+    {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
+    --><div class="gallery-square">
+      <a href="{{ gallery.link }}">
+        <div class="gallery-title">
+          <h2>{{ gallery.title }}</h2>
+          {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+          {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+        </div>
+      </a>
+      {% set cover = Image(gallery.cover) %}
+      {{ cover.copy() }}
+      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
+    </div><!-- comment tricks against space between inline-block
+    -->{% endfor %}
   </div>
+  {% endfor %}
+</div>
 
-
-  <div class="galleries-grid">
-      {% for galleries_line in galleries|reverse|batch(3)|reverse %}
-      <div class="galleries-line covers-{{ galleries_line|length }}">
-        {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
-        --><div class="gallery-square">
-          <a href="{{ gallery.link }}">
-            <div class="gallery-title">
-              <h2>{{ gallery.title }}</h2>
-              {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
-              {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
-            </div>
-          </a>
-          {% set cover = Image(gallery.cover) %}
-          {{ cover.copy() }}
-          <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
-        </div><!-- comment tricks against space between inline-block
-        -->{% endfor %}
-      </div>
-      {% endfor %}
-  </div>
-
-  <p style="visibility: hidden">.</p>
-
-  <footer>
-      <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
-  </footer>
-</body>
-</html>
+<p style="visibility: hidden">.</p>
+{% endblock %}

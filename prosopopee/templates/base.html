@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+  {% block css %}
+  {% endblock %}
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ settings.title }}</title>
+</head>
+
+<body>
+
+  <div class="gallery-header">
+      <img id="logo" src="static/img/logo.svg" />
+      <h1>{{ settings.title }}</h1>
+      {% if settings.sub_title -%}<h4>{{ settings.sub_title }}</h4>{% endif -%}
+      <hr>
+      {% if settings.menu -%}
+      {% include 'menu.html' %}
+      {% endif -%}
+  </div>
+
+
+  {% block content %}
+  {% endblock %}
+
+  <footer>
+      <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
+  </footer>
+</body>
+</html>
