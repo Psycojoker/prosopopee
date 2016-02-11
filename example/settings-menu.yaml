@@ -1,4 +1,11 @@
 title: "Example gallery"
-menu: 
-  - about: "Menu 1"
-  - contact: "Menu 2"
+menu:
+  - name: "About"
+    type: "page"
+    url: "about"
+  - name: "My first gallery"
+    type: "folder"
+    url: "first_gallery"
+  - name: "Twitter"
+    type: "external"
+    url: "http://twitter.com"

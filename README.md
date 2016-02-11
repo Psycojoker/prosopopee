@@ -62,21 +62,35 @@ sub_title: it's a scary place, don't go there
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
 
 ```yaml
-menu:
-  - about: "About Me"
-  - contact: "Contact"
+menu: 
+    name: "About"
+    type: "page"
+    url: "about"
+  - name: "My first gallery"
+    type: "folder"
+    url: "first_gallery"
+  - name: "Twitter"
+    type: "external"
+    url: "http://twitter.com"
 ```
 
-The first part (`about` and `contact`) here are the name of the files (without
-the `.yaml`) and the second part are the menu title that will be displayed in
-the templates. So, here, you'll need to create a ``about.yaml`` and a
-``contact.yaml`` files in the root directory. Their content are similar to
-galleries (see [bellow](#gallery-settingsyaml)).
+You can use 3 type of item in the menu:
 
-For example, this could be the content of `contact.yaml`:
+* page
+* folder
+* external
+
+For page, the url is the files (without the `.yaml`)
+For folder, the url is the name of the folder (like first_gallery in exemple)
+And for the external, the url is the full url of the website. You can 
+use it too for make home in the menu.
+So, here, you'll need to create a ``about.yaml`` files in the root directory. 
+Their content are similar to galleries (see [bellow](#gallery-settingsyaml)).
+
+For example, this could be the content of `about.yaml`:
 
 ```yaml
-title: "Contact"
+title: "About"
 sections:
   - type: text
     text: Some text, HTML <b>is allowed</b>.
