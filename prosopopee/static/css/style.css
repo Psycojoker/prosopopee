@@ -90,7 +90,7 @@ a {
     text-align: center;
     z-index: 3;
     background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
-    padding: 20% 0 0;
+    padding: 20% 0 10px 0;
 }
 
 .gallery-header {
@@ -145,7 +145,6 @@ a {
 }
 
 .gallery-datetime {
-    margin-bottom: 1em;
     font-family: 'crimson', serif;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -232,4 +231,24 @@ nav ul li > a.item-menu::before {
     font-size: 18px;
     line-height: 1;
     color: #ebebeb;
+}
+
+.gallery-tag {
+   font-size: 13px;
+   text-transform: uppercase;
+   font-style: normal;
+   display: inline;
+   font-family: "adobe-garamond-pro", serif;
+}
+
+.gallery-tag span {
+    font-size: 12px;
+    border-bottom: solid 1px rgba(255,255,255,0.2);
+    display: inline-block;
+    margin: 0 0 0 3px;
+    font-weight: bold;
+    font-family: "europa", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-style: normal;
 }

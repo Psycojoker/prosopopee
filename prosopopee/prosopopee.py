@@ -158,6 +158,7 @@ def main():
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
         gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
+        gallery_tags = gallery_settings["tags"] if "date" in gallery_settings else ""
 
         if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
@@ -165,6 +166,7 @@ def main():
                 "link": gallery,
                 "sub_title": gallery_sub_title,
                 "date": gallery_date,
+                "tags": gallery_tags,
                 "cover": cover_image_path,
             })
 
@@ -179,10 +181,11 @@ def main():
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
-    for item in settings.get("menu", []):
-        file_name, menu_name = item.items()[0]
-        error(os.path.exists(os.path.join(os.getcwd(), file_name + ".yaml")), "I can't find a " + file_name + ".yaml in the current working directory as specified by your menu description in your root settings.yaml")
-        open(os.path.join("build", file_name + ".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(file_name + ".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
+    for item in settings.get("menu"):
+        if item.get("type") == "page":
+            file_name = item.get("url")
+            error(os.path.exists(os.path.join(os.getcwd(), file_name + ".yaml")), "I can't find a " + file_name + ".yaml in the current working directory as specified by your menu description in your root settings.yaml")
+            open(os.path.join("build", file_name + ".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(file_name + ".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
 
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
@@ -192,3 +195,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
