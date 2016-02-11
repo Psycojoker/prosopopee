@@ -158,7 +158,7 @@ def main():
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
         gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
-        gallery_tags = gallery_settings["tags"] if "date" in gallery_settings else ""
+        gallery_tags = gallery_settings["tags"] if "tags" in gallery_settings else ""
 
         if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
