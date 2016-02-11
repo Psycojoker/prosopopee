@@ -101,6 +101,7 @@ sections:
 This settings.yaml will describe:
 
 * the title, subtitle and cover picture of your gallery that will be used on the homepage
+* the tags is optional
 * if your gallery is public (if not, it will still be built but won't appear on the homepage)
 * the date of your gallery: this will be used on the homepage since **galleries are sorted anti chronologically** on it
 * the list of sections that will contains your gallery. A section will represent either one picture, a group of pictures or text. The different kind of sections will be explained in the next README section.
@@ -112,6 +113,9 @@ title: Gallery title
 sub_title: Gallery sub-title
 date: 2016-01-15
 cover: my_cover_picture.jpg
+tags:
+  - #yolo
+  - #travel
 sections:
   - type: full-picture
     image: big_picture.jpg
