@@ -58,43 +58,29 @@ sub_title: it's a scary place, don't go there
 ```
 
 #### Menu
-
+ 
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
 
 ```yaml
 menu: 
-    name: "About"
-    type: "page"
-    url: "about"
-  - name: "My first gallery"
-    type: "folder"
-    url: "first_gallery"
-  - name: "Twitter"
-    type: "external"
-    url: "http://twitter.com"
+  - about: "About"
+  - first_gallery: "My first gallery"
+  - http://twitter.com: "Twitter"
 ```
 
-You can use 3 type of item in the menu:
-
-* page
-* folder
-* external
-
-For page, the url is the files (without the `.yaml`)
-For folder, the url is the name of the folder (like first_gallery in exemple)
-And for the external, the url is the full url of the website. You can 
-use it too for make home in the menu.
-So, here, you'll need to create a ``about.yaml`` files in the root directory. 
-Their content are similar to galleries (see [bellow](#gallery-settingsyaml)).
-
-For example, this could be the content of `about.yaml`:
+For example, this could be the content of `settings.yaml` in `about` folder:
 
 ```yaml
 title: "About"
+static: true
+public: false  
 sections:
   - type: text
     text: Some text, HTML <b>is allowed</b>.
 ```
+
+The `static` option is use it for don't need to give date and cover at the static page.
+If you don't want see the page in front page you can use the `public` option.
 
 ### Gallery settings.yaml
 

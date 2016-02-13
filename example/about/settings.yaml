@@ -1,0 +1,6 @@
+title: "About"
+static: true
+public: false  
+sections:
+  - type: text
+    text: Some text, HTML <b>is allowed</b>.

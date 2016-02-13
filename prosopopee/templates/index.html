@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+{% endblock %}
+
+{% block logo %}
+<img id="logo" src="static/img/logo.svg" />
+{% endblock %}
+
 {% block content %}
 <div class="galleries-grid">
   {% for galleries_line in galleries|reverse|batch(3)|reverse %}

@@ -2,8 +2,6 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
   {% block css %}
   {% endblock %}
 
@@ -15,7 +13,8 @@
 <body>
 
   <div class="gallery-header">
-      <img id="logo" src="static/img/logo.svg" />
+      {% block logo %}
+      {% endblock %}
       <h1>{{ settings.title }}</h1>
       {% if settings.sub_title -%}<h4>{{ settings.sub_title }}</h4>{% endif -%}
       <hr>
