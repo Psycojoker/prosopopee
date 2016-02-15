@@ -68,14 +68,26 @@ class Image(object):
     def __init__(self, options):
         # assuming string
         if not isinstance(options, dict):
-            name = options
             options = {"name": options}
 
-        self.name = name
-        self.quality = options.get("quality", DEFAULT_GM_QUALITY)
-        self.autoorient = options.get("auto-orient", DEFAULT_GM_AUTOORIENT)
+        if not options.has_key("quality"):
+            options["quality"] = DEFAULT_GM_QUALITY
+        if not options.has_key("autoorient"):
+            options["autoorient"] = DEFAULT_GM_AUTOORIENT
+
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
-        del self.options["name"]
+
+    @property
+    def name(self):
+      return self.options["name"]
+
+    @property
+    def quality(self):
+      return self.options["quality"]
+
+    @property
+    def autoorient(self):
+      return self.options["autoorient"]
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
