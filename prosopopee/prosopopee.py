@@ -14,6 +14,7 @@ gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
 DEFAULT_GM_QUALITY = 75
+DEFAULT_GM_AUTOORIENT = False
 
 CACHE_VERSION = 1
 
@@ -67,24 +68,42 @@ class Image(object):
     def __init__(self, options):
         # assuming string
         if not isinstance(options, dict):
-            name = options
             options = {"name": options}
 
-        self.name = name
-        self.quality = options.get("quality", DEFAULT_GM_QUALITY)
+        if not options.has_key("quality"):
+            options["quality"] = DEFAULT_GM_QUALITY
+        if not options.has_key("autoorient"):
+            options["autoorient"] = DEFAULT_GM_AUTOORIENT
+
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
-        del self.options["name"]
+
+    @property
+    def name(self):
+      return self.options["name"]
+
+    @property
+    def quality(self):
+      return self.options["quality"]
+
+    @property
+    def autoorient(self):
+      return self.options["autoorient"]
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
-            # print "Skiped %s since the file hasn't been modified based on file size" % source
+            # print "Skipped %s since the file hasn't been modified based on file size" % source
             # return ""
-        shutil.copyfile(source, target)
+        if not self.autoorient:
+            shutil.copyfile(source, target)
+            print source, "->", target
+        else:
+            command = "gm convert -auto-orient %s %s" % (source, target)
+            print command
+            os.system(command)
 
-        print source, "->", target
         return ""
 
     def generate_thumbnail(self, gm_geometry):
@@ -95,12 +114,15 @@ class Image(object):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
 
         if CACHE.thumbnail_needs_to_be_generated(source, target, self):
-            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, self.quality, target)
+            gm_options = ""
+            if self.autoorient:
+              gm_options = "-auto-orient "
+            command = "gm convert %s %s -resize %s -quality %s %s" % (gm_options, source, gm_geometry, self.quality, target)
             print command
             os.system(command)
             CACHE.cache_thumbnail(source, target, self)
         else:
-            print "skiped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
+            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
 
@@ -130,11 +152,19 @@ def main():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
+    if settings.get("auto-orient"):
+        global DEFAULT_GM_AUTOORIENT
+        DEFAULT_GM_AUTOORIENT = settings.get("auto-orient")
+
+    if settings.get("quality"):
+      global DEFAULT_GM_QUALITY
+      DEFAULT_GM_QUALITY = settings.get("quality")
+
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yml in your current directory, but a one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
+    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yaml in your current directory, but one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
@@ -153,7 +183,7 @@ def main():
 
         cover_image_path = os.path.join(gallery, gallery_settings["cover"])
 
-        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
+        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at %s" % (gallery, cover_image_path))
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
@@ -162,7 +192,7 @@ def main():
         if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
                 "title": gallery_title,
-                "link": gallery,
+                "link": gallery + "/index.html",
                 "sub_title": gallery_sub_title,
                 "date": gallery_date,
                 "cover": cover_image_path,
