@@ -14,6 +14,7 @@ gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
 DEFAULT_GM_QUALITY = 75
+DEFAULT_GM_AUTOORIENT = False
 
 CACHE_VERSION = 1
 
@@ -72,6 +73,7 @@ class Image(object):
 
         self.name = name
         self.quality = options.get("quality", DEFAULT_GM_QUALITY)
+        self.autoorient = options.get("auto-orient", DEFAULT_GM_AUTOORIENT)
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
         del self.options["name"]
 
@@ -82,9 +84,14 @@ class Image(object):
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
             # print "Skiped %s since the file hasn't been modified based on file size" % source
             # return ""
-        shutil.copyfile(source, target)
+        if not self.autoorient:
+            shutil.copyfile(source, target)
+            print source, "->", target
+        else:
+            command = "gm convert -auto-orient %s %s" % (source, target)
+            print command
+            os.system(command)
 
-        print source, "->", target
         return ""
 
     def generate_thumbnail(self, gm_geometry):
@@ -95,7 +102,10 @@ class Image(object):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
 
         if CACHE.thumbnail_needs_to_be_generated(source, target, self):
-            command = "gm convert %s -resize %s -quality %s %s" % (source, gm_geometry, self.quality, target)
+            gm_options = ""
+            if self.autoorient:
+              gm_options = "-auto-orient "
+            command = "gm convert %s %s -resize %s -quality %s %s" % (gm_options, source, gm_geometry, self.quality, target)
             print command
             os.system(command)
             CACHE.cache_thumbnail(source, target, self)
@@ -129,6 +139,10 @@ def main():
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
+
+    if settings.get("auto-orient"):
+        global DEFAULT_GM_AUTOORIENT
+        DEFAULT_GM_AUTOORIENT = settings.get("auto-orient")
 
     front_page_galleries_cover = []
 
