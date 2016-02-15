@@ -180,7 +180,7 @@ def main():
         if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
                 "title": gallery_title,
-                "link": gallery,
+                "link": gallery + "/index.html",
                 "sub_title": gallery_sub_title,
                 "date": gallery_date,
                 "cover": cover_image_path,
