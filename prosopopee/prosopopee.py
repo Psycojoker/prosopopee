@@ -144,6 +144,10 @@ def main():
         global DEFAULT_GM_AUTOORIENT
         DEFAULT_GM_AUTOORIENT = settings.get("auto-orient")
 
+    if settings.get("quality"):
+      global DEFAULT_GM_QUALITY
+      DEFAULT_GM_QUALITY = settings.get("quality")
+
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
