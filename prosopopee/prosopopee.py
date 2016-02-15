@@ -82,7 +82,7 @@ class Image(object):
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
-            # print "Skiped %s since the file hasn't been modified based on file size" % source
+            # print "Skipped %s since the file hasn't been modified based on file size" % source
             # return ""
         if not self.autoorient:
             shutil.copyfile(source, target)
@@ -110,7 +110,7 @@ class Image(object):
             os.system(command)
             CACHE.cache_thumbnail(source, target, self)
         else:
-            print "skiped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
+            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
 
@@ -152,7 +152,7 @@ def main():
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yml in your current directory, but a one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
+    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yaml in your current directory, but one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
@@ -171,7 +171,7 @@ def main():
 
         cover_image_path = os.path.join(gallery, gallery_settings["cover"])
 
-        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
+        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at %s" % (gallery, cover_image_path))
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
