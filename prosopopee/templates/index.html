@@ -20,7 +20,7 @@
           <h2>{{ gallery.title }}</h2>
           {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
           {% if gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
-	  {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span>{{ tag }}</span> {% endfor -%}</div>{% endif %}
+          {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span>{{ tag }}</span> {% endfor -%}</div>{% endif %}
         </div>
       </a>
       {% set cover = Image(gallery.cover) %}
