@@ -58,35 +58,36 @@ sub_title: it's a scary place, don't go there
 ```
 
 #### Menu
-
+ 
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
 
 ```yaml
-menu:
-  - about: "About Me"
-  - contact: "Contact"
+menu: 
+  - about: "About"
+  - first_gallery: "My first gallery"
+  - http://twitter.com: "Twitter"
 ```
 
-The first part (`about` and `contact`) here are the name of the files (without
-the `.yaml`) and the second part are the menu title that will be displayed in
-the templates. So, here, you'll need to create a ``about.yaml`` and a
-``contact.yaml`` files in the root directory. Their content are similar to
-galleries (see [bellow](#gallery-settingsyaml)).
-
-For example, this could be the content of `contact.yaml`:
+For example, this could be the content of `settings.yaml` in `about` folder:
 
 ```yaml
-title: "Contact"
+title: "About"
+static: true
+public: false  
 sections:
   - type: text
     text: Some text, HTML <b>is allowed</b>.
 ```
+
+The `static` option is use it for don't need to give date and cover at the static page.
+If you don't want see the page in front page you can use the `public` option.
 
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
 
 * the title, subtitle and cover picture of your gallery that will be used on the homepage
+* the tags is optional
 * if your gallery is public (if not, it will still be built but won't appear on the homepage)
 * the date of your gallery: this will be used on the homepage since **galleries are sorted anti chronologically** on it
 * the list of sections that will contains your gallery. A section will represent either one picture, a group of pictures or text. The different kind of sections will be explained in the next README section.
@@ -98,6 +99,9 @@ title: Gallery title
 sub_title: Gallery sub-title
 date: 2016-01-15
 cover: my_cover_picture.jpg
+tags:
+  - #yolo
+  - #travel
 sections:
   - type: full-picture
     image: big_picture.jpg

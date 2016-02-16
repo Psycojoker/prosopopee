@@ -149,15 +149,16 @@ def main():
 
         error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
-        error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
-
-        cover_image_path = os.path.join(gallery, gallery_settings["cover"])
-
-        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
+        
+        if gallery_settings.get("public", True):
+            error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
+            cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
 
         gallery_title = gallery_settings["title"]
         gallery_sub_title = gallery_settings.get("sub_title", "")
         gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
+        gallery_tags = gallery_settings["tags"] if "tags" in gallery_settings else ""
 
         if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
@@ -165,6 +166,7 @@ def main():
                 "link": gallery,
                 "sub_title": gallery_sub_title,
                 "date": gallery_date,
+                "tags": gallery_tags,
                 "cover": cover_image_path,
             })
 
@@ -174,15 +176,13 @@ def main():
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
-
-        open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
+        
+        if gallery_settings.get("static") == True:
+            open(os.path.join("build", gallery, "index.html"), "w").write(page_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
+        else:
+            open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
-
-    for item in settings.get("menu", []):
-        file_name, menu_name = item.items()[0]
-        error(os.path.exists(os.path.join(os.getcwd(), file_name + ".yaml")), "I can't find a " + file_name + ".yaml in the current working directory as specified by your menu description in your root settings.yaml")
-        open(os.path.join("build", file_name + ".html"), "w").write(page_template.render(settings=settings, pages=yaml.safe_load(open(file_name + ".yaml", "r")), galleries=front_page_galleries_cover).encode("Utf-8"))
 
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
@@ -192,3 +192,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

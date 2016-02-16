@@ -1,4 +1,5 @@
 title: "Example gallery"
-menu: 
-  - about: "Menu 1"
-  - contact: "Menu 2"
+menu:
+  - about: "About"
+  - first_gallery: "My first gallery"
+  - http://twitter.com: "Twitter"
