@@ -172,10 +172,8 @@ def main():
         Image.base_dir = os.path.join(os.getcwd(), gallery)
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
-        if gallery_settings.get("static") == True:
-            open(os.path.join("build", gallery, "index.html"), "w").write(page_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
-        else:
-            open(os.path.join("build", gallery, "index.html"), "w").write(gallery_index_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
+        template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
+        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
