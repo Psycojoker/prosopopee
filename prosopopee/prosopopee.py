@@ -155,18 +155,12 @@ def main():
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
 
-        gallery_title = gallery_settings["title"]
-        gallery_sub_title = gallery_settings.get("sub_title", "")
-        gallery_date = gallery_settings["date"] if "date" in gallery_settings else ""
-        gallery_tags = gallery_settings["tags"] if "tags" in gallery_settings else ""
-
-        if gallery_settings.get("public", True):
             front_page_galleries_cover.append({
-                "title": gallery_title,
+                "title": gallery_settings["title"],
                 "link": gallery,
-                "sub_title": gallery_sub_title,
-                "date": gallery_date,
-                "tags": gallery_tags,
+                "sub_title": gallery_settings.get("sub_title", ""),
+                "date": gallery_settings.get("date", ""),
+                "tags": gallery_settings.get("tags", ""),
                 "cover": cover_image_path,
             })
 
