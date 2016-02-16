@@ -130,6 +130,10 @@ def main():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
+    if settings.get("quality"):
+      global DEFAULT_GM_QUALITY
+      DEFAULT_GM_QUALITY = settings.get("quality")
+
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
