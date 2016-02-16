@@ -149,7 +149,7 @@ def main():
 
         error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
-        
+
         if gallery_settings.get("public", True):
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
@@ -176,7 +176,7 @@ def main():
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
-        
+
         if gallery_settings.get("static") == True:
             open(os.path.join("build", gallery, "index.html"), "w").write(page_template.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
         else:
