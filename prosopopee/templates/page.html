@@ -15,9 +15,9 @@
   <h2>{{ gallery.title }}</h2>
 </section>
 
-  {% for section in gallery.sections %}
-    {% include "sections/" + section.type + ".html" %}
-  {% endfor %}
+{% for section in gallery.sections %}
+  {% include "sections/" + section.type + ".html" %}
+{% endfor %}
 
 <div class="back-to-home">
   <hr>
