@@ -58,11 +58,11 @@ sub_title: it's a scary place, don't go there
 ```
 
 #### Menu
- 
+
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
 
 ```yaml
-menu: 
+menu:
   - about: "About"
   - first_gallery: "My first gallery"
   - http://twitter.com: "Twitter"
@@ -73,7 +73,7 @@ For example, this could be the content of `settings.yaml` in `about` folder:
 ```yaml
 title: "About"
 static: true
-public: false  
+public: false
 sections:
   - type: text
     text: Some text, HTML <b>is allowed</b>.
