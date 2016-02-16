@@ -80,7 +80,7 @@ class Image(object):
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
-            # print "Skiped %s since the file hasn't been modified based on file size" % source
+            # print "Skipped %s since the file hasn't been modified based on file size" % source
             # return ""
         shutil.copyfile(source, target)
 
@@ -100,7 +100,7 @@ class Image(object):
             os.system(command)
             CACHE.cache_thumbnail(source, target, self)
         else:
-            print "skiped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
+            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
         return thumbnail_name
 
@@ -134,7 +134,7 @@ def main():
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yml in your current directory, but a one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
+    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yaml in your current directory, but one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
@@ -154,7 +154,7 @@ def main():
             error(gallery_settings.get("title"), "Your galery describe in %s need to have a title" % (os.path.join(gallery, "settings.yaml")))
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
-            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exists at %s" % (gallery, cover_image_path))
+            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at %s" % (gallery, cover_image_path))
 
             front_page_galleries_cover.append({
                 "title": gallery_settings["title"],
