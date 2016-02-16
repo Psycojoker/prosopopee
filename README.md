@@ -79,8 +79,14 @@ sections:
     text: Some text, HTML <b>is allowed</b>.
 ```
 
-The `static` option is use it for don't need to give date and cover at the static page.
-If you don't want see the page in front page you can use the `public` option.
+You can use the `static` option to get a template closer to the one of the
+homepage that is better suited for a static page. You'll need to specify
+"public: false" if you don't want to list this page on the homepage. On you
+case you didn't specified "public: false" you'll **need** to specify a "cover:"
+entry like any other gallery.
+
+**NOTE**: except the "static: " option to disepear quite soon for a more
+generic approach to "choose your page style".
 
 ### Gallery settings.yaml
 
