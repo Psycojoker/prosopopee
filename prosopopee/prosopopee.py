@@ -209,6 +209,7 @@ def main():
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
     langs = settings.get("multilingual", [None])
+    main_lang = langs[0]
 
     front_page_galleries_cover = []
 
@@ -254,7 +255,7 @@ def main():
 
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
         for lang in langs:
-            filename = "index.%s.html" % lang if lang else "index.html"
+            filename = "index.%s.html" % lang if lang and lang != main_lang else "index.html"
             open(os.path.join("build", gallery, filename), "w").write(template_to_render.render(settings=_(lang,settings), gallery=_(lang,gallery_settings), Image=Image).encode("Utf-8"))
 
     front_page_galleries_cover = list(reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"])))
@@ -264,7 +265,7 @@ def main():
     Image.target_dir = os.path.join(os.getcwd(), "build")
 
     for lang in langs:
-        filename = "index.%s.html" % lang if lang else "index.html"
+        filename = "index.%s.html" % lang if lang and lang != main_lang else "index.html"
         open(os.path.join("build", filename), "w").write(index_template.render(settings=_(lang,settings), galleries=_(lang,front_page_galleries_cover), Image=Image).encode("Utf-8"))
 
 if __name__ == '__main__':
