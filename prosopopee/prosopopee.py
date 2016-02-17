@@ -5,6 +5,7 @@ import sys
 import json
 import yaml
 import shutil
+import collections
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -16,6 +17,83 @@ page_template = templates.get_template("page.html")
 DEFAULT_GM_QUALITY = 75
 
 CACHE_VERSION = 1
+
+
+class ListTranslateViewIterator(object):
+  def __init__(self, lang, l):
+    self.lang = lang
+    self.it = iter(l)
+
+  def next(self):
+    return _(self.lang, self.it.next())
+
+  def __iter__(self):
+    return self
+
+class ListTranslateView(collections.Sequence):
+  def __init__(self, lang, l):
+    self.lang=lang
+    self.proxified_list = l
+
+  def __len__(self):
+    return len(self.proxified_list)
+
+  def __getitem__(self, i):
+    return _(self.lang, self.proxified_list[i])
+
+  def __iter__(self):
+    return ListTranslateViewIterator(self.lang, self.proxified_list)
+
+  def __str__(self):
+    # TODO: fails with unicode input, but we don't use it...
+    return "[%s]" % (", ".join(["%s" % x for x in self]))
+
+class DictTranslateViewIterator(object):
+  def __init__(self, lang, d):
+    self.lang = lang
+    self.it = iter(d)
+
+  def next(self):
+    return _(self.lang, self.it.next())
+
+  def __iter__(self):
+    return self
+
+class DictTranslateView(collections.Mapping):
+  def __init__(self, lang, d):
+    self.lang=lang
+    self.proxified_dict = d
+
+  def __len__(self):
+    return len(self.proxified_dict)
+
+  def __getitem__(self, key):
+    if key in ('title', 'sub_title', 'text'):
+      try:
+        return self.proxified_dict[key][self.lang]
+      except(KeyError, TypeError):
+        # KeyError : when text is actually a dict (e.g. full-picture)
+        # TypeError : when value is a string and not a locales dict (monolingual case)
+        pass
+    return _(self.lang, self.proxified_dict[key])
+
+  def __iter__(self):
+    return DictTranslateViewIterator(self.lang, self.proxified_dict)
+
+  def __str__(self):
+    # TODO: fails with unicode input, but we don't use it...
+    return "{%s}" % (", ".join(["'%s': '%s'" % (k,v) for (k,v) in self.iteritems()]))
+
+def _(lang, o):
+    # TODO: should support iterators too
+    # TODO: testing for isinstance(o, collections.Mapping) creates an infinite recursion loop
+    t = type(o)
+    if isinstance(o, dict):
+      return DictTranslateView(lang, o)
+    elif isinstance(o, list):
+      return ListTranslateView(lang, o)
+    else:
+      return o
 
 
 class Cache(object):
@@ -130,6 +208,8 @@ def main():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
+    langs = settings.get("multilingual", [None])
+
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
@@ -173,16 +253,19 @@ def main():
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
-        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
+        for lang in langs:
+            filename = "index.%s.html" % lang if lang else "index.html"
+            open(os.path.join("build", gallery, filename), "w").write(template_to_render.render(settings=_(lang,settings), gallery=_(lang,gallery_settings), Image=Image).encode("Utf-8"))
 
-    front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+    front_page_galleries_cover = list(reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"])))
 
     # this should probably be a factory
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
 
-    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, Image=Image).encode("Utf-8"))
-
+    for lang in langs:
+        filename = "index.%s.html" % lang if lang else "index.html"
+        open(os.path.join("build", filename), "w").write(index_template.render(settings=_(lang,settings), galleries=_(lang,front_page_galleries_cover), Image=Image).encode("Utf-8"))
 
 if __name__ == '__main__':
     main()
