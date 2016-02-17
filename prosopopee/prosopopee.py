@@ -89,7 +89,7 @@ class Image(object):
 
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = self.name.split(".")
-        thumbnail_name[-2] += "-small"
+        thumbnail_name[-2] += "-%s" % gm_geometry
         thumbnail_name = ".".join(thumbnail_name)
 
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
