@@ -100,7 +100,7 @@ class Image(object):
             shutil.copyfile(source, target)
             print source, "->", target
         else:
-            command = "gm convert -auto-orient %s %s" % (source, target)
+            command = "gm convert %s -auto-orient -strip %s" % (source, target)
             print command
             os.system(command)
 
@@ -116,8 +116,8 @@ class Image(object):
         if CACHE.thumbnail_needs_to_be_generated(source, target, self):
             gm_options = ""
             if self.autoorient:
-              gm_options = "-auto-orient "
-            command = "gm convert %s %s -resize %s -quality %s %s" % (gm_options, source, gm_geometry, self.quality, target)
+              gm_options = "-auto-orient"
+            command = "gm convert %s -strip %s -resize %s -quality %s %s" % (source, gm_options, gm_geometry, self.quality, target)
             print command
             os.system(command)
             CACHE.cache_thumbnail(source, target, self)
