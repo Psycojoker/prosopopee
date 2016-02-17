@@ -68,14 +68,10 @@ class DictTranslateView(collections.Mapping):
     return len(self.proxified_dict)
 
   def __getitem__(self, key):
-    if key in ('title', 'sub_title', 'text'):
-      try:
-        return self.proxified_dict[key][self.lang]
-      except(KeyError, TypeError):
-        # KeyError : when text is actually a dict (e.g. full-picture)
-        # TypeError : when value is a string and not a locales dict (monolingual case)
-        pass
-    return _(self.lang, self.proxified_dict[key])
+    if isinstance(self.proxified_dict[key], dict) and self.proxified_dict[key].has_key(self.lang):
+      return self.proxified_dict[key][self.lang]
+    else:
+      return _(self.lang, self.proxified_dict[key])
 
   def __iter__(self):
     return DictTranslateViewIterator(self.lang, self.proxified_dict)
