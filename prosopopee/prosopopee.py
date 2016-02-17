@@ -100,7 +100,7 @@ class Image(object):
             shutil.copyfile(source, target)
             print source, "->", target
         else:
-            command = "gm convert %s -auto-orient -strip %s" % (source, target)
+            command = "gm convert %s -strip -auto-orient %s" % (source, target)
             print command
             os.system(command)
 
