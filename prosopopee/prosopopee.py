@@ -16,6 +16,11 @@ page_template = templates.get_template("page.html")
 DEFAULT_GM_QUALITY = 75
 DEFAULT_GM_AUTOORIENT = False
 
+gm_settings = {
+  "quality" : 75,
+  "auto-orient" : True
+}
+
 CACHE_VERSION = 1
 
 
@@ -69,13 +74,8 @@ class Image(object):
         # assuming string
         if not isinstance(options, dict):
             options = {"name": options}
-
-        if not options.has_key("quality"):
-            options["quality"] = DEFAULT_GM_QUALITY
-        if not options.has_key("autoorient"):
-            options["autoorient"] = DEFAULT_GM_AUTOORIENT
-
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
+        self.options.update(gm_settings)
 
     @property
     def name(self):
@@ -87,7 +87,7 @@ class Image(object):
 
     @property
     def autoorient(self):
-      return self.options["autoorient"]
+      return self.options["auto-orient"]
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
@@ -151,15 +151,10 @@ def main():
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
-
-    if settings.get("auto-orient"):
-        global DEFAULT_GM_AUTOORIENT
-        DEFAULT_GM_AUTOORIENT = settings.get("auto-orient")
-
-    if settings.get("quality"):
-      global DEFAULT_GM_QUALITY
-      DEFAULT_GM_QUALITY = settings.get("quality")
-
+    
+    if settings.get("gm_settings"):
+        gm_settings.update( settings.get("gm_settings") )
+ 
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
