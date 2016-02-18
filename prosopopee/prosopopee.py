@@ -14,8 +14,8 @@ gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
 gm_settings = {
-  "quality" : 75,
-  "auto-orient" : True
+    "quality": 75,
+    "auto-orient": True
 }
 
 CACHE_VERSION = 1
@@ -76,15 +76,15 @@ class Image(object):
 
     @property
     def name(self):
-      return self.options["name"]
+        return self.options["name"]
 
     @property
     def quality(self):
-      return self.options["quality"]
+        return self.options["quality"]
 
     @property
     def autoorient(self):
-      return self.options["auto-orient"]
+        return self.options["auto-orient"]
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
@@ -113,7 +113,7 @@ class Image(object):
         if CACHE.thumbnail_needs_to_be_generated(source, target, self):
             gm_options = ""
             if self.autoorient:
-              gm_options = "-auto-orient"
+                gm_options = "-auto-orient"
             command = "gm convert %s -strip %s -resize %s -quality %s %s" % (source, gm_options, gm_geometry, self.quality, target)
             print command
             os.system(command)
@@ -150,7 +150,7 @@ def main():
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
     if settings.get("gm_settings"):
-        gm_settings.update( settings.get("gm_settings") )
+        gm_settings.update(settings.get("gm_settings"))
 
     front_page_galleries_cover = []
 
