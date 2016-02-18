@@ -36,8 +36,25 @@ class Cache(object):
 
         return False
 
+    def image_needs_to_be_oritend(self, source, target, command):
+        if not os.path.exists(target):
+            return True
+
+        if target not in self.cache:
+            return True
+
+        cached_image = self.cache[target]
+
+        if cached_image["size"] != os.path.getsize(source) or cached_image["command"] != command:
+            return True
+
+        return False
+
     def cache_thumbnail(self, source, target, image):
         self.cache[target] = {"size": os.path.getsize(source), "options": image.options}
+
+    def cache_auto_oriented_image(self, source, target, command):
+        self.cache[target] = {"size": os.path.getsize(source), "command": command}
 
     def __del__(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))

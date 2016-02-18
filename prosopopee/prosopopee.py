@@ -55,10 +55,16 @@ class Image(object):
         if not self.autoorient:
             shutil.copyfile(source, target)
             print source, "->", target
-        else:
-            command = "gm convert %s -strip -auto-orient %s" % (source, target)
+            return ""
+
+        command = "gm convert %s -strip -auto-orient %s" % (source, target)
+
+        if CACHE.image_needs_to_be_oritend(source, target, command):
             print command
             os.system(command)
+            CACHE.cache_auto_oriented_image(source, target, command)
+        else:
+            print "skipped %s since it's already generated (based on source unchanged size and images options)" % target
 
         return ""
 
