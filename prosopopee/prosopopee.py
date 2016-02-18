@@ -30,8 +30,8 @@ class Image(object):
         # assuming string
         if not isinstance(options, dict):
             options = {"name": options}
-        self.options = options.copy()  # used for caching, if it's modified -> regenerate
-        self.options.update(SETTINGS["gm"])
+        self.options = SETTINGS["gm"].copy()  # used for caching, if it's modified -> regenerate
+        self.options.update(options)
 
     @property
     def name(self):
