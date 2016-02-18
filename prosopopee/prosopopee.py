@@ -8,6 +8,7 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
+from .utils import error
 
 templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
 index_template = templates.get_template("index.html")
@@ -81,16 +82,6 @@ class Image(object):
 
     def __repr__(self):
         return self.name
-
-
-def error(test, error_message):
-    if test:
-        return
-
-    sys.stderr.write(error_message)
-    sys.stderr.write("\n")
-    sys.stderr.write("Abort.\n")
-    sys.exit(1)
 
 
 def main():
