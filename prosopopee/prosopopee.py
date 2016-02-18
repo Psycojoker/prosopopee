@@ -2,28 +2,26 @@
 
 import os
 import sys
-import json
 import yaml
 import shutil
 import collections
 
 from jinja2 import Environment, FileSystemLoader
 
+from .cache import CACHE
+from .utils import error
+
 templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
 index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
-DEFAULT_GM_QUALITY = 75
-DEFAULT_GM_AUTOORIENT = False
-
-gm_settings = {
-  "quality" : 75,
-  "auto-orient" : True
+SETTINGS = {
+    "gm": {
+        "quality": 75,
+        "auto-orient": True
+    }
 }
-
-CACHE_VERSION = 1
-
 
 class ListTranslateViewIterator(object):
   def __init__(self, lang, l):
@@ -97,49 +95,6 @@ def _(lang, o):
     else:
       return o
 
-
-class Cache(object):
-    cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
-
-    def __init__(self, json):
-        # fix: I need to keep a reference to json because for whatever reason
-        # modules are set to None during python shutdown thus totally breaking
-        # the __del__ call to save the cache
-        # This wonderfully stupid behavior has been fixed in 3.4 (which nobody uses)
-        self.json = json
-        if os.path.exists(os.path.join(os.getcwd(), ".prosopopee_cache")):
-            self.cache = json.load(open(self.cache_file_path, "r"))
-        else:
-            self.cache = {"version": CACHE_VERSION}
-
-        if "version" not in self.cache or self.cache["version"] != CACHE_VERSION:
-            print "info: cache format as changed, prune cache"
-            self.cache = {"version": CACHE_VERSION}
-
-    def thumbnail_needs_to_be_generated(self, source, target, image):
-        if not os.path.exists(target):
-            return True
-
-        if target not in self.cache:
-            return True
-
-        cached_thumbnail = self.cache[target]
-
-        if cached_thumbnail["size"] != os.path.getsize(source) or cached_thumbnail["options"] != image.options:
-            return True
-
-        return False
-
-    def cache_thumbnail(self, source, target, image):
-        self.cache[target] = {"size": os.path.getsize(source), "options": image.options}
-
-    def __del__(self):
-        self.json.dump(self.cache, open(self.cache_file_path, "w"))
-
-
-CACHE = Cache(json=json)
-
-
 class Image(object):
     base_dir = ""
     target_dir = ""
@@ -149,19 +104,19 @@ class Image(object):
         if not isinstance(options, dict):
             options = {"name": options}
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
-        self.options.update(gm_settings)
+        self.options.update(SETTINGS["gm"])
 
     @property
     def name(self):
-      return self.options["name"]
+        return self.options["name"]
 
     @property
     def quality(self):
-      return self.options["quality"]
+        return self.options["quality"]
 
     @property
     def autoorient(self):
-      return self.options["auto-orient"]
+        return self.options["auto-orient"]
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
@@ -173,10 +128,16 @@ class Image(object):
         if not self.autoorient:
             shutil.copyfile(source, target)
             print source, "->", target
-        else:
-            command = "gm convert %s -strip -auto-orient %s" % (source, target)
+            return ""
+
+        command = "gm convert %s -strip -auto-orient %s" % (source, target)
+
+        if CACHE.image_needs_to_be_oritend(source, target, command):
             print command
             os.system(command)
+            CACHE.cache_auto_oriented_image(source, target, command)
+        else:
+            print "skipped %s since it's already generated (based on source unchanged size and images options)" % target
 
         return ""
 
@@ -190,7 +151,7 @@ class Image(object):
         if CACHE.thumbnail_needs_to_be_generated(source, target, self):
             gm_options = ""
             if self.autoorient:
-              gm_options = "-auto-orient"
+                gm_options = "-auto-orient"
             command = "gm convert %s -strip %s -resize %s -quality %s %s" % (source, gm_options, gm_geometry, self.quality, target)
             print command
             os.system(command)
@@ -204,16 +165,6 @@ class Image(object):
         return self.name
 
 
-def error(test, error_message):
-    if test:
-        return
-
-    sys.stderr.write(error_message)
-    sys.stderr.write("\n")
-    sys.stderr.write("Abort.\n")
-    sys.exit(1)
-
-
 def main():
     if os.system("which gm > /dev/null") != 0:
         sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize images, please install the 'graphicsmagick' package.\n")
@@ -225,10 +176,10 @@ def main():
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
-    
-    if settings.get("gm_settings"):
-        gm_settings.update( settings.get("gm_settings") )
- 
+
+    if settings.get("settings", {}).get("gm"):
+        SETTINGS["gm"].update(settings["settings"]["gm"])
+
     langs = settings.get("multilingual", [None])
     main_lang = langs[0]
 
