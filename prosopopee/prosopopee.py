@@ -15,9 +15,11 @@ index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
-gm_settings = {
-    "quality": 75,
-    "auto-orient": True
+SETTINGS = {
+    "gm": {
+        "quality": 75,
+        "auto-orient": True
+    }
 }
 
 class Image(object):
@@ -29,7 +31,7 @@ class Image(object):
         if not isinstance(options, dict):
             options = {"name": options}
         self.options = options.copy()  # used for caching, if it's modified -> regenerate
-        self.options.update(gm_settings)
+        self.options.update(SETTINGS["gm"])
 
     @property
     def name(self):
@@ -96,8 +98,8 @@ def main():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
-    if settings.get("gm_settings"):
-        gm_settings.update(settings.get("gm_settings"))
+    if settings.get("settings", {}).get("gm"):
+        SETTINGS["gm"].update(settings["settings"]["gm"])
 
     front_page_galleries_cover = []
 
