@@ -39,14 +39,6 @@ class Image(object):
     def name(self):
         return self.options["name"]
 
-    @property
-    def quality(self):
-        return self.options["quality"]
-
-    @property
-    def autoorient(self):
-        return self.options["auto-orient"]
-
     def gm(self, source, target, options):
         if CACHE.needs_to_be_generated(source, target, options):
             gm_switches = {
