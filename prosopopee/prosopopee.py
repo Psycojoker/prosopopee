@@ -55,7 +55,7 @@ class Image(object):
               "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
               "strip": "-strip" if options["strip"] else "",
               "quality": "-quality %s" % options["quality"] if options.has_key("quality") else "-define jpeg:preserve-settings",
-              "resize": "-resize %s" % options["resize"] if options.has_key("resize") else ""
+              "resize": "-resize %s" % options["resize"] if options.has_key("resize") and options["resize"] is not None else ""
             }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
             print command
