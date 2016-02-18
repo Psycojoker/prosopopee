@@ -13,9 +13,6 @@ index_template = templates.get_template("index.html")
 gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
-DEFAULT_GM_QUALITY = 75
-DEFAULT_GM_AUTOORIENT = False
-
 gm_settings = {
   "quality" : 75,
   "auto-orient" : True
