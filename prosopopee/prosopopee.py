@@ -16,6 +16,7 @@ gallery_index_template = templates.get_template("gallery-index.html")
 page_template = templates.get_template("page.html")
 
 SETTINGS = {
+    "show_date": True,
     "gm": {
         "quality": 75,
         "auto-orient": True
