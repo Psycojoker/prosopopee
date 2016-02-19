@@ -46,8 +46,8 @@ class Image(object):
               "target": target,
               "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
               "strip": "-strip" if options["strip"] else "",
-              "quality": "-quality %s" % options["quality"] if options.has_key("quality") else "-define jpeg:preserve-settings",
-              "resize": "-resize %s" % options["resize"] if options.has_key("resize") and options["resize"] is not None else ""
+              "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+              "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
             }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
             print command
@@ -55,7 +55,6 @@ class Image(object):
             CACHE.cache_picture(source, target, options)
         else:
             print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
-
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
