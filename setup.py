@@ -30,6 +30,6 @@ setup(name='prosopopee',
       keywords='',
       include_package_data=True,
       package_data={
-            'prosopopee': ["static/x/*" for x in os.listdir("./prosopopee/static/")] + ['templates/*.html', 'templates/sections/*'],
+            'prosopopee': ["static/%s/*" % x for x in os.listdir("./prosopopee/static/")] + ['templates/*.html', 'templates/sections/*'],
         },
      )
