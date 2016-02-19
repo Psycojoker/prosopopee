@@ -203,7 +203,7 @@ def main():
         error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
 
         if gallery_settings.get("public", True):
-            error(gallery_settings.get("title"), "Your galery describe in %s need to have a title" % (os.path.join(gallery, "settings.yaml")))
+            error(gallery_settings.get("title"), "Your gallery describe in %s need to have a title" % (os.path.join(gallery, "settings.yaml")))
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at %s" % (gallery, cover_image_path))

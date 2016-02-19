@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding:Utf-8 -*-
 
+import os
 from setuptools import setup
 
 try:
@@ -29,6 +30,6 @@ setup(name='prosopopee',
       keywords='',
       include_package_data=True,
       package_data={
-            'prosopopee': ['static/css/*', 'static/js/*', 'static/img/*', 'templates/*.html', 'templates/sections/*'],
+            'prosopopee': ["static/%s/*" % x for x in os.listdir("./prosopopee/static/")] + ['templates/*.html', 'templates/sections/*'],
         },
      )
