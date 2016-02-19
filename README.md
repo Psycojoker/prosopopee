@@ -57,6 +57,8 @@ title: My exploration of the outside world
 sub_title: it's a scary place, don't go there
 ```
 
+It can also optionally contain a menu and global settings.
+
 #### Menu
 
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example:
@@ -87,6 +89,30 @@ entry like any other gallery.
 
 **NOTE**: except the "static: " option to disepear quite soon for a more
 generic approach to "choose your page style".
+
+#### Global settings
+
+Global settings can be set in your root `settings.yaml`, under the `settings` key.
+
+Currently a `gm` settings key allows to customize the default GraphicsMagick's behavior. It looks like :
+
+```yaml
+settings:
+  gm:
+    quality: 75
+    auto-orient: True
+    strip: True
+    resize: 50%
+```
+
+The meaning of the currently supported GraphicsMagick's settings is as follows :
+* `quality` allows to customize the compression level of thumbnails (between 0 and 100)
+* `auto-orient` change the orientation of pictures so they are upright (based on corresponding EXIF tags if present)
+* `strip` removes all profiles and text attributes from the image (good for privacy, slightly reduce file size)
+* `resize` can be used to resize the fullsize version of pictures. by default, input image size is preserved
+
+Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
+
 
 ### Gallery settings.yaml
 
@@ -142,15 +168,39 @@ sections:
     - ...
 ```
 
+Images go into the `cover` or `image` keys.
+Each image individual processing settings can be customized to override the default
+GraphicsMagick settings defined (or not) in the root `settings.yaml`.
+
+This is done by putting the image path into a `name` key,
+and adding specific processing settings afterwards.
+
+For example, you can replace :
+
+```yaml
+image: image1.jpg
+```
+
+by :
+
+```yaml
+image:
+  name: image1.jpg
+  quality: 90
+  strip: False
+  auto-orient: False
+```
+
+
 ### Different kind of sections
 
-A gallery is compose of a succession of sections as you can on this [wonderfully
+A gallery is composed of a succession of sections as you can see on this [wonderfully
 totally uninteresting example
 gallery](http://psycojoker.github.io/prosopopee/first_gallery/) the gallery is
 composed of 5 sections:
 
 * a full screen picture with text written on it
-* a picture with with borders around it
+* a picture with borders around it
 * a group of 5 pictures
 * and a fullscreen picture without text on it this time
 
@@ -167,7 +217,7 @@ this is not mandatory.
 
 #### Full Screen picture with OR without text on it
 
-This display a full screen picture as shown in the [example
+This displays a full screen picture as shown in the [example
 gallery](http://psycojoker.github.io/prosopopee/first_gallery/) in the first
 and last sections. How you should use it:
 
@@ -191,7 +241,7 @@ Without text:
 
 #### Bordered picture
 
-This display a centered picture that is surrounded by white (the background) as
+This displays a centered picture that is surrounded by white (the background) as
 shown in the second position of the [example
 gallery](http://psycojoker.github.io/prosopopee/first_gallery/).
 
@@ -204,8 +254,8 @@ How to use it:
 
 #### Group of pictures
 
-This display a group of zoomable pictures on one or multiple lines as shown on
-the forth position (after the text) of the [example
+This displays a group of zoomable pictures on one or multiple lines as shown on
+the fourth position (after the text) of the [example
 gallery](http://psycojoker.github.io/prosopopee/first_gallery/).
 
 ```yaml
@@ -220,14 +270,15 @@ gallery](http://psycojoker.github.io/prosopopee/first_gallery/).
         - image5.jpg
 ```
 
-Every sublist (the first level <code>-</code> represent a line).
+The first level `-` represent a line of pictures.
+The second level `-` represent the list of images in this line.
 
 **Know bug**: the images are left aligned, so if you don't put enough images on
 a line, you'll have white space on the right.
 
 #### Text
 
-This display some centered text as shown on the third position of the [example
+This displays some centered text as shown on the third position of the [example
 gallery](http://psycojoker.github.io/prosopopee/first_gallery/). HTML is
 allowed inside the text.
 
@@ -240,8 +291,8 @@ How to use it:
 
 #### Paragraph
 
-This display a h2 title followed by text. HTML is allowed inside of the text.
-If not title is declared, a separator is added.
+This displays a h2 title followed by text. HTML is allowed inside of the text.
+If no title is declared, a separator is added.
 
 How to use it:
 
@@ -264,7 +315,7 @@ How to use it:
 
 #### Panorama
 
-This display a very large pictures with a drag and drop posibility on it.
+This displays a very large picture with a drag-and-drop possibility on it.
 
 How to use it:
 

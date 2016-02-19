@@ -20,7 +20,9 @@ SETTINGS = {
     "show_date": True,
     "gm": {
         "quality": 75,
-        "auto-orient": True
+        "auto-orient": True,
+        "strip": True,
+        "resize": None
     }
 }
 
@@ -111,13 +113,23 @@ class Image(object):
     def name(self):
         return self.options["name"]
 
-    @property
-    def quality(self):
-        return self.options["quality"]
+    def gm(self, source, target, options):
+        if CACHE.needs_to_be_generated(source, target, options):
+            gm_switches = {
+              "source": source,
+              "target": target,
+              "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
+              "strip": "-strip" if options["strip"] else "",
+              "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+              "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
 
-    @property
-    def autoorient(self):
-        return self.options["auto-orient"]
+            }
+            command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
+            print command
+            os.system(command)
+            CACHE.cache_picture(source, target, options)
+        else:
+            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
@@ -126,40 +138,26 @@ class Image(object):
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
             # print "Skipped %s since the file hasn't been modified based on file size" % source
             # return ""
-        if not self.autoorient:
+
+        options = self.options.copy()
+        if not options["auto-orient"] and not options["strip"]:
             shutil.copyfile(source, target)
             print source, "->", target
-            return ""
-
-        command = "gm convert %s -strip -auto-orient %s" % (source, target)
-
-        if CACHE.image_needs_to_be_oritend(source, target, command):
-            print command
-            os.system(command)
-            CACHE.cache_auto_oriented_image(source, target, command)
         else:
-            print "skipped %s since it's already generated (based on source unchanged size and images options)" % target
-
+          # Do not consider quality settings here, since we aim to copy the input image
+          # better to preserve input encoding setting
+          del options["quality"]
+          self.gm(source, target, options)
         return ""
 
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = self.name.split(".")
         thumbnail_name[-2] += "-%s" % gm_geometry
         thumbnail_name = ".".join(thumbnail_name)
-
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
-
-        if CACHE.thumbnail_needs_to_be_generated(source, target, self):
-            gm_options = ""
-            if self.autoorient:
-                gm_options = "-auto-orient"
-            command = "gm convert %s -strip %s -resize %s -quality %s %s" % (source, gm_options, gm_geometry, self.quality, target)
-            print command
-            os.system(command)
-            CACHE.cache_thumbnail(source, target, self)
-        else:
-            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
-
+        options = self.options.copy()
+        options.update({"resize": gm_geometry})
+        self.gm(source, target, options)
         return thumbnail_name
 
     def __repr__(self):

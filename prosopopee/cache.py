@@ -3,6 +3,10 @@ import json
 
 CACHE_VERSION = 1
 
+def remove_name(options):
+    noname_options = options.copy()
+    del noname_options["name"]
+    return noname_options
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -22,39 +26,23 @@ class Cache(object):
             print "info: cache format as changed, prune cache"
             self.cache = {"version": CACHE_VERSION}
 
-    def thumbnail_needs_to_be_generated(self, source, target, image):
+
+    def needs_to_be_generated(self, source, target, options):
         if not os.path.exists(target):
             return True
 
         if target not in self.cache:
             return True
 
-        cached_thumbnail = self.cache[target]
+        cached_picture = self.cache[target]
 
-        if cached_thumbnail["size"] != os.path.getsize(source) or cached_thumbnail["options"] != image.options:
+        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_name(options):
             return True
 
         return False
 
-    def image_needs_to_be_oritend(self, source, target, command):
-        if not os.path.exists(target):
-            return True
-
-        if target not in self.cache:
-            return True
-
-        cached_image = self.cache[target]
-
-        if cached_image["size"] != os.path.getsize(source) or cached_image["command"] != command:
-            return True
-
-        return False
-
-    def cache_thumbnail(self, source, target, image):
-        self.cache[target] = {"size": os.path.getsize(source), "options": image.options}
-
-    def cache_auto_oriented_image(self, source, target, command):
-        self.cache[target] = {"size": os.path.getsize(source), "command": command}
+    def cache_picture(self, source, target, options):
+        self.cache[target] = {"size": os.path.getsize(source), "options": remove_name(options)}
 
     def __del__(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))
