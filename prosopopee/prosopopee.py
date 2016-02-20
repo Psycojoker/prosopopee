@@ -118,7 +118,10 @@ def main():
     # XXX recursively merge directories
     if os.path.exists(os.path.join(os.getcwd(), "build", "static")):
         shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
-    shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "static"), os.path.join(os.getcwd(), "build", "static"))
+    if os.path.exists(os.path.join(os.getcwd(), "static")):
+        shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", "static"))
+    else:
+        shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
         gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
