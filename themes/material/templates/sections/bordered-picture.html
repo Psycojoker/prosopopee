@@ -1,0 +1,7 @@
+<div class="container baguette">
+    {% set image = Image(section.image) %}
+    {{ image.copy()}}
+    <a href="{{ image }}">
+        <img class="responsive-img" src="{{ image }}">
+    </a>
+</div>

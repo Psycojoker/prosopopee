@@ -1,0 +1,5 @@
+{% set image = Image(section.image) %}
+{{ image.copy() }}
+<div class="container panorama">
+	<img src="{{ image.generate_thumbnail("x800") }}">
+</div>

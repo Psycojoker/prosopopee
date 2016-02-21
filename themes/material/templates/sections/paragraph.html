@@ -1,0 +1,10 @@
+<div class="container">
+	{% if section.title %}
+	<div id="{{ section.title }}" class="scrollspy">
+		<h2>{{ section.title }}</h2>
+		{% else %}
+		<div class="separator"></div>
+		{% endif %}
+		<p class="flow-text">{{ section.text }}</p>
+	</div>
+</div>

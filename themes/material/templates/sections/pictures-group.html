@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row baguette">
+        {% for line in section.images %}
+        {% for image in line %}
+        {% set image = Image(image) %}
+        {{ image.copy() }}
+        {% set plop =  12 // loop.length %}
+        <div class="col m{{ plop }} l{{ plop }}">
+            <div class="card">
+                <div class="card-image">
+                    <a href="{{ image }}">
+                        <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% if not loop.last %}
+        <div class="separator"></div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>

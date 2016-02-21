@@ -1,0 +1,32 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.parallax-container {
+  height: 500px;
+  min-height: 250px;
+  margin-bottom: 20px;
+}
+
+.parallax-container h1 {
+  font-weight: 600;
+  font-size: 5.5vw;
+  text-transform: uppercase;
+}
+
+.parallax-container h2 {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 2.2vw;
+}
+
+.parallax-tittle {
+  text-align: center;
+  width: 100%;
+}
