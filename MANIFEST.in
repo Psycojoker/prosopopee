@@ -1,4 +1,2 @@
-recursive-include templates *
-recursive-include static *
 recursive-include themes *
 include requirements.txt

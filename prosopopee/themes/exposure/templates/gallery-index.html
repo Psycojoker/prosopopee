@@ -28,6 +28,7 @@
   </div>
 
   <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
@@ -41,6 +42,11 @@
             overlay: true
           });
     });
+
+    $(document).ready(function(){
+    	$('.scrollspy').scrollSpy();
+    });
+
   </script>
   <footer>
       <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
