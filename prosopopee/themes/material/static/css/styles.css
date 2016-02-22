@@ -9,9 +9,10 @@ main {
 }
 
 .parallax-container {
-  height: 500px;
+  height: 800px;
   min-height: 250px;
   margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, .4);
 }
 
 .parallax-container h1 {
