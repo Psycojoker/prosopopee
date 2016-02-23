@@ -112,6 +112,8 @@ def main():
 
     theme = settings.get("settings", {}).get("theme", "exposure")
 
+    error(os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme)), "'%s' is not an existing theme, available themes are '%s'" % (theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))))
+
     templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")]))
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
