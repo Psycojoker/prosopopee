@@ -126,7 +126,6 @@ def main():
     if os.path.exists(os.path.join(os.getcwd(), "static")):
         shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", "static"))
     else:
-        print (os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static")
         shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
