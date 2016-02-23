@@ -419,3 +419,14 @@ GPLv3+
 > 16:57 &lt;meornithorynque> et tu as besoin d'un nom ?<br>
 > 16:57 &lt;meornithorynque> genre n'importe quoi ?<br>
 > 16:57 &lt;meornithorynque> je propose "Prosopopée"
+
+## Authors
+
+By chronological order:
+
+* [Bram](http://worlddomination.be), launched the project
+* [Kload](https://github.com/Kloadut)
+* [opi](https://github.com/opi)
+* [taziden](https://www.libre-parcours.net/)
+* [beudbeud](https://github.com/abeudin)
+* [Julien Malik](https://github.com/julienmalik)
