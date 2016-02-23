@@ -94,6 +94,8 @@ generic approach to "choose your page style".
 
 Global settings can be set in your root `settings.yaml`, under the `settings` key.
 
+##### GM
+
 Currently a `gm` settings key allows to customize the default GraphicsMagick's behavior. It looks like :
 
 ```yaml
@@ -113,6 +115,22 @@ The meaning of the currently supported GraphicsMagick's settings is as follows :
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
 
+##### Themes
+
+Prosopopée has a support for various themes. As for now, only 2 themes are available:
+
+* the default one called "exposure"
+* "material" based on materialcss
+
+To specify the theme, add the "theme" key in your "settings" key or your
+**root** settings.yaml. For example:
+
+```yaml
+title: My exploration of the outside world
+sub_title: it's a scary place, don't go there
+settings:
+  theme: material
+```
 
 ### Gallery settings.yaml
 
@@ -168,6 +186,8 @@ sections:
     - ...
 ```
 
+#### Images handling
+
 Images go into the `cover` or `image` keys.
 Each image individual processing settings can be customized to override the default
 GraphicsMagick settings defined (or not) in the root `settings.yaml`.
@@ -181,7 +201,7 @@ For example, you can replace :
 image: image1.jpg
 ```
 
-by :
+by:
 
 ```yaml
 image:
@@ -402,3 +422,15 @@ GPLv3+
 > 16:57 &lt;meornithorynque> et tu as besoin d'un nom ?<br>
 > 16:57 &lt;meornithorynque> genre n'importe quoi ?<br>
 > 16:57 &lt;meornithorynque> je propose "Prosopopée"
+
+## Authors
+
+By chronological order:
+
+* [Bram](http://worlddomination.be), launched the project
+* [Kload](https://github.com/Kloadut)
+* [opi](https://github.com/opi)
+* [taziden](https://www.libre-parcours.net/)
+* [beudbeud](https://github.com/abeudin)
+* [CapsLock](https://blog.legeox.net/)
+* [Julien Malik](https://github.com/julienmalik)

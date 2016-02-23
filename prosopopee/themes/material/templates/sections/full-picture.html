@@ -1,0 +1,13 @@
+{% set image = Image(section.image) %}
+{{ image.copy() }}
+<div class="parallax-container z-depth-1 valign-wrapper">
+    <div class="parallax hide-on-med-and-down"><img src="{{ image }}"></div>
+    <div class="parallax hide-on-large-only"><img src="{{ image.generate_thumbnail("x1024") }}"></div>
+    {% if section.text %}
+    <div class="parallax-tittle white-text">
+    <h1>{{ section.text.title }}</h1>
+    <h2>{{ section.text.sub_title }}</h2>
+    {% if section.text.date %}<div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>{% endif %}
+    </div>
+    {% endif %}
+</div>

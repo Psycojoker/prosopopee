@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="static/css/materialize.css">
+<link rel="stylesheet" href="static/css/styles.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for galleries_line in galleries|reverse|batch(3)|reverse %}
+        <div class="galleries-line covers-{{ galleries_line|length }}">
+            {% for gallery in galleries_line|reverse %}
+            {% if loop.length is divisibleby 2 %}
+            <div class="col m6 l6">
+            {% else %}
+            {% if loop.last %}
+            <div class="col m12 l12">
+            {% else %}
+            <div class="col m6 l6">
+            {% endif %}    
+            {% endif %}
+            <a href="{{ gallery.link }}">    
+                <div class="card hoverable blue-grey lighten-5">
+                    <div class="card-image">
+                        {% set cover = Image(gallery.cover) %}
+                        {{ cover.copy() }}
+                        <img src="{{ cover.generate_thumbnail("x800") }}">
+                        <span class="card-title">{{ gallery.title }}</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">{% if gallery.sub_title %}{{ gallery.sub_title }}{% endif %}</span>
+                        {% if gallery.tags %}{% for tag in gallery.tags -%}<div class="chip right"><i class="mdi-action-label"></i> {{ tag }} </div>{% endfor -%}{% endif %}
+                    </div>
+                    <div class="card-action">
+                        <a href="{{ gallery.link }}">Read more..</a>
+                        {% if gallery.date %}<div class="right">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+                    </div>
+                </div>
+            </a>    
+            </div>
+            {% endfor %}
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+
+        <script type="text/javascript" src="static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="static/js/materialize.min.js" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+$('.button-collapse').sideNav();
+
+$(document).ready(function(){
+    $('.scrollspy').scrollSpy();
+});
+        </script>
+        {% endblock %}

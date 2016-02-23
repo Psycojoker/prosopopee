@@ -1,0 +1,17 @@
+CHANGELOG
+=========
+
+0.2 (2016-02-23)
+----------------
+
+* a lot new contributors stepped in, see https://github.com/Psycojoker/prosopopee#authors
+* possibility to specify an (optional) menu https://github.com/Psycojoker/prosopopee#menu made by beudbeud
+* configure Graphics Magick options on a global or per images fashion https://github.com/Psycojoker/prosopopee#gm and https://github.com/Psycojoker/prosopopee#images-handling by capslock and jmk
+* support for various themes and a new material theme in addition of the default one https://github.com/Psycojoker/prosopopee#gm by beudbeud
+* tags support in gallery settings https://github.com/Psycojoker/prosopopee#gallery-settingsyaml by beudbeud
+* introduce internal CACHE format version to avoid breaking build when changing it
+
+0.1 (2016-02-09)
+----------------
+
+* First pypi release

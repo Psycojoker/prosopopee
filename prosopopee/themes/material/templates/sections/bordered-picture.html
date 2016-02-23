@@ -1,0 +1,14 @@
+<div class="container baguette hide-on-med-and-down">
+    {% set image = Image(section.image) %}
+    {{ image.copy()}}
+    <a href="{{ image }}">
+        <img class="responsive-img" src="{{ image.generate_thumbnail("x2000") }}">
+    </a>
+</div>
+<div class="container baguette hide-on-large-only">
+    {% set image = Image(section.image) %}
+    {{ image.copy()}}
+    <a href="{{ image.generate_thumbnail("x1024") }}">
+        <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
+    </a>
+</div>

@@ -11,11 +11,6 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import error
 
-templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "templates")]))
-index_template = templates.get_template("index.html")
-gallery_index_template = templates.get_template("gallery-index.html")
-page_template = templates.get_template("page.html")
-
 SETTINGS = {
     "show_date": True,
     "gm": {
@@ -191,10 +186,23 @@ def main():
     if not os.path.exists("build"):
         os.makedirs("build")
 
+    theme = settings.get("settings", {}).get("theme", "exposure")
+
+    error(os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme)), "'%s' is not an existing theme, available themes are '%s'" % (theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))))
+
+    templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")]))
+    index_template = templates.get_template("index.html")
+    gallery_index_template = templates.get_template("gallery-index.html")
+    page_template = templates.get_template("page.html")
+
     # XXX recursively merge directories
     if os.path.exists(os.path.join(os.getcwd(), "build", "static")):
         shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
-    shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "static"), os.path.join(os.getcwd(), "build", "static"))
+
+    if os.path.exists(os.path.join(os.getcwd(), "static")):
+        shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", "static"))
+    else:
+        shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
         gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
