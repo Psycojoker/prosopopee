@@ -1,5 +1,8 @@
+CHANGELOG
+=========
+
 0.2 (2016-02-23)
-================
+----------------
 
 * a lot new contributors stepped in, see https://github.com/Psycojoker/prosopopee#authors
 * possibility to specify an (optional) menu https://github.com/Psycojoker/prosopopee#menu made by beudbeud
@@ -9,6 +12,6 @@
 * introduce internal CACHE format version to avoid breaking build when changing it
 
 0.1 (2016-02-09)
-================
+----------------
 
 * First pypi release
