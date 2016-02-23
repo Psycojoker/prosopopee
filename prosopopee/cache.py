@@ -1,7 +1,7 @@
 import os
 import json
 
-CACHE_VERSION = 1
+CACHE_VERSION = 2
 
 def remove_name(options):
     noname_options = options.copy()
