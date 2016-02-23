@@ -186,6 +186,8 @@ sections:
     - ...
 ```
 
+#### Images handling
+
 Images go into the `cover` or `image` keys.
 Each image individual processing settings can be customized to override the default
 GraphicsMagick settings defined (or not) in the root `settings.yaml`.
@@ -199,7 +201,7 @@ For example, you can replace :
 image: image1.jpg
 ```
 
-by :
+by:
 
 ```yaml
 image:
