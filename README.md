@@ -429,4 +429,5 @@ By chronological order:
 * [opi](https://github.com/opi)
 * [taziden](https://www.libre-parcours.net/)
 * [beudbeud](https://github.com/abeudin)
+* [CapsLock](https://blog.legeox.net/)
 * [Julien Malik](https://github.com/julienmalik)
