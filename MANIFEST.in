@@ -1,2 +1,2 @@
-recursive-include prosopopee/themes *
+recursive-include themes *
 include requirements.txt
