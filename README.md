@@ -384,6 +384,23 @@ In a folder containing the **root** settings.yaml file, simply do
 A `build` folder will be created in the current directory, containing an
 index.html, static files (css & js) and pictures.
 
+## Themes
+
+Prosopopée has a support for various themes. As for now, only 2 themes are available:
+
+* the default one called "exposure"
+* "material" based on materialcss
+
+To specify the theme, add the "theme" key in your "settings" key or your
+**root** settings.yaml. For example:
+
+```yaml
+title: My exploration of the outside world
+sub_title: it's a scary place, don't go there
+settings:
+  theme: material
+```
+
 ## TODO
 
 * write documentation on how to overwrite the templates
