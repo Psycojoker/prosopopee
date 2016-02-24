@@ -26,10 +26,10 @@
                         {% set cover = Image(gallery.cover) %}
                         {{ cover.copy() }}
                         <img src="{{ cover.generate_thumbnail("x800") }}">
-                        <span class="card-title">{{ gallery.title }}</span>
+                        <span class="card-title truncate">{{ gallery.title }}</span>
                     </div>
                     <div class="card-content">
-                        <span class="card-title">{% if gallery.sub_title %}{{ gallery.sub_title }}{% endif %}</span>
+                        <span class="card-title truncate">{% if gallery.sub_title %}{{ gallery.sub_title }}{% endif %}</span>
                         {% if gallery.tags %}{% for tag in gallery.tags -%}<div class="chip right"><i class="mdi-action-label"></i> {{ tag }} </div>{% endfor -%}{% endif %}
                     </div>
                     <div class="card-action">
