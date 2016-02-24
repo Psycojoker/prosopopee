@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding:Utf-8 -*-
 
-import os
 from setuptools import setup
 
 try:
