@@ -3,7 +3,6 @@
 
 import os
 from setuptools import setup
-from operator import add
 
 try:
     from pypandoc import convert
@@ -31,6 +30,6 @@ setup(name='prosopopee',
       keywords='',
       include_package_data=True,
       package_data={
-            'prosopopee': reduce(add, [[x[0].replace("prosopopee/", "", 1) + y for y in x[2]] for x in os.walk("prosopopee/themes/")], []),
+            'prosopopee': ['themes/*/*/*/*'] + ['themes/*/templates/*.html'] + ['themes/*/templates/section/*.html']
         },
      )
