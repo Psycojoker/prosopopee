@@ -30,6 +30,6 @@ setup(name='prosopopee',
       keywords='',
       include_package_data=True,
       package_data={
-            'prosopopee': ["%s/*" % x[0] for x in os.walk("prosopopee/themes/") if x[2]],
+            'prosopopee': ["%s/*" % x[0].replace("prosopopee/", "", 1) for x in os.walk("prosopopee/themes/") if x[2]],
         },
      )
