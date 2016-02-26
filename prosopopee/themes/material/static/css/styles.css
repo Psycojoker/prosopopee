@@ -31,3 +31,44 @@ main {
   text-align: center;
   width: 100%;
 }
+
+.caption {
+    position: relative;
+    overflow: hidden;
+}
+
+.caption__media {
+    display: block;
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+
+.caption__overlay {
+    background-color: rgba(0, 0, 0, .4);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: white;
+    transform: translateY(101%);
+    transition: transform .35s ease-out;
+}
+
+.caption:hover .caption__overlay {
+    transform: translateY(0);
+}
+
+.bordered-picture .caption__overlay {
+    margin-left: 11.5%;
+    margin-right: 11.5%;
+}
+
+.caption .card-panel {
+    margin: 0;
+    padding: 1px;
+    text-align: center;
+}
+  

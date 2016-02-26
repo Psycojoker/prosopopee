@@ -2,19 +2,20 @@
     <div class="row baguette">
         {% for line in section.images %}
         {% for image in line %}
+        {% set caption = image.text %}
         {% set image = Image(image) %}
         {{ image.copy() }}
         {% set plop =  12 // loop.length %}
         <div class="col m{{ plop }} l{{ plop }}">
             <div class="card">
-                <div class="card-image hide-on-med-and-down">
-                    <a href="{{ image }}">
+                <div class="card-image caption">
+                    <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
                         <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
-                    </a>
-                </div>
-                <div class="card-image hide-on-large-only">
-                    <a href="{{ image.generate_thumbnail("x1024") }}">
-                        <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
+                        {% if caption %}
+                        <div class="caption__overlay card-panel center">
+                            <h5 class="black-white">{{ caption }}</h5>
+                        </div>
+                        {% endif %}
                     </a>
                 </div>
             </div>

@@ -6,7 +6,7 @@
             {% set image = Image(image) %}
             {{ image.copy() }}
             <div class="picture caption">
-                <a href="{{ image }}">
+                <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
                     <img src="{{ image.generate_thumbnail("x600") }}">
                     {% if caption %}
                     <div class="caption__overlay">

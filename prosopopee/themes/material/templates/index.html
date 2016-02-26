@@ -25,7 +25,7 @@
                     <div class="card-image">
                         {% set cover = Image(gallery.cover) %}
                         {{ cover.copy() }}
-                        <img src="{{ cover.generate_thumbnail("x800") }}">
+                        <img class="responsive-img" src="{{ cover.generate_thumbnail("x800") }}">
                         <span class="card-title truncate">{{ gallery.title }}</span>
                     </div>
                     <div class="card-content">

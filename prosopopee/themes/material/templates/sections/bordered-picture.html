@@ -1,14 +1,13 @@
-<div class="container baguette hide-on-med-and-down">
+<div class="container baguette caption">
     {% set image = Image(section.image) %}
+    {% set caption = section.text %}
     {{ image.copy()}}
-    <a href="{{ image }}">
+    <a href="{{ image }} {% if caption %}data-caption="{{ caption }}"{% endif %}>
         <img class="responsive-img" src="{{ image.generate_thumbnail("x2000") }}">
-    </a>
-</div>
-<div class="container baguette hide-on-large-only">
-    {% set image = Image(section.image) %}
-    {{ image.copy()}}
-    <a href="{{ image.generate_thumbnail("x1024") }}">
-        <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
+        {% if caption %}
+        <div class="caption__overlay card-panel center">
+            <h5 class="black-white">{{ caption }}</h5>
+        </div>
+        {% endif %}
     </a>
 </div>

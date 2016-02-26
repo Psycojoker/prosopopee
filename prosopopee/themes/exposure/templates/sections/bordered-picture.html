@@ -3,7 +3,7 @@
 {{ image.copy()}}
 <section class="bordered-picture baguette">
     <div class="caption">
-        <a href="{{ image }}">
+        <a href="{{ image }} {% if caption %}data-caption="{{ caption }}"{% endif %}">
             <img src="{{ image }}">
             {% if caption %}
             <div class="caption__overlay">
