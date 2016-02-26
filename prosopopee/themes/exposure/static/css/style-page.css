@@ -197,3 +197,59 @@ footer a {
 .gallery-header {
     margin-bottom: 0;
 }
+
+
+
+.caption {
+    position: relative;
+    overflow: hidden;
+}
+
+.caption__media {
+    display: block;
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.caption__overlay {
+    height: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 20px 0 30px 0;
+    color: white;
+    transform: translateY(-100%);
+    transition: transform .35s ease-out;
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0.85)), color-stop(100%, transparent));
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    background: -o-linear-gradient(top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    background: -ms-linear-gradient(top, rgba(0,0,0,0.85) 0%, transparent 100%);
+}
+
+.caption:hover .caption__overlay {
+    transform: translateY(0);
+}
+
+.caption h5 {
+    position: relative;
+    width: auto;
+    display: inline-block;
+    margin: 0 auto 10px auto;
+    font-size: 20px;
+    font-family: "adobe-garamond-pro", serif;
+    font-weight: normal;
+    font-style: italic;
+    padding: 2px 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.bordered-picture .caption__overlay {
+    margin-left: 11.5%;
+    margin-right: 11.5%;
+}
+

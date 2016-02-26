@@ -2,17 +2,23 @@
     {% for line in section.images %}
         <div class="pictures-line">
             {% for image in line %}
-                {% set image = Image(image) %}
-                {{ image.copy() }}
-                <div class="picture">
-                    <a href="{{ image }}">
-                        <img src="{{ image.generate_thumbnail("x600") }}">
-                    </a>
-                </div>
+            {% set caption = image.text %}
+            {% set image = Image(image) %}
+            {{ image.copy() }}
+            <div class="picture caption">
+                <a href="{{ image }}">
+                    <img src="{{ image.generate_thumbnail("x600") }}">
+                    {% if caption %}
+                    <div class="caption__overlay">
+                        <h5 class="caption__overlay__title">{{ caption }}</h5>
+                    </div>
+                    {% endif %}
+                </a>
+            </div>
             {% if not loop.last %}
-                <div class="separator"></div>
+            <div class="separator"></div>
             {% endif %}
             {% endfor %}
         </div>
-    {% endfor %}
+        {% endfor %}
 </section>
