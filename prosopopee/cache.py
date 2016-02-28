@@ -4,9 +4,11 @@ import json
 CACHE_VERSION = 2
 
 
-def remove_name(options):
+def remove_superficial_options(options):
     noname_options = options.copy()
     del noname_options["name"]
+    if "text" in noname_options:
+        del noname_options["text"]
     return noname_options
 
 
@@ -37,13 +39,13 @@ class Cache(object):
 
         cached_picture = self.cache[target]
 
-        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_name(options):
+        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_superficial_options(options):
             return True
 
         return False
 
     def cache_picture(self, source, target, options):
-        self.cache[target] = {"size": os.path.getsize(source), "options": remove_name(options)}
+        self.cache[target] = {"size": os.path.getsize(source), "options": remove_superficial_options(options)}
 
     def __del__(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))
