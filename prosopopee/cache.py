@@ -3,10 +3,12 @@ import json
 
 CACHE_VERSION = 2
 
+
 def remove_name(options):
     noname_options = options.copy()
     del noname_options["name"]
     return noname_options
+
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -25,7 +27,6 @@ class Cache(object):
         if "version" not in self.cache or self.cache["version"] != CACHE_VERSION:
             print "info: cache format as changed, prune cache"
             self.cache = {"version": CACHE_VERSION}
-
 
     def needs_to_be_generated(self, source, target, options):
         if not os.path.exists(target):
