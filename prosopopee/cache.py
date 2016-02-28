@@ -5,11 +5,11 @@ CACHE_VERSION = 2
 
 
 def remove_superficial_options(options):
-    noname_options = options.copy()
-    del noname_options["name"]
-    if "text" in noname_options:
-        del noname_options["text"]
-    return noname_options
+    cleaned_options = options.copy()
+    del cleaned_options["name"]
+    if "text" in cleaned_options:
+        del cleaned_options["text"]
+    return cleaned_options
 
 
 class Cache(object):
