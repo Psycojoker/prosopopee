@@ -3,10 +3,14 @@ import json
 
 CACHE_VERSION = 2
 
-def remove_name(options):
-    noname_options = options.copy()
-    del noname_options["name"]
-    return noname_options
+
+def remove_superficial_options(options):
+    cleaned_options = options.copy()
+    del cleaned_options["name"]
+    if "text" in cleaned_options:
+        del cleaned_options["text"]
+    return cleaned_options
+
 
 class Cache(object):
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
@@ -26,7 +30,6 @@ class Cache(object):
             print "info: cache format as changed, prune cache"
             self.cache = {"version": CACHE_VERSION}
 
-
     def needs_to_be_generated(self, source, target, options):
         if not os.path.exists(target):
             return True
@@ -36,13 +39,13 @@ class Cache(object):
 
         cached_picture = self.cache[target]
 
-        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_name(options):
+        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_superficial_options(options):
             return True
 
         return False
 
     def cache_picture(self, source, target, options):
-        self.cache[target] = {"size": os.path.getsize(source), "options": remove_name(options)}
+        self.cache[target] = {"size": os.path.getsize(source), "options": remove_superficial_options(options)}
 
     def __del__(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))
