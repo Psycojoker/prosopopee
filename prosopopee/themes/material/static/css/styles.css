@@ -62,8 +62,8 @@ main {
 }
 
 .bordered-picture .caption__overlay {
-    margin-left: 11.5%;
-    margin-right: 11.5%;
+    margin-left: 11.5% !important;
+    margin-right: 11.5% !important;
 }
 
 .caption .card-panel {
@@ -71,4 +71,11 @@ main {
     padding: 1px;
     text-align: center;
 }
-  
+
+.bordered-picture img {
+    height: 77%;
+    width: 77%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
+}
+
