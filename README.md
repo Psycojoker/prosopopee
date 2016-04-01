@@ -132,6 +132,17 @@ settings:
   theme: material
 ```
 
+##### Licence
+
+By default Prosopopée use CC-BY-SA for all the content, if you want use a another licence 
+you need add key in **root** settings.yaml. For example:
+
+```yaml
+licences:
+   name: WTFPL
+   url: "http://www.wtfpl.net/txt/copying/"
+```
+
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
