@@ -9,40 +9,60 @@
 <div class="container">
     <div class="row">
         {% for galleries_line in galleries|reverse|batch(3)|reverse %}
-        <div class="galleries-line covers-{{ galleries_line|length }}">
-            {% for gallery in galleries_line|reverse %}
-            {% if loop.length is divisibleby 2 %}
-            <div class="col m6 l6">
+        {% for gallery in galleries_line|reverse %}
+        {% if loop.length is divisibleby 2 %}
+        <div class="col s12 m12 l6">
             {% else %}
             {% if loop.last %}
-            <div class="col m12 l12">
-            {% else %}
-            <div class="col m6 l6">
-            {% endif %}    
-            {% endif %}
-            <a href="{{ gallery.link }}">    
-                <div class="card hoverable blue-grey lighten-5">
-                    <div class="card-image">
-                        {% set cover = Image(gallery.cover) %}
-                        {{ cover.copy() }}
-                        <img class="responsive-img" src="{{ cover.generate_thumbnail("x800") }}">
-                        <span class="card-title truncate">{{ gallery.title }}</span>
-                    </div>
-                    <div class="card-content">
-                        <span class="card-title truncate">{% if gallery.sub_title %}{{ gallery.sub_title }}{% endif %}</span>
-                        {% if gallery.tags %}{% for tag in gallery.tags -%}<div class="chip right"><i class="mdi-action-label"></i> {{ tag }} </div>{% endfor -%}{% endif %}
-                    </div>
-                    <div class="card-action">
-                        <a href="{{ gallery.link }}">Read more..</a>
-                        {% if gallery.date %}<div class="right">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
-                    </div>
+            <div class="col s12 m12 l12">
+                {% else %}
+                <div class="col s12 m12 l6">
+                    {% endif %}    
+                    {% endif %}
+                    <a href="{{ gallery.link }}">    
+                        <div class="card hoverable blue-grey lighten-5">
+                            <div class="card-image">
+                                {% set cover = Image(gallery.cover) %}
+                                {{ cover.copy() }}
+                                <img class="responsive-img hide-on-large-only" src="{{ cover.generate_thumbnail("x900") }}">
+                                <img class="small-card hide-on-med-and-down" src="{{ cover.generate_thumbnail("x900") }}">
+                                <span class="card-title truncate">{{ gallery.title }}
+                                    {% if gallery.sub_title %} : {{ gallery.sub_title }}{% endif %}
+                                </span>
+                            </div>
+                            <div class="card-action">
+                                <div class="left">
+                                    <a href="{{ gallery.link }}">Read more..</a>
+                                </div>
+                                {% if gallery.tags or gallery.date %}
+                                <div class="right">
+                                    {% if gallery.tags %}{% for tag in gallery.tags -%}
+                                    <div class="chip">
+                                        <div class="image">
+                                            <img class="grey">
+                                            <div class="tag white-text">
+                                                {{ tag[0].capitalize() }}
+                                            </div>
+                                            </img>
+                                            {{ tag }}
+                                        </div>
+                                    </div>
+                                    {% endfor -%}
+                                    {% endif %}
+                                    {% if gallery.date %}
+                                    <div class="chip">
+                                        {{ gallery.date.strftime("%d %B %Y") }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>    
                 </div>
-            </a>    
+                {% endfor %}
             </div>
             {% endfor %}
-            </div>
-            {% endfor %}
-            </div>
         </div>
 
         <script type="text/javascript" src="static/js/jquery-2.1.4.min.js" charset="utf-8"></script>

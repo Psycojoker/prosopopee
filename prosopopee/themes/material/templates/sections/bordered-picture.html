@@ -1,8 +1,8 @@
-<div class="container baguette caption">
-    {% set image = Image(section.image) %}
-    {% set caption = section.text %}
-    {{ image.copy()}}
-    <a href="{{ image }} {% if caption %}data-caption="{{ caption }}"{% endif %}>
+{% set image = Image(section.image) %}
+{% set caption = section.text %}
+{{ image.copy()}}
+<div class="bordered-picture baguette caption">
+    <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
         <img class="responsive-img" src="{{ image.generate_thumbnail("x2000") }}">
         {% if caption %}
         <div class="caption__overlay card-panel center">

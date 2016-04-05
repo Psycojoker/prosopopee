@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+0.3 (unreleased)
+----------------
+
+* caption support on bordered picture and pictures group https://github.com/Psycojoker/prosopopee#images-caption by beudbeud
+* configure licence https://github.com/Psycojoker/prosopopee#licence in footer by beudbeud
+* possibility to use a range for the full picture date https://github.com/Psycojoker/prosopopee#full-screen-picture-with-or-without-text-on-it by beudbeud
+* Update material theme by beudbeud
+
 0.2 (2016-02-23)
 ----------------
 

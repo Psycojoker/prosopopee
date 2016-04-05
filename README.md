@@ -132,6 +132,17 @@ settings:
   theme: material
 ```
 
+##### Licence
+
+By default Prosopopée use CC-BY-SA for all the content, if you want use a another licence 
+you need add key in **root** settings.yaml. For example:
+
+```yaml
+licence:
+   name: WTFPL
+   url: "http://www.wtfpl.net/txt/copying/"
+```
+
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
@@ -211,7 +222,6 @@ image:
   auto-orient: False
 ```
 
-
 ### Different kind of sections
 
 A gallery is composed of a succession of sections as you can see on this [wonderfully
@@ -250,6 +260,7 @@ With text:
       title: Big picture title
       sub_title: Some text
       date: 2016-01-15
+      date_end: 2016-01-24 (Optional)
 ```
 
 Without text:
@@ -343,6 +354,36 @@ How to use it:
   - type: panorama
     image: 7.jpg
 ```
+
+### Images caption
+
+
+Prosopopée has a support of caption in images, you can use it on bordered-picture and pictures-group.
+
+Exemple on bordered-picture :
+
+```yaml
+  - type: bordered-picture
+    image: another_picture.jpg
+    text: This is a caption
+```
+
+And on pictures-group
+
+```yaml
+  - type: pictures-group
+    images:
+      -
+        - name: image1.jpg
+          text: This is a caption
+        - image2.jpg
+        - image3.jpg
+      -
+        - image4.jpg
+        - image5.jpg
+```
+
+
 
 ### Example
 

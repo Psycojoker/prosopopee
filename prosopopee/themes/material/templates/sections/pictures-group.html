@@ -1,29 +1,27 @@
-<div class="container">
-    <div class="row baguette">
+<div class="pictures-group baguette">
+    <div class="row">
         {% for line in section.images %}
-        {% for image in line %}
-        {% set caption = image.text %}
-        {% set image = Image(image) %}
-        {{ image.copy() }}
-        {% set plop =  12 // loop.length %}
-        <div class="col m{{ plop }} l{{ plop }}">
-            <div class="card">
-                <div class="card-image caption">
-                    <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
-                        <img class="responsive-img" src="{{ image.generate_thumbnail("x600") }}">
-                        {% if caption %}
-                        <div class="caption__overlay card-panel center">
-                            <h5 class="black-white">{{ caption }}</h5>
-                        </div>
-                        {% endif %}
-                    </a>
+        <div class="pictures-line">
+            {% for image in line %}
+            {% set caption = image.text %}
+            {% set image = Image(image) %}
+            {{ image.copy() }}
+            <div class="col">
+                <div class="card">
+                    <div class="picture card-image caption">
+                        <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
+                            <img src="{{ image.generate_thumbnail("x600") }}">
+                            {% if caption %}
+                            <div class="caption__overlay center">
+                                <h5 class="caption__overlay__title">{{ caption }}</h5>
+                            </div>
+                            {% endif %}
+                        </a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% if not loop.last %}
-        <div class="separator"></div>
-        {% endif %}
-        {% endfor %}
         {% endfor %}
     </div>
 </div>

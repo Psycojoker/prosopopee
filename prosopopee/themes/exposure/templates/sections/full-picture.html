@@ -2,12 +2,17 @@
 {{ image.copy() }}
 <section class="full-picture" style="background: transparent url('{{ image }}') no-repeat scroll center top / cover;">
     {% if section.text %}
-        <div class="picture-text">
-            <div class="picture-text-column">
-                <h1>{{ section.text.title }}</h1>
-                <h2>{{ section.text.sub_title }}</h2>
-                {% if section.text.date %}<div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>{% endif %}
-            </div>
+    <div class="picture-text">
+        <div class="picture-text-column">
+            <h1>{{ section.text.title }}</h1>
+            <h2>{{ section.text.sub_title }}</h2>
+            {% if section.text.date_end %}
+            <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}  to {{ section.text.date_end.strftime("%d %B %Y") }}</div>
+            {% else %}
+            {% if section.text.date %}
+            <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>{% endif %}
+            {% endif %}
         </div>
+    </div>
     {% endif %}
 </section>
