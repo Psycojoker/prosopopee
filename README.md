@@ -138,7 +138,7 @@ By default Prosopopée use CC-BY-SA for all the content, if you want use a anoth
 you need add key in **root** settings.yaml. For example:
 
 ```yaml
-licences:
+licence:
    name: WTFPL
    url: "http://www.wtfpl.net/txt/copying/"
 ```
