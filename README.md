@@ -143,6 +143,16 @@ licence:
    url: "http://www.wtfpl.net/txt/copying/"
 ```
 
+##### Share
+
+If you want enable the share content on social network, add key in **root** settings.yaml. For example: 
+By defaut you can share on facebook, twitter, pinterest, google+.
+
+```yaml
+share: True
+url: "http://prosopopee.com/"
+```
+
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
