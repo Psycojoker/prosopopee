@@ -1,0 +1,17 @@
+{% set absolute_url = settings.url + "/" + link -%}
+<div class=share>
+<ul class="icon">
+    <li>
+    <a class="twitter" href="https://twitter.com/share?text={{ gallery.name }}&url={{absolute_url}}&hashtags=weareawesome&via=bluleadz"  target="_blank" class="twitter">Twitter</i></a>
+    </li>
+    <li>
+    <a class="facebook" href="http://www.facebook.com/share.php?u={{absolute_url}}" target="_blank" class="facebook">Facebook</a>
+    </li>
+    <li>
+    <a class="pinterest" href="http://www.pinterest.com/pin/create/button/?url={{absolute_url}}" target="_blank" class="linkedin">Pinterest</a>
+    </li>
+    <li>
+    <a class="google" href="https://plus.google.com/share?url={{absolute_url}}" target="_blank" class="google">Google +</a>
+    </li>
+</ul>
+</div>

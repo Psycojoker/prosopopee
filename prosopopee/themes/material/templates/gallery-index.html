@@ -21,11 +21,16 @@
 		{% include "sections/" + section.type + ".html" %}
 		{% endfor %}
 
+
+        {% if settings.share %}
+        {% include 'share.html' -%}
+        {% else -%}
 		<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
 			<a href="../" class="btn-floating btn-large red">
                 <i class="mdi-action-home"></i>
 			</a>
 		</div>
+        {% endif %}
 
 		<script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>

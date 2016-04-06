@@ -157,7 +157,7 @@ def main():
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
-        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image).encode("Utf-8"))
+        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, link=gallery).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 

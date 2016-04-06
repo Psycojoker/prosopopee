@@ -148,7 +148,6 @@ footer {
 
 .back-to-home hr {
     width: 14%;
-    margin-top: 8em;
     color: #DDD;
 }
 
@@ -251,5 +250,63 @@ footer a {
 .bordered-picture .caption__overlay {
     margin-left: 11.5%;
     margin-right: 11.5%;
+}
+
+.center, .center-align {
+  text-align: center;
+}
+
+
+.share {
+    text-align: center;
+    height: auto;
+    position: relative;
+    bottom: 0;
+    padding: 0 0 10px 0;
+}
+
+
+ul.icon {
+   padding: 0;
+   margin: 10px 0 0 0;
+}
+
+ul.icon li {
+  padding: 0;
+  list-style-type: none;
+  display:inline-block;
+}
+
+ul.icon a {
+    display: block;
+    float: left;
+    background: url(../img/social-share.png) no-repeat;
+    background-size: 196px 23px;
+    border: none;
+}
+
+ul.icon li, ul.icon a {
+    width: 32px;
+    height: 32px;
+    text-indent: -999999em;
+    overflow: hidden;
+    list-style-type: none;
+    display: inline-block;
+}
+
+a.twitter {
+    background-position: 5px 0 !important;
+}
+
+a.facebook {
+    background-position: -57px 0 !important;
+}
+
+a.pinterest {
+    background-position: -114px 0 !important;
+}
+
+a.google {
+    background-position: -172px 0 !important;
 }
 

@@ -1,0 +1,23 @@
+{% set absolute_url = settings.url + "/" + link -%}
+<div class="fixed-action-btn horizontal click-to-toggle" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large red">
+        <i class="mdi-content-add"></i>
+    </a>
+    <ul>
+        <li>
+            <a href="../" class="btn-floating btn-large red"><i class="mdi-action-home"></i></a>
+        </li>
+        <li>
+            <a class="btn-floating grey lighten-3" href="https://twitter.com/share?text={{ gallery.name }}&url={{absolute_url}}&hashtags=weareawesome&via=bluleadz"  target="_blank" class="twitter">Twitter</a>
+        </li>
+        <li>
+            <a class="btn-floating grey lighten-3" href="http://www.facebook.com/share.php?u={{absolute_url}}" target="_blank" class="facebook">Facebook</a>
+        </li>
+        <li>
+            <a class="btn-floating grey lighten-3" href="http://www.pinterest.com/pin/create/button/?url={{absolute_url}}" target="_blank" class="linkedin">Pinterest</a>
+        </li>
+        <li>
+            <a class="btn-floating grey lighten-3" href="https://plus.google.com/share?url={{absolute_url}}" target="_blank" class="google">Google +</a>
+        </li>
+    </ul>
+</div>
