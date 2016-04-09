@@ -149,7 +149,7 @@ If you want enable the share content on social network, add key in **root** sett
 By defaut you can share on facebook, twitter, pinterest, google+.
 
 ```yaml
-share: True
+share: true
 url: "http://prosopopee.com/"
 ```
 
