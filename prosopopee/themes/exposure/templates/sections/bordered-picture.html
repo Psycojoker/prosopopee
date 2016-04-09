@@ -1,6 +1,9 @@
 {% set image = Image(section.image) %}
 {% set caption = section.text %}
 {{ image.copy()}}
+{% if section.color %}
+<div style="padding: 1px 0px;background: {{ section.background }};">
+{% endif %}
 <section class="bordered-picture baguette">
     <div class="caption">
         <a href="{{ image }} {% if caption %}data-caption="{{ caption }}"{% endif %}">
@@ -13,3 +16,7 @@
     </div>
         </a>
 </section>
+{% if section.color %}
+</div>
+{% endif %}
+

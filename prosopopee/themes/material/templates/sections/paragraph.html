@@ -1,3 +1,6 @@
+{% if section.background %}
+<div style="padding: 1px 0px;background: {{ section.background }};">
+{% endif %}
 <div class="container">
 	{% if section.title %}
 	<div id="{{ section.title }}" class="scrollspy">
@@ -8,3 +11,6 @@
 		<p class="flow-text">{{ section.text }}</p>
 	</div>
 </div>
+{% if section.background %}
+</div>
+{% endif %}

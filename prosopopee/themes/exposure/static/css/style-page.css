@@ -257,12 +257,13 @@ footer a {
 }
 
 
-.share {
+.share, .author {
     text-align: center;
     height: auto;
     position: relative;
     bottom: 0;
     padding: 0 0 10px 0;
+    font-family: 'crimson', serif;
 }
 
 
@@ -310,3 +311,30 @@ a.google {
     background-position: -172px 0 !important;
 }
 
+.author img.circle {
+    border-radius: 50%;
+    width: 80px;
+}
+
+.author {
+    padding-bottom: 7em;
+}
+
+.author-meta {
+    color: #ccc;
+    font-style: italic;
+    font-size: 19px;
+}
+
+.author h4 {
+    text-transform: uppercase;
+}
+.author .desc {
+    width: 350px;
+    margin: auto;
+    padding-bottom: 10px;
+    font-style: normal;
+    font-size: 14px;
+    line-height: normal;
+    color: #333;
+}
