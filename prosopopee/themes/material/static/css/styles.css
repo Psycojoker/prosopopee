@@ -112,3 +112,11 @@ main {
 .card-action .right {
     margin-top: -5px;
 }
+
+.author {
+    padding-top: 7em;
+}
+
+.fixed-action-btn.horizontal ul {
+    top: 22%;
+}

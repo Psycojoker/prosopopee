@@ -1,3 +1,6 @@
+{% if section.background %}
+<div style="padding: 1px 0px;background: {{ section.background }};">
+{% endif %}
 <div class="pictures-group baguette">
     <div class="row">
         {% for line in section.images %}
@@ -25,3 +28,6 @@
         {% endfor %}
     </div>
 </div>
+{% if section.background %}
+</div>
+{% endif %}

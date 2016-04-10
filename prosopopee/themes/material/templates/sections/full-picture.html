@@ -1,7 +1,7 @@
 {% set image = Image(section.image) %}
 {{ image.copy() }}
-<div class="parallax-container z-depth-1 valign-wrapper">
-    <div class="parallax"><img src="{{ image }}"></div>
+<div class="parallax-container z-depth-2 valign-wrapper">
+    <div class="parallax"><img class="responsive-img" src="{{ image }}"></div>
     {% if section.text %}
     <div class="parallax-tittle white-text">
         <h1>{{ section.text.title }}</h1>

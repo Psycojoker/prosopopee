@@ -1,5 +1,11 @@
+{% if section.background %}
+<div style="padding: 1px 0px;background: {{ section.background }};">
+{% endif %}
 <div class="container">
     <p class="flow-text">
     {{ section.text }}
     </p>
 </div>
+{% if section.background %}
+</div>
+{% endif %}

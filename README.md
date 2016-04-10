@@ -143,6 +143,16 @@ licence:
    url: "http://www.wtfpl.net/txt/copying/"
 ```
 
+##### Share
+
+If you want enable the share content on social network, add key in **root** settings.yaml. For example: 
+By defaut you can share on facebook, twitter, pinterest, google+.
+
+```yaml
+share: true
+url: "http://prosopopee.com/"
+```
+
 ### Gallery settings.yaml
 
 This settings.yaml will describe:
@@ -355,6 +365,21 @@ How to use it:
     image: 7.jpg
 ```
 
+#### Author
+
+This section is for describe the author of the story.
+
+```yaml
+  - type: author
+    name: Adrien Beudin
+    text: Some text
+    image: IMG_20150725_200941.jpg
+    twitter: beudbeud (Optional)
+    facebook: beudbeud (Optional)
+    website: plop.fr (Optional)
+```
+
+
 ### Images caption
 
 
@@ -383,7 +408,25 @@ And on pictures-group
         - image5.jpg
 ```
 
+### Background settings
 
+For all section you can define the background.
+
+Exemple for background color
+
+```yaml
+  - type: bordered-picture
+    background: "#555"
+    image: another_picture.jpg
+```
+
+or you can use picture
+
+```yaml
+  - type: bordered-picture
+    background: "url(background_picture.jpg)"
+    image: another_picture.jpg
+```
 
 ### Example
 

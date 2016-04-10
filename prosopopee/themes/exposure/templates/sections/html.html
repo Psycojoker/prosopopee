@@ -1,5 +1,12 @@
+{% if section.color %}
+<div style="padding: 1px 0px;background: {{ section.background }};">
+{% endif %}
 <section class="html">
     <center>
         {{ section.html }}
     </center>
 </section>
+{% if section.color %}
+</div>
+{% endif %}
+
