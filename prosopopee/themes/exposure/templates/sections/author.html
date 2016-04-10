@@ -15,16 +15,12 @@
         <span>
             <a href="http://facebook.com/{{ section.twitter }}">Facebook</a>
         </span>
-        {% endif %}
-        {% if not loop.last %}
         <span> | </span>
         {% endif %}
         {% if section.facebook %}
         <span>
             <a href="http://twitter.com/{{ section.twitter }}">Twitter</a>
         </span>
-        {% endif %}
-        {% if not loop.last %}
         <span> | </span>
         {% endif %}
         {% if section.website %}
