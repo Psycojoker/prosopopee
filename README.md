@@ -423,9 +423,9 @@ Exemple for background color
 or you can use picture
 
 ```yaml
-  - type: bordered-picture
+  - type: text
     background: "url(background_picture.jpg)"
-    image: another_picture.jpg
+    text: Some text
 ```
 
 ### Text color settings
