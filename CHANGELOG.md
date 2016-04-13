@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.3 (unreleased)
-----------------
+0.3 the "beudbeud release" (2016-04-13)
+---------------------------------------
 
 * caption support on bordered picture and pictures group https://github.com/Psycojoker/prosopopee#images-caption by beudbeud
 * configure licence https://github.com/Psycojoker/prosopopee#licence in footer by beudbeud
