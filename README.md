@@ -428,6 +428,18 @@ or you can use picture
     image: another_picture.jpg
 ```
 
+### Background settings
+
+For text, html and paragraph  section you can define the text color.
+
+Exemple
+
+```yaml
+  - type: bordered-picture
+    color: "#333"
+```
+
+
 ### Example
 
 As a recap, here is how the files of the example gallery are organised:
