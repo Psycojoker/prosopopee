@@ -8,6 +8,7 @@ body {
     height: 100%;
     width: 100%;
     background-color: #FBFBFB;
+    color: black;
     margin: 0;
 }
 
@@ -103,7 +104,6 @@ a {
     line-height: 1.8em;
     margin-left: 21%;
     margin-right: 21%;
-    color: black;
 }
 
 .paragraph {
@@ -112,7 +112,6 @@ a {
     font-size: 1em;
     margin-left: 21%;
     margin-right: 21%;
-    color: #333;
 }
 
 .paragraph h2 {
@@ -120,7 +119,6 @@ a {
     font-weight: normal;
     font-size: 2.5em;
     text-transform: uppercase;
-    color: black;
     line-height: 1.4em;
 }
 
