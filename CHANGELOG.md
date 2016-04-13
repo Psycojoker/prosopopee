@@ -9,7 +9,7 @@ CHANGELOG
 * possibility to use a range for the full picture date https://github.com/Psycojoker/prosopopee#full-screen-picture-with-or-without-text-on-it by beudbeud
 * Update material theme by beudbeud
 * social share https://github.com/Psycojoker/prosopopee#share by beudbeud 
-* Define background of section https://github.com/abeudin/prosopopee#background-settings by beudbeud 
+* Define background and text color of section https://github.com/abeudin/prosopopee#background-settings by beudbeud 
 
 0.2 (2016-02-23)
 ----------------

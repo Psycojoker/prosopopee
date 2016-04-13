@@ -423,10 +423,22 @@ Exemple for background color
 or you can use picture
 
 ```yaml
-  - type: bordered-picture
+  - type: text
     background: "url(background_picture.jpg)"
-    image: another_picture.jpg
+    text: Some text
 ```
+
+### Text color settings
+
+For text, html and paragraph  section you can define the text color.
+
+Exemple
+
+```yaml
+  - type: bordered-picture
+    color: "#333"
+```
+
 
 ### Example
 
