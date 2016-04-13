@@ -428,7 +428,7 @@ or you can use picture
     image: another_picture.jpg
 ```
 
-### Background settings
+### Text color settings
 
 For text, html and paragraph  section you can define the text color.
 
