@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.3.1 (2016-04-13)
+------------------
+
+* fix: cover date was hidden by default, this was a backward breaking behavior
+
 0.3 the "beudbeud release" (2016-04-13)
 ---------------------------------------
 
