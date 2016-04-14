@@ -1,11 +1,12 @@
 # Prosopopee
 
 More or less a small clone of exposure.co in form of a static generator. For
-those of you who don't know what exposure.co is, this more or less allows you
-to organise you picture in a way that more or less tell a story.
+those of you who don't know what exposure.co is, this allows you to tell a
+story with your pictures.
 
 You can find example usages here:
 
+* http://surleschemins.fr
 * http://media.faimaison.net/photos/galerie/
 * https://www.thebrownianmovement.org/
 * http://outside.browny.pink
@@ -13,7 +14,8 @@ You can find example usages here:
 
 # Why?
 
-I wanted to learn a bit of advanced css and I wanted to self-host my data.
+I wanted to learn a bit of advanced css and I wanted to self-host my data
+instead of using exposure.co.
 
 ## Requirements
 
