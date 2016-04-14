@@ -101,6 +101,9 @@ def main():
     if settings.get("settings", {}).get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
 
+    if not "show_date" in settings:
+        settings["show_date"] = SETTINGS["show_date"]
+
     front_page_galleries_cover = []
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
