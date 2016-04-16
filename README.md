@@ -159,6 +159,7 @@ url: "http://prosopopee.com"
 For activate the RSS you need add this key in **root** settings.yaml
 
 ```yaml
+rss: true
 url: "http://prosopopee.com"
 ```
 
