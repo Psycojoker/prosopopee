@@ -1,4 +1,3 @@
-{% set absolute_url = settings.url + "/" + link -%}
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
@@ -8,6 +7,7 @@
         <atom:link href="{{ settings.url }}/feed.xml" rel="self" type="application/rss+xml" />
 
         {% for gallery in galleries %}
+        {% set absolute_url = settings.url + "/" + gallery.link -%}
 		<item>
 			<title>{{ gallery.title }}</title>
 			<link>{{ absolute_url }}</link>
