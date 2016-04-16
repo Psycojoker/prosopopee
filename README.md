@@ -58,7 +58,6 @@ The root settings.yaml should contains 2 keys : one for the title of your websit
 title: My exploration of the outside world
 sub_title: it's a scary place, don't go there
 ```
-
 It can also optionally contain a menu and global settings.
 
 #### Menu
@@ -152,7 +151,15 @@ By defaut you can share on facebook, twitter, pinterest, google+.
 
 ```yaml
 share: true
-url: "http://prosopopee.com/"
+url: "http://prosopopee.com"
+```
+
+##### RSS
+
+For activate the RSS you need add this key in **root** settings.yaml
+
+```yaml
+url: "http://prosopopee.com"
 ```
 
 ### Gallery settings.yaml
