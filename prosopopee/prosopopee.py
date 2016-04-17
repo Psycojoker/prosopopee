@@ -8,7 +8,7 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error
+from .utils import error, warning, okgreen
 
 SETTINGS = {
     "show_date": True,
@@ -47,11 +47,11 @@ class Image(object):
 
             }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
-            print command
+            warning("Generation", source)
             os.system(command)
             CACHE.cache_picture(source, target, options)
         else:
-            print "skipped %s since it's already generated (based on source unchanged size and images options set in your gallery's settings.yaml)" % target
+            okgreen("Skipped", source + "it's already generated")
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
@@ -97,6 +97,8 @@ def main():
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
+    if settings.get("rss") or settings.get("share"):
+        error(settings.get("url"), "If you want the rss and the social network share work, you should specify url in main settings")
 
     if settings.get("settings", {}).get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
@@ -163,7 +165,7 @@ def main():
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
         open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, link=gallery).encode("Utf-8"))
        
-        if settings.get("url"):
+        if settings.get("rss"):
             open(os.path.join("build", "feed.xml"), "w").write(feed_template.render(settings=settings, link=gallery, galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
