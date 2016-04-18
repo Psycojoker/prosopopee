@@ -97,8 +97,9 @@ def main():
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
+
     if settings.get("rss") or settings.get("share"):
-        error(settings.get("url"), "If you want the rss and the social network share work, you should specify url in main settings")
+        error(settings.get("url"), "If you want the rss and/or the social network share work, you should specify url in main settings")
 
     if settings.get("settings", {}).get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
