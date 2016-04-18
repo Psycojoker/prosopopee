@@ -51,7 +51,7 @@ class Image(object):
             os.system(command)
             CACHE.cache_picture(source, target, options)
         else:
-            okgreen("Skipped", source + "it's already generated")
+            okgreen("Skipped", source + " is already generated")
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
