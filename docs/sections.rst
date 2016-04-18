@@ -11,14 +11,14 @@ composed of 5 sections:
 * a group of 5 pictures
 * and a fullscreen picture without text on it this time
 
-In your settings.yaml, a section will **always** have a <code>type</code> key
+In your settings.yaml, a section will **always** have a ``type`` key
 that will describe its kind and additional data. Underneath, the
-<code>type</code> key is actually the name of an HTML template and the other
+``type`` key is actually the name of an HTML template and the other
 data will be passed to this template.
 
 You can find all the sections templates here: https://github.com/Psycojoker/prosopopee/tree/master/prosopopee/templates/sections
 
-You often have an <code>image</code> key. You need to give it a path to the
+You often have an ``image`` key. You need to give it a path to the
 actual file. By convention, those files are put inside your gallery folder but
 this is not mandatory.
 

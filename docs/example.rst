@@ -9,12 +9,12 @@ As a recap, here is how the files of the example gallery are organised::
 	          ├── settings.yaml
 	          └── stuff.png
 
-The content of <code>example/settings.yaml</code>::
+The content of ``example/settings.yaml``::
 
 	title: "Example gallery"
 	sub_title: some subtitle
 
-The content of <code>example/first_gallery/settings.yaml</code>::
+The content of ``example/first_gallery/settings.yaml``::
 
 	title: my first gallery
 	sub_title: some subtitle

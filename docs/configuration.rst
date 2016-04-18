@@ -161,7 +161,7 @@ _______
 	  - type: bordered-picture
 	    image: another_picture.jpg
 
-And here is an example or a **private** gallery (notice the <code>public</code> keyword)::
+And here is an example or a **private** gallery (notice the ``public`` keyword)::
 
 	title: Gallery title
 	sub_title: Gallery sub-title
