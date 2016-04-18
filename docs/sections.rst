@@ -147,22 +147,22 @@ Prosopopée has a support of caption in images, you can use it on bordered-pictu
 
 Exemple on bordered-picture::
 
-	  - type: bordered-picture
-	    image: another_picture.jpg
-	    text: This is a caption
+  - type: bordered-picture
+    image: another_picture.jpg
+    text: This is a caption
 
 And on pictures-group::
 
-	  - type: pictures-group
-	    images:
-	      -
-	        - name: image1.jpg
-	          text: This is a caption
-	        - image2.jpg
-	        - image3.jpg
-	      -
-	        - image4.jpg
-	        - image5.jpg
+  - type: pictures-group
+    images:
+      -
+        - name: image1.jpg
+          text: This is a caption
+        - image2.jpg
+        - image3.jpg
+      -
+        - image4.jpg
+        - image5.jpg
 
 Background settings
 ~~~~~~~~~~~~~~~~~~~
@@ -171,15 +171,15 @@ For all section you can define the background.
 
 Exemple for background color::
 
-	  - type: bordered-picture
-	    background: "#555"
-	    image: another_picture.jpg
+  - type: bordered-picture
+    background: "#555"
+    image: another_picture.jpg
 
 or you can use picture::
 
-	  - type: text
-	    background: "url(background_picture.jpg)"
-	    text: Some text
+  - type: text
+    background: "url(background_picture.jpg)"
+    text: Some text
 
 Text color settings
 ~~~~~~~~~~~~~~~~~~~
@@ -188,6 +188,6 @@ For text, html and paragraph  section you can define the text color.
 
 Exemple::
 
-	  - type: bordered-picture
-	    color: "#333"
+  - type: bordered-picture
+    color: "#333"
 
