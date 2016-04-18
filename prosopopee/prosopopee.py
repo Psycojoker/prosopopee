@@ -110,9 +110,11 @@ def main():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
-    if settings["rss"] or settings["share"]:
-        error(settings.get("url"), "If you want the rss and/or the social network share to work, "
-                                   "you need to specify the website url in root settings")
+    if (settings["rss"] or settings["share"]) and not settings.get("url"):
+        warning("warning", "If you want the rss and/or the social network share to work, "
+                                     "you need to specify the website url in root settings")
+        settings["rss"] = False
+        settings["share"] = False
 
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
