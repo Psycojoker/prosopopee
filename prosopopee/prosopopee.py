@@ -88,10 +88,12 @@ class Image(object):
 
 def main():
     if os.system("which gm > /dev/null") != 0:
-        sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize images, please install the 'graphicsmagick' package.\n")
+        sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize "
+                         "images, please install the 'graphicsmagick' package.\n")
         sys.exit(1)
 
-    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a settings.yaml in the current working directory")
+    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
+                                      "settings.yaml in the current working directory")
 
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
@@ -99,7 +101,8 @@ def main():
     error(settings.get("title"), "You should specify a title in your main settings.yaml")
 
     if settings.get("rss") or settings.get("share"):
-        error(settings.get("url"), "If you want the rss and/or the social network share work, you should specify url in main settings")
+        error(settings.get("url"), "If you want the rss and/or the social network share work, "
+                                   "you should specify url in main settings")
 
     if settings.get("settings", {}).get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
@@ -120,9 +123,19 @@ def main():
 
     theme = settings.get("settings", {}).get("theme", "exposure")
 
-    error(os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme)), "'%s' is not an existing theme, available themes are '%s'" % (theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))))
+    theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
+    available_themes = theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))
 
-    templates = Environment(loader=FileSystemLoader([os.path.realpath(os.path.join(os.getcwd(), "templates")), os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")]))
+    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % (available_themes))
+
+    prosopopee_templates_dir = os.path.realpath(os.path.join(os.getcwd(), "templates"))
+    project_templates_dir = os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
+
+    templates = Environment(loader=FileSystemLoader([
+        prosopopee_templates_dir,
+        project_templates_dir
+    ]))
+
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
     page_template = templates.get_template("page.html")
@@ -144,10 +157,13 @@ def main():
         error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
 
         if gallery_settings.get("public", True):
-            error(gallery_settings.get("title"), "Your gallery describe in %s need to have a title" % (os.path.join(gallery, "settings.yaml")))
-            error(gallery_settings.get("cover"), "You should specify a path to a cover picture in %s" % (os.path.join(gallery, "settings.yaml")))
+            error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
+                                                 "title" % (os.path.join(gallery, "settings.yaml")))
+            error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
+                                                 "in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
-            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at %s" % (gallery, cover_image_path))
+            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
+                                                    "%s" % (gallery, cover_image_path))
 
             front_page_galleries_cover.append({
                 "title": gallery_settings["title"],
