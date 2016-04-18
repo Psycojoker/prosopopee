@@ -26,5 +26,7 @@ Documentation
    :maxdepth: 2
 
    install
+   configuration
+   sections
    authors
    changelog
