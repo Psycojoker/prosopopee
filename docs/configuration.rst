@@ -171,3 +171,27 @@ And here is an example or a **private** gallery (notice the <code>public</code> 
 	sections:
 	    - ...
 
+Advanced settings
+-----------------
+
+Images handling
+_______________
+
+Images go into the `cover` or `image` keys.
+Each image individual processing settings can be customized to override the default
+GraphicsMagick settings defined (or not) in the root `settings.yaml`.
+
+This is done by putting the image path into a `name` key,
+and adding specific processing settings afterwards.
+
+For example, you can replace::
+
+    image: image1.jpg
+
+by::
+
+	image:
+	  name: image1.jpg
+	  quality: 90
+	  strip: False
+	  auto-orient: False
