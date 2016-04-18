@@ -18,6 +18,21 @@ Why
 
 I wanted to learn a bit of advanced css and I wanted to self-host my data instead of using exposure.co.
 
+Licence
+=======
+
+GPLv3+
+
+Credit
+======
+
+::
+    > 16:57 &lt;meornithorynque> et tu as besoin d'un nom ?<br>
+    > 16:57 &lt;meornithorynque> genre n'importe quoi ?<br>
+    > 16:57 &lt;meornithorynque> je propose "Prosopopée"
+
+
+
 Documentation
 =============
 
@@ -28,5 +43,7 @@ Documentation
    install
    configuration
    sections
+   example
+   build
    authors
    changelog
