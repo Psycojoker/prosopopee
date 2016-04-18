@@ -110,7 +110,9 @@ def main():
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    error(dirs, "I can't find at least one directory with a settings.yaml in the current working directory (NOT the settings.yaml in your current directory, but one INSIDE A DIRECTORY in your current working directory), you don't have any gallery?")
+    error(dirs, "I can't find at least one directory with a settings.yaml in the current working"
+          "directory (NOT the settings.yaml in your current directory, but one INSIDE A"
+          "DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
