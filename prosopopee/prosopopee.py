@@ -10,8 +10,14 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import error, warning, okgreen
 
-SETTINGS = {
+DEFAULTS = {
+    "rss": True,
+    "share": False,
+    "settings": {},
     "show_date": True,
+}
+
+SETTINGS = {
     "gm": {
         "quality": 75,
         "auto-orient": True,
@@ -97,18 +103,19 @@ def main():
 
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
+    for key, value in DEFAULTS.items():
+        if key not in settings:
+            settings[key] = value
+
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
-    error(settings.get("title"), "You should specify a title in your main settings.yaml")
+    error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
-    if settings.get("rss") or settings.get("share"):
-        error(settings.get("url"), "If you want the rss and/or the social network share work, "
-                                   "you should specify url in main settings")
+    if settings["rss"] or settings["share"]:
+        error(settings.get("url"), "If you want the rss and/or the social network share to work, "
+                                   "you need to specify the website url in root settings")
 
-    if settings.get("settings", {}).get("gm"):
+    if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
-
-    if not "show_date" in settings:
-        settings["show_date"] = SETTINGS["show_date"]
 
     front_page_galleries_cover = []
 
@@ -121,7 +128,7 @@ def main():
     if not os.path.exists("build"):
         os.makedirs("build")
 
-    theme = settings.get("settings", {}).get("theme", "exposure")
+    theme = settings["settings"].get("theme", "exposure")
 
     theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
     available_themes = theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))
@@ -184,7 +191,7 @@ def main():
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
         open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, link=gallery).encode("Utf-8"))
 
-        if settings.get("rss"):
+        if settings["rss"]:
             open(os.path.join("build", "feed.xml"), "w").write(feed_template.render(settings=settings, link=gallery, galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
