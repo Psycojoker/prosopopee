@@ -118,7 +118,7 @@ For activate the RSS you need add this key in **root** settings.yaml::
 
 
 Gallery settings.yaml
-=====================
+---------------------
 
 This settings.yaml will describe:
 
