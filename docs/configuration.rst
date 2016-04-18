@@ -118,7 +118,7 @@ For activate the RSS you need add this key in **root** settings.yaml::
 
 
 Gallery settings.yaml
-_____________________
+=====================
 
 This settings.yaml will describe:
 
@@ -129,8 +129,10 @@ This settings.yaml will describe:
  * the list of sections that will contains your gallery. A section will represent either one picture, a group of pictures or text. The different kind of sections will be explained in the next README section.
 
 Example
-~~~~~~~
+_______
+
 ::
+
 	title: Gallery title
 	sub_title: Gallery sub-title
 	date: 2016-01-15
