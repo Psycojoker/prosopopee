@@ -7,6 +7,7 @@ class bcolors:
     FAIL = '\033[91m'
     ENDC = '\033[0m'
 
+
 def error(test, error_message):
     if test:
         return
@@ -15,10 +16,12 @@ def error(test, error_message):
     sys.stderr.write("\n")
     sys.exit(1)
 
+
 def warning(logging, warning_message):
-    sys.stderr.write( "%s%s : %s%s" % (bcolors.WARNING, logging, bcolors.ENDC, warning_message))
+    sys.stderr.write("%s%s : %s%s" % (bcolors.WARNING, logging, bcolors.ENDC, warning_message))
     sys.stderr.write("\n")
 
+
 def okgreen(logging, ok_message):
-    sys.stderr.write( "%s%s : %s%s" % (bcolors.OKGREEN, logging, bcolors.ENDC, ok_message))
+    sys.stderr.write("%s%s : %s%s" % (bcolors.OKGREEN, logging, bcolors.ENDC, ok_message))
     sys.stderr.write("\n")
