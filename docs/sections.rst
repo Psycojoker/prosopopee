@@ -16,7 +16,9 @@ that will describe its kind and additional data. Underneath, the
 ``type`` key is actually the name of an HTML template and the other
 data will be passed to this template.
 
-You can find all the sections templates here: https://github.com/Psycojoker/prosopopee/tree/master/prosopopee/templates/sections
+You can find all the sections templates here: 
+
+https://github.com/Psycojoker/prosopopee/tree/master/prosopopee/themes/exposure/templates/sections
 
 You often have an ``image`` key. You need to give it a path to the
 actual file. By convention, those files are put inside your gallery folder but
