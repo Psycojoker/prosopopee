@@ -1,9 +1,9 @@
 Sections
 ========
 
-A gallery is composed of a succession of sections as you can see on this [wonderfully
+A gallery is composed of a succession of sections as you can see on this `wonderfully
 totally uninteresting example
-gallery](http://psycojoker.github.io/prosopopee/first_gallery/) the gallery is
+gallery <http://psycojoker.github.io/prosopopee/first_gallery/>`_ the gallery is
 composed of 5 sections:
 
 * a full screen picture with text written on it
@@ -25,8 +25,8 @@ this is not mandatory.
 Full Screen picture
 ___________________
 
-This displays a full screen picture as shown in the [example
-gallery](http://psycojoker.github.io/prosopopee/first_gallery/) in the first
+This displays a full screen picture as shown in the `example
+gallery <http://psycojoker.github.io/prosopopee/first_gallery/>`_ in the first
 and last sections. How you should use it :
 
 With text::
@@ -48,8 +48,8 @@ Bordered picture
 ________________
 
 This displays a centered picture that is surrounded by white (the background) as
-shown in the second position of the [example
-gallery](http://psycojoker.github.io/prosopopee/first_gallery/).
+shown in the second position of the `example
+gallery <http://psycojoker.github.io/prosopopee/first_gallery/>`_.
 
 How to use it::
 
@@ -60,8 +60,8 @@ Group of pictures
 _________________
 
 This displays a group of zoomable pictures on one or multiple lines as shown on
-the fourth position (after the text) of the [example
-gallery](http://psycojoker.github.io/prosopopee/first_gallery/)::
+the fourth position (after the text) of the `example
+gallery <http://psycojoker.github.io/prosopopee/first_gallery/>`_::
 
   - type: pictures-group
     images:
@@ -82,8 +82,8 @@ a line, you'll have white space on the right.
 Text
 ____
 
-This displays some centered text as shown on the third position of the [example
-gallery](http://psycojoker.github.io/prosopopee/first_gallery/). HTML is
+This displays some centered text as shown on the third position of the `example
+gallery <http://psycojoker.github.io/prosopopee/first_gallery/>`_. HTML is
 allowed inside the text.
 
 How to use it::
