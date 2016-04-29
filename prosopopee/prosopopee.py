@@ -23,8 +23,75 @@ SETTINGS = {
         "auto-orient": True,
         "strip": True,
         "resize": None
+    },
+    "ffmpeg": {
+        "loglevel": "panic",
+        "format": "webm",
+        "resolution": "1280x720",
+        "bitrate": "3900k",
+        "preselect": "libvpx-720p"
     }
 }
+
+class Video(object):
+    base_dir = ""
+    target_dir = ""
+
+    def __init__(self, options):
+        # assuming string
+        if not isinstance(options, dict):
+            options = {"video": options}
+        self.options = SETTINGS["ffmpeg"].copy()  # used for caching, if it's modified -> regenerate
+        self.options.update(options)
+    
+    @property
+    def name(self):
+        return self.options["name"]
+
+    def ffmpeg(self, source, target, options):
+        if CACHE.needs_to_be_generated(source, target, options):
+            ffmpeg_switches = {
+                    "source": source,
+                    "target": target,
+                    "loglevel": "-loglevel %s" % options["loglevel"],
+                    "resolution": "-s %s" % options["resolution"],
+                    "preselect": "-vpre %s" % options["preselect"],
+                    "resize": "-vf scale=-1:%s" % options.get("resize"),
+                    "bitrate": "-b %s" % options["bitrate"],
+                    "format": "-f %s" % options["format"]
+                    }
+            warning("Generation", source)
+            if options.get("resize"):
+                command = "ffmpeg {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+                os.system(command)
+            else:
+                command = "ffmpeg {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
+                command2 = "ffmpeg {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
+                os.system(command)
+                os.system(command2)
+            CACHE.cache_picture(source, target, options)
+        else:
+            okgreen("Skipped", source + " is already generated")
+    
+    def copy(self):
+        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
+        options = self.options.copy()
+        self.ffmpeg(source, target, options)
+        return ""
+
+    def generate_thumbnail(self, gm_geometry):
+        thumbnail_name = self.name.split(".")
+        thumbnail_name[-2] += "-%s" % gm_geometry
+        thumbnail_name = thumbnail_name[-2] + ".png"
+        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
+        options = self.options.copy()
+        options.update({"resize": gm_geometry})
+        self.ffmpeg(source, target, options)
+        return thumbnail_name
+    
+    def __repr__(self):
+        return self.name
+
 
 class Image(object):
     base_dir = ""
@@ -44,14 +111,13 @@ class Image(object):
     def gm(self, source, target, options):
         if CACHE.needs_to_be_generated(source, target, options):
             gm_switches = {
-              "source": source,
-              "target": target,
-              "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
-              "strip": "-strip" if options["strip"] else "",
-              "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-              "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
-
-            }
+                    "source": source,
+                    "target": target,
+                    "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
+                    "strip": "-strip" if options["strip"] else "",
+                    "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+                    "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
+                    }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
             warning("Generation", source)
             os.system(command)
@@ -72,7 +138,7 @@ class Image(object):
             shutil.copyfile(source, target)
             print source, "->", target
         else:
-          # Do not consider quality settings here, since we aim to copy the input image
+            # Do not consider quality settings here, since we aim to copy the input image
           # better to preserve input encoding setting
           del options["quality"]
           self.gm(source, target, options)
@@ -95,11 +161,11 @@ class Image(object):
 def main():
     if os.system("which gm > /dev/null") != 0:
         sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize "
-                         "images, please install the 'graphicsmagick' package.\n")
+                "images, please install the 'graphicsmagick' package.\n")
         sys.exit(1)
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
-                                      "settings.yaml in the current working directory")
+            "settings.yaml in the current working directory")
 
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
@@ -112,7 +178,7 @@ def main():
 
     if (settings["rss"] or settings["share"]) and not settings.get("url"):
         warning("warning", "If you want the rss and/or the social network share to work, "
-                                     "you need to specify the website url in root settings")
+                "you need to specify the website url in root settings")
         settings["rss"] = False
         settings["share"] = False
 
@@ -124,8 +190,8 @@ def main():
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
     error(dirs, "I can't find at least one directory with a settings.yaml in the current working "
-          "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
-          "DIRECTORY in your current working directory), you don't have any gallery?")
+            "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
+            "DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
@@ -143,7 +209,7 @@ def main():
     templates = Environment(loader=FileSystemLoader([
         prosopopee_templates_dir,
         project_templates_dir
-    ]))
+        ]))
 
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
@@ -167,12 +233,12 @@ def main():
 
         if gallery_settings.get("public", True):
             error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                                                 "title" % (os.path.join(gallery, "settings.yaml")))
+                    "title" % (os.path.join(gallery, "settings.yaml")))
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                                                 "in %s" % (os.path.join(gallery, "settings.yaml")))
+                    "in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
-                                                    "%s" % (gallery, cover_image_path))
+                    "%s" % (gallery, cover_image_path))
 
             front_page_galleries_cover.append({
                 "title": gallery_settings["title"],
@@ -181,17 +247,19 @@ def main():
                 "date": gallery_settings.get("date", ""),
                 "tags": gallery_settings.get("tags", ""),
                 "cover": cover_image_path,
-            })
+                })
 
-        if not os.path.exists(os.path.join("build", gallery)):
-            os.makedirs(os.path.join("build", gallery))
+            if not os.path.exists(os.path.join("build", gallery)):
+                os.makedirs(os.path.join("build", gallery))
 
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
+        Video.base_dir = os.path.join(os.getcwd(), gallery)
+        Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
-        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, link=gallery).encode("Utf-8"))
+        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, Video=Video, link=gallery).encode("Utf-8"))
 
         if settings["rss"]:
             open(os.path.join("build", "feed.xml"), "w").write(feed_template.render(settings=settings, link=gallery, galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))).encode("Utf-8"))
