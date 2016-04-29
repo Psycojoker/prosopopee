@@ -33,6 +33,7 @@ SETTINGS = {
     }
 }
 
+
 class Video(object):
     base_dir = ""
     target_dir = ""
@@ -41,9 +42,10 @@ class Video(object):
         # assuming string
         if not isinstance(options, dict):
             options = {"video": options}
-        self.options = SETTINGS["ffmpeg"].copy()  # used for caching, if it's modified -> regenerate
+        # used for caching, if it's modified -> regenerate
+        self.options = SETTINGS["ffmpeg"].copy()
         self.options.update(options)
-    
+
     @property
     def name(self):
         return self.options["name"]
@@ -72,7 +74,7 @@ class Video(object):
             CACHE.cache_picture(source, target, options)
         else:
             okgreen("Skipped", source + " is already generated")
-    
+
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
         options = self.options.copy()
@@ -88,7 +90,7 @@ class Video(object):
         options.update({"resize": gm_geometry})
         self.ffmpeg(source, target, options)
         return thumbnail_name
-    
+
     def __repr__(self):
         return self.name
 
@@ -113,7 +115,7 @@ class Image(object):
             gm_switches = {
                     "source": source,
                     "target": target,
-                    "auto-orient" : "-auto-orient" if options["auto-orient"] else "",
+                    "auto-orient": "-auto-orient" if options["auto-orient"] else "",
                     "strip": "-strip" if options["strip"] else "",
                     "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
                     "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
@@ -130,8 +132,8 @@ class Image(object):
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
-            # print "Skipped %s since the file hasn't been modified based on file size" % source
-            # return ""
+        # print "Skipped %s since the file hasn't been modified based on file size" % source
+        # return ""
 
         options = self.options.copy()
         if not options["auto-orient"] and not options["strip"]:
@@ -139,9 +141,9 @@ class Image(object):
             print source, "->", target
         else:
             # Do not consider quality settings here, since we aim to copy the input image
-          # better to preserve input encoding setting
-          del options["quality"]
-          self.gm(source, target, options)
+            # better to preserve input encoding setting
+            del options["quality"]
+            self.gm(source, target, options)
         return ""
 
     def generate_thumbnail(self, gm_geometry):
@@ -161,11 +163,11 @@ class Image(object):
 def main():
     if os.system("which gm > /dev/null") != 0:
         sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize "
-                "images, please install the 'graphicsmagick' package.\n")
+                         "images, please install the 'graphicsmagick' package.\n")
         sys.exit(1)
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
-            "settings.yaml in the current working directory")
+          "settings.yaml in the current working directory")
 
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
@@ -190,8 +192,8 @@ def main():
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
     error(dirs, "I can't find at least one directory with a settings.yaml in the current working "
-            "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
-            "DIRECTORY in your current working directory), you don't have any gallery?")
+          "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
+          "DIRECTORY in your current working directory), you don't have any gallery?")
 
     if not os.path.exists("build"):
         os.makedirs("build")
@@ -233,12 +235,12 @@ def main():
 
         if gallery_settings.get("public", True):
             error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                    "title" % (os.path.join(gallery, "settings.yaml")))
+                  "title" % (os.path.join(gallery, "settings.yaml")))
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                    "in %s" % (os.path.join(gallery, "settings.yaml")))
+                  "in %s" % (os.path.join(gallery, "settings.yaml")))
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
-                    "%s" % (gallery, cover_image_path))
+                  "%s" % (gallery, cover_image_path))
 
             front_page_galleries_cover.append({
                 "title": gallery_settings["title"],
