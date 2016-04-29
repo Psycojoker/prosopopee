@@ -53,15 +53,15 @@ class Video(object):
     def ffmpeg(self, source, target, options):
         if CACHE.needs_to_be_generated(source, target, options):
             ffmpeg_switches = {
-                    "source": source,
-                    "target": target,
-                    "loglevel": "-loglevel %s" % options["loglevel"],
-                    "resolution": "-s %s" % options["resolution"],
-                    "preselect": "-vpre %s" % options["preselect"],
-                    "resize": "-vf scale=-1:%s" % options.get("resize"),
-                    "bitrate": "-b %s" % options["bitrate"],
-                    "format": "-f %s" % options["format"]
-                    }
+              "source": source,
+              "target": target,
+              "loglevel": "-loglevel %s" % options["loglevel"],
+              "resolution": "-s %s" % options["resolution"],
+              "preselect": "-vpre %s" % options["preselect"],
+              "resize": "-vf scale=-1:%s" % options.get("resize"),
+              "bitrate": "-b %s" % options["bitrate"],
+              "format": "-f %s" % options["format"]
+              }
             warning("Generation", source)
             if options.get("resize"):
                 command = "ffmpeg {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
@@ -113,13 +113,13 @@ class Image(object):
     def gm(self, source, target, options):
         if CACHE.needs_to_be_generated(source, target, options):
             gm_switches = {
-                    "source": source,
-                    "target": target,
-                    "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-                    "strip": "-strip" if options["strip"] else "",
-                    "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-                    "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
-                    }
+              "source": source,
+              "target": target,
+              "auto-orient": "-auto-orient" if options["auto-orient"] else "",
+              "strip": "-strip" if options["strip"] else "",
+              "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+              "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
+              }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
             warning("Generation", source)
             os.system(command)
