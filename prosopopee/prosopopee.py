@@ -161,10 +161,11 @@ class Image(object):
 
 
 def main():
-    if os.system("which gm > /dev/null") != 0:
-        sys.stderr.write("ERROR: I can't locate the 'gm' binary, I won't be able to resize "
-                         "images, please install the 'graphicsmagick' package.\n")
-        sys.exit(1)
+    for i in ['gm', 'ffmpeg']:
+        if os.system("which " + i +" > /dev/null") != 0:
+            sys.stderr.write("ERROR: I can't locate the "+ i +" binary, I won't be able to resize "
+                             "images, please install the '" + i + "' package.\n")
+            sys.exit(1)
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
