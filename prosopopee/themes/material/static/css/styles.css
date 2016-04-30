@@ -127,6 +127,7 @@ main {
     height: 100%;
 }
 
+.bordered-picture video,
 .picture video {
     position: absolute;
     top: 0;
@@ -134,6 +135,12 @@ main {
     z-index: 2;
     width: 100%;
     height: auto;
+}
+
+.bordered-picture video {
+    width: 77%;
+    margin-left: 11.5%;
+    margin-right: 11.5%;
 }
 
 div#bg-section {
