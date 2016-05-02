@@ -150,3 +150,13 @@ div#bg-section {
 .pictures-group .row {
     margin-top: 20px
 }
+
+.parallax video {
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+}
+.parallax video.fillWidth {
+  width: 100%;
+}
+
