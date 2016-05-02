@@ -193,3 +193,42 @@ Exemple::
   - type: bordered-picture
     color: "#333"
 
+Video support
+~~~~~~~~~~~~~
+
+For bordered-picture, full-picture and pictures-group it's possible to use video
+
+Exemple for pictures-group::
+
+  - type: pictures-group
+    images:
+      -
+        - snapseed-01.jpeg
+        - name: snapseed-04.jpeg
+          text: plop2
+        - snapseed-05.jpeg
+        - snapseed-07.jpeg
+      -
+        - snapseed-06-02.jpeg
+        - name: VID_20160312_174602.mp4
+          type: video
+
+Exemple for bordered-picture::
+
+  - type: bordered-picture
+    image:
+      name: VID_20160312_174602.mp4
+      type: video
+
+And for full-picture::
+
+  - type: full-picture
+    image:
+      name: VID_20160312_174602.mp4
+      type: video
+    text:
+      title: Title Text
+      sub_title: Sub title text
+      date: 2016-03-11
+      date_end: 2016-03-25
+

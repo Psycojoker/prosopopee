@@ -4,6 +4,7 @@ Changelog
 0.4 (unreleased)
 
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
+ * possibility to use video
 
 0.3.1 (2016-04-13)
 
