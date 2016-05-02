@@ -163,8 +163,8 @@ class Image(object):
 def main():
     for i in ['gm', 'ffmpeg']:
         if os.system("which " + i +" > /dev/null") != 0:
-            sys.stderr.write("ERROR: I can't locate the "+ i +" binary, 
-                             please install the '" + i + "' package.\n")
+            sys.stderr.write("ERROR: I can't locate the "+ i +" binary, "
+                             "please install the '" + i + "' package.\n")
             sys.exit(1)
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
