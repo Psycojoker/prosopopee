@@ -64,7 +64,7 @@ class Video(object):
               }
             warning("Generation", source)
             if options.get("resize"):
-                command = "ffmpeg {loglevel} -i {source} {resolution} -vframes 1 -y {target}".format(**ffmpeg_switches)
+                command = "ffmpeg {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
                 os.system(command)
             else:
                 command = "ffmpeg {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
