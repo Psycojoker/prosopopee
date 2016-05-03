@@ -25,6 +25,7 @@ SETTINGS = {
         "resize": None
     },
     "ffmpeg": {
+        "binary": "ffmpeg",
         "loglevel": "panic",
         "format": "webm",
         "resolution": "1280x720",
@@ -61,14 +62,15 @@ class Video(object):
               "resize": "-vf scale=-1:%s" % options.get("resize"),
               "bitrate": "-b %s" % options["bitrate"],
               "format": "-f %s" % options["format"]
+              "binary": "%s" % options["binary"]
               }
             warning("Generation", source)
             if options.get("resize"):
-                command = "ffmpeg {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+                command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
                 os.system(command)
             else:
-                command = "ffmpeg {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
-                command2 = "ffmpeg {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
+                command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
+                command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
                 os.system(command)
                 os.system(command2)
             CACHE.cache_picture(source, target, options)
