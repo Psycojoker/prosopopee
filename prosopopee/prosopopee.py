@@ -163,7 +163,14 @@ class Image(object):
 
 
 def main():
-    for i in ['gm', options["binary"]]:
+    settings = yaml.safe_load(open("settings.yaml", "r"))
+    if settings["settings"].get("ffmpeg"):
+        SETTINGS["ffmpeg"].update(settings["settings"]["ffmpeg"])
+        conv_video = settings["settings"]["ffmpeg"]["binary"]
+    else:
+        conv_video = "ffmpeg"
+
+    for i in ['gm', conv_video]:
         if os.system("which " + i +" > /dev/null") != 0:
             sys.stderr.write("ERROR: I can't locate the "+ i +" binary, "
                              "please install the '" + i + "' package.\n")
@@ -172,7 +179,6 @@ def main():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
 
-    settings = yaml.safe_load(open("settings.yaml", "r"))
 
     for key, value in DEFAULTS.items():
         if key not in settings:
