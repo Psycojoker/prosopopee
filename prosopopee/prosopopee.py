@@ -61,7 +61,7 @@ class Video(object):
               "preselect": "-vpre %s" % options["preselect"],
               "resize": "-vf scale=-1:%s" % options.get("resize"),
               "bitrate": "-b %s" % options["bitrate"],
-              "format": "-f %s" % options["format"]
+              "format": "-f %s" % options["format"],
               "binary": "%s" % options["binary"]
               }
             warning("Generation", source)
