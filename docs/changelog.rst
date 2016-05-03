@@ -4,7 +4,8 @@ Changelog
 0.4 (unreleased)
 
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
- * possibility to use video
+ * possibility to use video in section
+ * add lazyload for pics
 
 0.3.1 (2016-04-13)
 

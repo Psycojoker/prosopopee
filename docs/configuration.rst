@@ -73,6 +73,20 @@ The meaning of the currently supported GraphicsMagick's settings is as follows :
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
 
+Video convertor
+~~~~~~~~~~~~~~~
+
+Prosopopée can use ffmpeg or libav and if you want you can customize the settings::
+
+	settings:
+	  ffmpeg:
+		binary: "ffmpeg"
+		loglevel: "panic"
+		format: "webm"
+		resolution: "1280x720"
+		bitrate: "3900k"
+		preselect: "libvpx-720p"
+
 Themes
 ~~~~~~
 

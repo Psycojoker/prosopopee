@@ -12,6 +12,14 @@ Gallery building needs graphicsmagick library::
 
     apt-get install graphicsmagick ffmpeg
 
+An video convertor like ffmpeg::
+
+    apt-get install ffmpeg
+
+or::
+    
+    apt-get install libav-tools
+
 Installation in virtualenv
 --------------------------
 
