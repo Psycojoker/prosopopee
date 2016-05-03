@@ -163,7 +163,7 @@ class Image(object):
 
 
 def main():
-    for i in ['gm', 'ffmpeg']:
+    for i in ['gm', options["binary"]]:
         if os.system("which " + i +" > /dev/null") != 0:
             sys.stderr.write("ERROR: I can't locate the "+ i +" binary, "
                              "please install the '" + i + "' package.\n")
