@@ -133,10 +133,13 @@ class Image(object):
            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
         }
+
         command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
         warning("Generation", source)
+
         print(command)
         os.system(command)
+
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
@@ -148,6 +151,7 @@ class Image(object):
         # return ""
 
         options = self.options.copy()
+
         if not options["auto-orient"] and not options["strip"]:
             shutil.copyfile(source, target)
             print source, "->", target
