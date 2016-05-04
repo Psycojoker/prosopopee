@@ -196,7 +196,12 @@ Exemple::
 Video support
 ~~~~~~~~~~~~~
 
-For bordered-picture, full-picture and pictures-group it's possible to use video
+For bordered-picture, full-picture and pictures-group it's possible to use
+video instead of pictures. You have to specify with the "type" key that it's a
+video.
+
+The video will be converted using either ffmpeg or avconv (depending on the one
+available).
 
 Exemple for pictures-group::
 
