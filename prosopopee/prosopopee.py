@@ -156,6 +156,7 @@ class Image(object):
             # better to preserve input encoding setting
             del options["quality"]
             self.gm(source, target, options)
+
         return ""
 
     def generate_thumbnail(self, gm_geometry):
