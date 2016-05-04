@@ -203,15 +203,15 @@ Exemple for pictures-group::
   - type: pictures-group
     images:
       -
-        - snapseed-01.jpeg
+        - name: VID_20160312_174602.mp4
+          type: video
+        - snapseed-06-02.jpeg
         - name: snapseed-04.jpeg
           text: plop2
         - snapseed-05.jpeg
         - snapseed-07.jpeg
       -
-        - snapseed-06-02.jpeg
-        - name: VID_20160312_174602.mp4
-          type: video
+        - snapseed-01.jpeg
 
 Exemple for bordered-picture::
 
