@@ -72,11 +72,14 @@ class Video(object):
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+            print(command)
             os.system(command)
         else:
             command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
             command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
+            print(command)
             os.system(command)
+            print(command2)
             os.system(command2)
 
         CACHE.cache_picture(source, target, options)
@@ -128,6 +131,7 @@ class Image(object):
               }
             command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
             warning("Generation", source)
+            print(command)
             os.system(command)
             CACHE.cache_picture(source, target, options)
         else:
