@@ -92,7 +92,7 @@ class Video(object):
         return ""
 
     def generate_thumbnail(self, gm_geometry):
-        thumbnail_name = ".".join(self.name.split(".")[:-1] + ["-%s" % gm_geometry, "png"])
+        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.png" % gm_geometry
 
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
 
@@ -167,7 +167,7 @@ class Image(object):
         return ""
 
     def generate_thumbnail(self, gm_geometry):
-        thumbnail_name = ".".join(self.name.split(".")[:-1] + ["-%s" % gm_geometry, self.name.split(".")[-1]])
+        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-" + gm_geometry + self.name.split(".")[-1]
 
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
 
@@ -294,8 +294,8 @@ def main():
                 "cover": cover_image_path,
             })
 
-            if not os.path.exists(os.path.join("build", gallery)):
-                os.makedirs(os.path.join("build", gallery))
+        if not os.path.exists(os.path.join("build", gallery)):
+            os.makedirs(os.path.join("build", gallery))
 
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
