@@ -52,30 +52,31 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
-        if CACHE.needs_to_be_generated(source, target, options):
-            ffmpeg_switches = {
-              "source": source,
-              "target": target,
-              "loglevel": "-loglevel %s" % options["loglevel"],
-              "resolution": "-s %s" % options["resolution"],
-              "preselect": "-vpre %s" % options["preselect"],
-              "resize": "-vf scale=-1:%s" % options.get("resize"),
-              "bitrate": "-b %s" % options["bitrate"],
-              "format": "-f %s" % options["format"],
-              "binary": "%s" % options["binary"]
-              }
-            warning("Generation", source)
-            if options.get("resize"):
-                command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
-                os.system(command)
-            else:
-                command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
-                command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
-                os.system(command)
-                os.system(command2)
-            CACHE.cache_picture(source, target, options)
-        else:
+        if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
+            return
+
+        ffmpeg_switches = {
+          "source": source,
+          "target": target,
+          "loglevel": "-loglevel %s" % options["loglevel"],
+          "resolution": "-s %s" % options["resolution"],
+          "preselect": "-vpre %s" % options["preselect"],
+          "resize": "-vf scale=-1:%s" % options.get("resize"),
+          "bitrate": "-b %s" % options["bitrate"],
+          "format": "-f %s" % options["format"],
+          "binary": "%s" % options["binary"]
+          }
+        warning("Generation", source)
+        if options.get("resize"):
+            command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+            os.system(command)
+        else:
+            command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
+            command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
+            os.system(command)
+            os.system(command2)
+        CACHE.cache_picture(source, target, options)
 
     def copy(self):
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
