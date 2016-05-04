@@ -291,7 +291,16 @@ def main():
         Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
         template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
-        open(os.path.join("build", gallery, "index.html"), "w").write(template_to_render.render(settings=settings, gallery=gallery_settings, Image=Image, Video=Video, link=gallery).encode("Utf-8"))
+
+        index_html = open(os.path.join("build", gallery, "index.html"), "w")
+
+        index_html.write(template_to_render.render(
+            settings=settings,
+            gallery=gallery_settings,
+            Image=Image,
+            Video=Video,
+            link=gallery
+        ).encode("Utf-8"))
 
         if settings["rss"]:
             open(os.path.join("build", "feed.xml"), "w").write(feed_template.render(settings=settings, link=gallery, galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))).encode("Utf-8"))
