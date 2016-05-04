@@ -181,8 +181,10 @@ class Image(object):
 
 def main():
     settings = yaml.safe_load(open("settings.yaml", "r"))
+
     if settings["settings"].get("ffmpeg"):
         SETTINGS["ffmpeg"].update(settings["settings"]["ffmpeg"])
+
         conv_video = settings["settings"]["ffmpeg"]["binary"]
     else:
         conv_video = "ffmpeg"
