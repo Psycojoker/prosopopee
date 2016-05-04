@@ -196,10 +196,14 @@ def main():
           "please install the 'graphicsmagick' package.\n")
 
     if os.system("which " + conv_video +" > /dev/null") != 0:
-        warning("I can't locate the "+ conv_video +" binary, "
-                "please install the '" + conv_video + "' package.\n")
-        warning("I won't be able to encode video and I will stop if I encounter a video to convert")
-        SETTINGS["ffmpeg"] = False
+        if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
+            SETTINGS["ffmpeg"]["binary"] = "avconv"
+            warning("I couldn't locate ffmpeg but I could find avconv, switching to avconv for video conversion")
+        else:
+            warning("I can't locate the "+ conv_video +" binary, "
+                    "please install the '" + conv_video + "' package.\n")
+            warning("I won't be able to encode video and I will stop if I encounter a video to convert")
+            SETTINGS["ffmpeg"] = False
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
