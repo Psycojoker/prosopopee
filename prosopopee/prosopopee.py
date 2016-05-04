@@ -115,6 +115,7 @@ class Image(object):
         # assuming string
         if not isinstance(options, dict):
             options = {"name": options}
+
         self.options = SETTINGS["gm"].copy()  # used for caching, if it's modified -> regenerate
         self.options.update(options)
 
