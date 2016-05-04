@@ -124,6 +124,7 @@ class Image(object):
     def gm(self, source, target, options):
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
+            return
 
         gm_switches = {
            "source": source,
