@@ -154,7 +154,7 @@ class Image(object):
 
         if not options["auto-orient"] and not options["strip"]:
             shutil.copyfile(source, target)
-            print source, "->", target
+            print("%s%s%s" % (source, "->", target))
         else:
             # Do not consider quality settings here, since we aim to copy the input image
             # better to preserve input encoding setting
