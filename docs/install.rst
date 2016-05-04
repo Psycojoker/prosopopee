@@ -10,7 +10,7 @@ Installation needs Python, pip and virtualenv::
 
 Gallery building needs graphicsmagick library::
 
-    apt-get install graphicsmagick ffmpeg
+    apt-get install graphicsmagick
 
 An video convertor like ffmpeg::
 
