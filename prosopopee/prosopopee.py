@@ -198,12 +198,12 @@ def main():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
 
+    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
     for key, value in DEFAULTS.items():
         if key not in settings:
             settings[key] = value
 
-    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
     if (settings["rss"] or settings["share"]) and not settings.get("url"):
