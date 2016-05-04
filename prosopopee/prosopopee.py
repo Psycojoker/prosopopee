@@ -266,7 +266,9 @@ def main():
                   "title" % (os.path.join(gallery, "settings.yaml")))
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
                   "in %s" % (os.path.join(gallery, "settings.yaml")))
+
             cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
                   "%s" % (gallery, cover_image_path))
 
