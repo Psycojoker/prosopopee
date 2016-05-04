@@ -4,8 +4,9 @@ Changelog
 0.4 (unreleased)
 
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
- * possibility to use video in section
- * add lazyload for pics
+ * possibility to use video in section by beudbeud
+ * add lazyload for pics by behavior
+ * if a theme doesn't have a section, fallback on exposure theme which is considered the default one by titoko
 
 0.3.1 (2016-04-13)
 
