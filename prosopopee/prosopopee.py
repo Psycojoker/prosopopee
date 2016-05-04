@@ -287,6 +287,7 @@ def main():
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
         Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
+
         Video.base_dir = os.path.join(os.getcwd(), gallery)
         Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
 
