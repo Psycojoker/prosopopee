@@ -239,7 +239,7 @@ def main():
     templates = Environment(loader=FileSystemLoader([
         prosopopee_templates_dir,
         project_templates_dir
-        ]))
+    ]))
 
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
@@ -277,7 +277,7 @@ def main():
                 "date": gallery_settings.get("date", ""),
                 "tags": gallery_settings.get("tags", ""),
                 "cover": cover_image_path,
-                })
+            })
 
             if not os.path.exists(os.path.join("build", gallery)):
                 os.makedirs(os.path.join("build", gallery))
