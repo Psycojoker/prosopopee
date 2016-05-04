@@ -94,10 +94,14 @@ class Video(object):
         thumbnail_name = self.name.split(".")
         thumbnail_name[-2] += "-%s" % gm_geometry
         thumbnail_name = thumbnail_name[-2] + ".png"
+
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
+
         options = self.options.copy()
         options.update({"resize": gm_geometry})
+
         self.ffmpeg(source, target, options)
+
         return thumbnail_name
 
     def __repr__(self):
