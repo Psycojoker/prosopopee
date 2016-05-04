@@ -67,7 +67,9 @@ class Video(object):
           "format": "-f %s" % options["format"],
           "binary": "%s" % options["binary"]
           }
+
         warning("Generation", source)
+
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
             os.system(command)
@@ -76,6 +78,7 @@ class Video(object):
             command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
             os.system(command)
             os.system(command2)
+
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
