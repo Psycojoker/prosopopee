@@ -293,8 +293,8 @@ def main():
                 "cover": cover_image_path,
             })
 
-            if not os.path.exists(os.path.join("build", gallery)):
-                os.makedirs(os.path.join("build", gallery))
+        if not os.path.exists(os.path.join("build", gallery)):
+            os.makedirs(os.path.join("build", gallery))
 
         # this should probably be a factory
         Image.base_dir = os.path.join(os.getcwd(), gallery)
