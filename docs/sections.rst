@@ -236,4 +236,3 @@ And for full-picture::
       sub_title: Sub title text
       date: 2016-03-11
       date_end: 2016-03-25
-
