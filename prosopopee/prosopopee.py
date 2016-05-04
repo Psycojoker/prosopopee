@@ -303,7 +303,13 @@ def main():
         ).encode("Utf-8"))
 
         if settings["rss"]:
-            open(os.path.join("build", "feed.xml"), "w").write(feed_template.render(settings=settings, link=gallery, galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))).encode("Utf-8"))
+            feed_xml = open(os.path.join("build", "feed.xml"), "w")
+
+            feed_xml.write(feed_template.render(
+                settings=settings,
+                link=gallery,
+                galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+            ).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
@@ -311,7 +317,13 @@ def main():
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
 
-    open(os.path.join("build", "index.html"), "w").write(index_template.render(settings=settings, galleries=front_page_galleries_cover, Image=Image).encode("Utf-8"))
+    index_html = open(os.path.join("build", "index.html"), "w")
+
+    index_html.write(index_template.render(
+        settings=settings,
+        galleries=front_page_galleries_cover,
+        Image=Image
+    ).encode("Utf-8"))
 
 
 if __name__ == '__main__':
