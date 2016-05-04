@@ -52,6 +52,8 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
+        error(SETTINGS["ffmeg"], "I couldn't find a binary to convert video and I ask to do so, abort")
+
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
             return
@@ -190,11 +192,14 @@ def main():
     else:
         conv_video = "ffmpeg"
 
-    for i in ['gm', conv_video]:
-        if os.system("which " + i +" > /dev/null") != 0:
-            sys.stderr.write("ERROR: I can't locate the "+ i +" binary, "
-                             "please install the '" + i + "' package.\n")
-            sys.exit(1)
+    error(os.system("which gm > /dev/null") == 0, "I can't locate the gm binary, "
+          "please install the 'graphicsmagick' package.\n")
+
+    if os.system("which " + conv_video +" > /dev/null") != 0:
+        warning("I can't locate the "+ conv_video +" binary, "
+                "please install the '" + conv_video + "' package.\n")
+        warning("I won't be able to encode video and I will stop if I encounter a video to convert")
+        SETTINGS["ffmpeg"] = False
 
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
