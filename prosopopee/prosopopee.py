@@ -167,10 +167,14 @@ class Image(object):
         thumbnail_name = self.name.split(".")
         thumbnail_name[-2] += "-%s" % gm_geometry
         thumbnail_name = ".".join(thumbnail_name)
+
         source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
+
         options = self.options.copy()
         options.update({"resize": gm_geometry})
+
         self.gm(source, target, options)
+
         return thumbnail_name
 
     def __repr__(self):
