@@ -1,5 +1,6 @@
 {% if section.image.type == "video" %}
 {% set video = Video(section.image) %}
+{{ video.copy() }}
 {% else %}
 {% set image = Image(section.image) %}
 {{ image.copy() }}

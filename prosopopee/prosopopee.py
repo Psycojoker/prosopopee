@@ -290,6 +290,7 @@ def main():
                 "sub_title": gallery_settings.get("sub_title", ""),
                 "date": gallery_settings.get("date", ""),
                 "tags": gallery_settings.get("tags", ""),
+                "cover_type": gallery_settings.get("cover_type", ""),
                 "cover": cover_image_path,
             })
 
@@ -329,13 +330,17 @@ def main():
     # this should probably be a factory
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
+    
+    Video.base_dir = os.getcwd()
+    Video.target_dir = os.path.join(os.getcwd(), "build")
 
     index_html = open(os.path.join("build", "index.html"), "w")
 
     index_html.write(index_template.render(
         settings=settings,
         galleries=front_page_galleries_cover,
-        Image=Image
+        Image=Image,
+        Video=Video
     ).encode("Utf-8"))
 
 

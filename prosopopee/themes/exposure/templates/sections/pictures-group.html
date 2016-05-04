@@ -15,13 +15,13 @@
             {% endif %}
             <div class="picture caption">
                 {% if video %}
-                <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="{{ video.generate_thumbnail("600") }}"alt="">
+                <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="" alt="">
                 <video class="lazy" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
                     <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
                 </video>
                 {% else %}
                 <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
-                    <img class="lazy" src="{{ image.generate_thumbnail("x600") }}" data-original="{{ image.generate_thumbnail("x600") }}" alt="">
+                    <img class="lazy" src="" data-original="{{ image.generate_thumbnail("x600") }}" alt="">
                     {% if caption %}
                     <div class="caption__overlay">
                         <h5 class="caption__overlay__title">{{ caption }}</h5>
