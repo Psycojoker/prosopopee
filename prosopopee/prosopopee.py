@@ -126,13 +126,13 @@ class Image(object):
             okgreen("Skipped", source + " is already generated")
 
         gm_switches = {
-          "source": source,
-          "target": target,
-          "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-          "strip": "-strip" if options["strip"] else "",
-          "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-          "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
-          }
+           "source": source,
+           "target": target,
+           "auto-orient": "-auto-orient" if options["auto-orient"] else "",
+           "strip": "-strip" if options["strip"] else "",
+           "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
+        }
         command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
         warning("Generation", source)
         print(command)
