@@ -201,7 +201,7 @@ video instead of pictures. You have to specify with the "type" key that it's a
 video.
 
 The video will be converted using either ffmpeg or avconv (depending on the one
-available).
+specified in the settings, ffmpeg being the default one).
 
 Exemple for pictures-group::
 
