@@ -233,13 +233,15 @@ def main():
 
     error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % (available_themes))
 
-    prosopopee_templates_dir = os.path.realpath(os.path.join(os.getcwd(), "templates"))
-    project_templates_dir = os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
+    templates_dir = [
+        os.path.realpath(os.path.join(os.getcwd(), "templates")),
+        os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
+    ]
 
-    templates = Environment(loader=FileSystemLoader([
-        prosopopee_templates_dir,
-        project_templates_dir
-    ]))
+    if theme != "exposure":
+        templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "exposure", "templates"))
+
+    templates = Environment(loader=FileSystemLoader(templates_dir))
 
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
