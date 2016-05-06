@@ -1,5 +1,5 @@
 {% if section.background or section.color %}
-<div style="{% if section.background -%}padding: 1px 0px;background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+<div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
 {% endif %}
 <div class="container">
 	{% if section.title %}

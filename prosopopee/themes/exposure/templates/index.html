@@ -35,6 +35,7 @@
           <video autoplay loop muted class="fillWidth">
               <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
           </video>
+          <img class="full-picture" src="{{ video.generate_thumbnail("900") }}">
       </div>
       {% set video = "" %}
       {% else %}
