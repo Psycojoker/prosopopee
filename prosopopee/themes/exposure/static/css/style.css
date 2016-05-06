@@ -252,3 +252,8 @@ nav ul li > a.item-menu::before {
     letter-spacing: 3px;
     font-style: normal;
 }
+
+.gallery-cover video.fillWidth,
+.gallery-cover img.fillWidth {
+    height: 100%;
+}

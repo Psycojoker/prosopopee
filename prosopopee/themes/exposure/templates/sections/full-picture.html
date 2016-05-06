@@ -25,7 +25,7 @@
         <video autoplay loop muted class="fillWidth">
             <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
         </video>
-        <img class="lazy" src="{{ video.generate_thumbnail("2000") }}">
+        <img class="lazy full-picture" src="{{ video.generate_thumbnail("2000") }}">
     </div>
 </section>
 {% else %}

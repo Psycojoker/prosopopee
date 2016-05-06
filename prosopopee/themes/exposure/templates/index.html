@@ -32,11 +32,11 @@
       {% endif %}
       {% if video %}
       <div class="gallery-cover">
-          <img src="{{ video.generate_thumbnail("900") }}">
           <video autoplay loop muted class="fillWidth">
               <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
           </video>
       </div>
+      {% set video = "" %}
       {% else %}
       <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
       {% endif %}

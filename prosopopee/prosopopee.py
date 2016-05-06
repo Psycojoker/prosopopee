@@ -41,7 +41,7 @@ class Video(object):
     def __init__(self, options):
         # assuming string
         if not isinstance(options, dict):
-            options = {"video": options}
+            options = {"name": options}
         # used for caching, if it's modified -> regenerate
         self.options = SETTINGS["ffmpeg"].copy()
         self.options.update(options)
