@@ -1,0 +1,48 @@
+{% if section.image.type == "video" %}
+{% set video = Video(section.image) %}
+{{ video.copy() }}
+{% else %}
+{% set image = Image(section.image) %}
+{{ image.copy() }}
+{% endif %}
+{% if video %}
+<section class="full-picture">
+    <div class="video-container">
+        {% if section.text %}
+        <div class="title-container">
+            <div class="headline">
+                <h1>{{ section.text.title }}</h1>
+                <h2>{{ section.text.sub_title }}</h2>
+                {% if section.text.date_end %}
+                <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}  to {{ section.text.date_end.strftime("%d %B %Y") }}</div>
+                {% else %}
+                {% if section.text.date %}
+                <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>{% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        <video autoplay loop muted class="fillWidth">
+            <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+        </video>
+        <img class="lazy full-picture" src="{{ video.generate_thumbnail("2000") }}">
+    </div>
+</section>
+{% else %}
+<section class="full-picture" style="background: transparent url('{{ image }}') no-repeat scroll center top / cover;">
+    {% if section.text %}
+    <div class="picture-text">
+        <div class="picture-text-column">
+            <h1>{{ section.text.title }}</h1>
+            <h2>{{ section.text.sub_title }}</h2>
+            {% if section.text.date_end %}
+            <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}  to {{ section.text.date_end.strftime("%d %B %Y") }}</div>
+            {% else %}
+            {% if section.text.date %}
+            <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>{% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endif %}

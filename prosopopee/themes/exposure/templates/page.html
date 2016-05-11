@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="../static/css/fonts.css"  media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="../static/css/style.css"  media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
+{% endblock %}
+
+{% block logo %}
+<img id="logo" src="../static/img/logo.svg" />
+{% endblock %}
+
+{% block content %}
+<section class="text">
+  <h2>{{ gallery.title }}</h2>
+</section>
+
+{% for section in gallery.sections %}
+  {% include "sections/" + section.type + ".html" %}
+{% endfor %}
+
+<div class="back-to-home">
+  <hr>
+  <a href="../index.html">
+      <div id="logo" src="../static/img/logo.svg"/>
+          HOME
+      </div>
+  </a>
+</div>
+
+<script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+{% endblock %}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+    <section class="full-picture" style="background: transparent url('./1.png') no-repeat scroll center top / cover;">
+        <div class="picture-text">
+            <div class="picture-text-column">
+                <h1>Some title on the picture</h1>
+                <h2>Some subtitle</h2>
+                <div class="datetime">march 3th 2015</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-picture" style="background: transparent url('./1.png') no-repeat scroll center top / cover;">
+    </section>
+
+    <section class="bordered-picture baguette">
+        <a href="./1.png">
+            <img src="./1.png">
+        </a>
+    </section>
+
+    <section class="pictures-group baguette">
+        <div class="pictures-line">
+            <div class="picture">
+                <a href="./1.png">
+                    <img src="./1-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./2.png">
+                    <img src="./2-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./1.png">
+                    <img src="./1-small.png">
+                </a>
+            </div>
+        </div>
+        <div class="pictures-line">
+            <div class="picture">
+                <a href="./1.png">
+                    <img src="./1-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./2.png">
+                    <img src="./2-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./2.png">
+                    <img src="./2-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./2.png">
+                    <img src="./2-small.png">
+                </a>
+            </div>
+            <div class="separator"></div>
+            <div class="picture">
+                <a href="./2.png">
+                    <img src="./2-small.png">
+                </a>
+            </div>
+        </div>
+    </section>
+
+  <div class="back-to-home">
+      <hr>
+      <a href="..">
+          <div id="logo" src="./../static/img/logo.svg"/>
+              HOME
+          </div>
+      </a>
+  </div>
+
+  <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    baguetteBox.run(".baguette", {});
+  </script>
+  <footer>
+      <p>Generate using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="CC-BY-SA">CC-BY-SA</a></p>
+  </footer>
+</body>
+</html>

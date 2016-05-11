@@ -1,0 +1,32 @@
+{% set image = Image(section.image) %}
+{{ image.copy() }}
+<div class="author">
+    <img src={{ image.generate_thumbnail("200x200") }} alt="" class="circle">
+    <div>
+        <span class=author-meta>Story by</span>
+        <h4>{{ section.name }}</h4>
+        {% if section.text %}
+        <div class=desc>{{ section.text }}</div>
+        {% endif %}
+    </div>
+    <div class="separator"></div>
+    <div>
+        {% if section.twitter %}
+        <span>
+            <a href="http://facebook.com/{{ section.twitter }}">Facebook</a>
+        </span>
+        <span> | </span>
+        {% endif %}
+        {% if section.facebook %}
+        <span>
+            <a href="http://twitter.com/{{ section.twitter }}">Twitter</a>
+        </span>
+        <span> | </span>
+        {% endif %}
+        {% if section.website %}
+        <span>
+            <a href="{{ section.sebsite }}">{{ section.website }}</a>
+        </span>
+        {% endif %}
+    </div>
+</div>

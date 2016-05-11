@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
+<link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+{% endblock %}
+
+{% block logo %}
+<img id="logo" src="static/img/logo.svg" />
+{% endblock %}
+
+{% block content %}
+<div class="galleries-grid">
+  {% for galleries_line in galleries|reverse|batch(3)|reverse %}
+  <div class="galleries-line covers-{{ galleries_line|length }}">
+    {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
+    --><div class="gallery-square">
+      <a href="{{ gallery.link }}">
+        <div class="gallery-title">
+            <h2>{{ gallery.title }}</h2>
+          {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+          {% if settings.show_date and gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+          {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span> {{ tag }}</span> {% endfor -%}</div>{% endif %}
+        </div>
+      </a>
+      {% if gallery.cover_type == "video" %}
+      {% set video = Video(gallery.cover) %}
+      {{ video.copy() }}
+      {% else %}
+      {% set cover = Image(gallery.cover) %}
+      {{ cover.copy() }}
+      {% endif %}
+      {% if video %}
+      <div class="gallery-cover">
+          <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
+          <video autoplay loop muted class="fillWidth">
+              <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+          </video>
+      </div>
+      {% set video = "" %}
+      {% else %}
+      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
+      {% endif %}
+    </div><!-- comment tricks against space between inline-block
+    -->{% endfor %}
+  </div>
+  {% endfor %}
+</div>
+<p style="visibility: hidden">.</p>
+{% endblock %}

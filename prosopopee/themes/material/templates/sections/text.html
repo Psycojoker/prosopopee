@@ -1,0 +1,11 @@
+{% if section.background or section.color %}
+<div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+{% endif %}
+<div class="container">
+    <p class="flow-text">
+    {{ section.text }}
+    </p>
+</div>
+{% if section.background or section.color %}
+</div>
+{% endif %}
