@@ -25,7 +25,7 @@
         <div class="back-to-home">
             <hr>
             <a href="../">
-                <div id="logo" src="./../static/img/logo.svg"/>
+                <div id="logo" src="./../static/img/logo.svg">
                     HOME
                 </div>
             </a>
@@ -34,7 +34,8 @@
         <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
-        <script type="text/javascript" charset="utf-8">
+        <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
 $(function() {
     baguetteBox.run(".baguette", {});
     $(".panorama").panorama_viewer({
@@ -43,6 +44,31 @@ $(function() {
         animationTime: 150,
         easing: "linear",
         overlay: true
+    });
+});
+
+var video = $("video.lazy");
+video.on('click', function(e){
+    var vid = video[0];
+    vid.play();
+    if (vid.requestFullscreen) {
+        vid.requestFullscreen();
+    } else if (vid.mozRequestFullScreen) {
+        vid.mozRequestFullScreen();
+    } else if (vid.webkitRequestFullscreen) {
+        vid.webkitRequestFullscreen();
+    }
+});
+
+$(function() {
+    $("img.lazy").lazyload({
+        effect : "fadeIn"
+    });
+    $("video.lazy").lazyload({
+        effect : "fadeIn"
+    });
+    $("section.lazy").lazyload({
+        effect : "fadeIn"
     });
 });
         </script>

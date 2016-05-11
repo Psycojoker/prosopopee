@@ -12,14 +12,22 @@ Gallery building needs graphicsmagick library::
 
     apt-get install graphicsmagick
 
+An video convertor like ffmpeg::
+
+    apt-get install ffmpeg
+
+or::
+
+    apt-get install libav-tools
+
 Installation in virtualenv
 --------------------------
 
 1. Create a virtualenv, and activate it::
 
-	virtualenv ve
-	source ve/bin/activate
+    virtualenv ve
+    source ve/bin/activate
 
 2. Download and install Prosopopee::
 
-	pip install prosopopee
+    pip install prosopopee

@@ -24,19 +24,19 @@ ____
 
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example::
 
-	menu:
-  	  - about: "About"
-  	  - first_gallery: "My first gallery"
-  	  - http://twitter.com: "Twitter"
+    menu:
+      - about: "About"
+      - first_gallery: "My first gallery"
+      - http://twitter.com: "Twitter"
 
 For example, this could be the content of `settings.yaml` in `about` folder::
 
-	title: "About"
-	static: true
-	public: false
-	sections:
-	  - type: text
-	    text: Some text, HTML <b>is allowed</b>.
+    title: "About"
+    static: true
+    public: false
+    sections:
+      - type: text
+        text: Some text, HTML <b>is allowed</b>.
 
 You can use the `static` option to get a template closer to the one of the
 homepage that is better suited for a static page. You'll need to specify
@@ -57,12 +57,12 @@ GM
 
 Currently a `gm` settings key allows to customize the default GraphicsMagick's behavior. It looks like ::
 
-	settings:
-	  gm:
-	    quality: 75
-	    auto-orient: True
-	    strip: True
-	    resize: 50%
+    settings:
+      gm:
+        quality: 75
+        auto-orient: True
+        strip: True
+        resize: 50%
 
 The meaning of the currently supported GraphicsMagick's settings is as follows :
 
@@ -72,6 +72,20 @@ The meaning of the currently supported GraphicsMagick's settings is as follows :
  * `resize` can be used to resize the fullsize version of pictures. by default, input image size is preserved
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
+
+Video convertor
+~~~~~~~~~~~~~~~
+
+Prosopopée can use ffmpeg or libav and if you want you can customize the settings::
+
+    settings:
+      ffmpeg:
+        binary: "ffmpeg"
+        loglevel: "panic"
+        format: "webm"
+        resolution: "1280x720"
+        bitrate: "3900k"
+        preselect: "libvpx-720p"
 
 Themes
 ~~~~~~
@@ -84,37 +98,37 @@ Prosopopée has a support for various themes. As for now, only 2 themes are avai
 To specify the theme, add the "theme" key in your "settings" key or your
 **root** settings.yaml. For example::
 
-	title: My exploration of the outside world
-	sub_title: it's a scary place, don't go there
-	settings:
-	  theme: material
+    title: My exploration of the outside world
+    sub_title: it's a scary place, don't go there
+    settings:
+      theme: material
 
 Licence
 ~~~~~~~
 
-By default Prosopopée use CC-BY-SA for all the content, if you want use a another licence 
+By default Prosopopée use CC-BY-SA for all the content, if you want use a another licence
 you need add key in **root** settings.yaml. For example::
 
-	licence:
-	   name: WTFPL
-	   url: "http://www.wtfpl.net/txt/copying/"
+    licence:
+       name: WTFPL
+       url: "http://www.wtfpl.net/txt/copying/"
 
 Share
 ~~~~~
 
-If you want enable the share content on social network, add key in **root** settings.yaml. For example: 
+If you want enable the share content on social network, add key in **root** settings.yaml. For example:
 By defaut you can share on facebook, twitter, pinterest, google+::
 
-	share: true
-	url: "http://prosopopee.com"
+    share: true
+    url: "http://prosopopee.com"
 
 RSS
 ~~~
 
 For activate the RSS you need add this key in **root** settings.yaml::
 
-	rss: true
-	url: "http://prosopopee.com"
+    rss: true
+    url: "http://prosopopee.com"
 
 
 Gallery settings.yaml
@@ -133,43 +147,43 @@ _______
 
 ::
 
-	title: Gallery title
-	sub_title: Gallery sub-title
-	date: 2016-01-15
-	cover: my_cover_picture.jpg
-	tags:
-	  - #yolo
-	  - #travel
-	sections:
-	  - type: full-picture
-	    image: big_picture.jpg
-	    text:
-	      title: Big picture title
-	      sub_title: Some text
-	      date: 2016-01-15
-	  - type: pictures-group
-	    images:
-	      -
-	        - image1.jpg
-	        - image2.jpg
-	        - image3.jpg
-	      -
-	        - image4.jpg
-	        - image5.jpg
-	  - type: text
-	    text: Some text, HTML <b>is allowed</b>.
-	  - type: bordered-picture
-	    image: another_picture.jpg
+    title: Gallery title
+    sub_title: Gallery sub-title
+    date: 2016-01-15
+    cover: my_cover_picture.jpg
+    tags:
+      - #yolo
+      - #travel
+    sections:
+      - type: full-picture
+        image: big_picture.jpg
+        text:
+          title: Big picture title
+          sub_title: Some text
+          date: 2016-01-15
+      - type: pictures-group
+        images:
+          -
+            - image1.jpg
+            - image2.jpg
+            - image3.jpg
+          -
+            - image4.jpg
+            - image5.jpg
+      - type: text
+        text: Some text, HTML <b>is allowed</b>.
+      - type: bordered-picture
+        image: another_picture.jpg
 
 And here is an example or a **private** gallery (notice the ``public`` keyword)::
 
-	title: Gallery title
-	sub_title: Gallery sub-title
-	date: 2016-01-15
-	cover: my_cover_picture.jpg
-	public: false
-	sections:
-	    - ...
+    title: Gallery title
+    sub_title: Gallery sub-title
+    date: 2016-01-15
+    cover: my_cover_picture.jpg
+    public: false
+    sections:
+        - ...
 
 Advanced settings
 -----------------
@@ -190,8 +204,8 @@ For example, you can replace::
 
 by::
 
-	image:
-	  name: image1.jpg
-	  quality: 90
-	  strip: False
-	  auto-orient: False
+    image:
+      name: image1.jpg
+      quality: 90
+      strip: False
+      auto-orient: False

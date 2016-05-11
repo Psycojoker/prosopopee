@@ -9,6 +9,8 @@ def remove_superficial_options(options):
     del cleaned_options["name"]
     if "text" in cleaned_options:
         del cleaned_options["text"]
+    if "type" in cleaned_options:
+        del cleaned_options["type"]
     return cleaned_options
 
 

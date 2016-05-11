@@ -1,62 +1,85 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="UTF-8">
-		<link rel="stylesheet" href="../static/css/materialize.css"/>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../static/css/materialize.css"/>
         <link rel="stylesheet" href="../static/css/styles.css">
         <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
-	{% if settings.share %}
-	<link rel="stylesheet" href="../static/css/font-awesome.css">
-	{% endif %}
+        {% if settings.share %}
+        <link rel="stylesheet" href="../static/css/font-awesome.css">
+        {% endif %}
 
-		<!--Let browser know website is optimized for mobile-->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<title>{{ gallery.title }} · {{ settings.title }}</title>
-	</head>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>{{ gallery.title }} · {{ settings.title }}</title>
+    </head>
 
-	<body>
-    <main>
+    <body>
+        <main>
 
-		{% for section in gallery.sections %}
-		{% include "sections/" + section.type + ".html" %}
-		{% endfor %}
+        {% for section in gallery.sections %}
+        {% include "sections/" + section.type + ".html" %}
+        {% endfor %}
 
 
         {% if settings.share %}
         {% include 'share.html' -%}
         {% else -%}
-		<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-			<a href="../" class="btn-floating btn-large red">
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a href="../" class="btn-floating btn-large red">
                 <i class="mdi-action-home"></i>
-			</a>
-		</div>
+            </a>
+        </div>
         {% endif %}
 
-		<script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
-		<script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-        	$('.parallax').parallax();
-        });    
+        <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+    $('.parallax').parallax();
+});    
 
-        $(function() {
-            baguetteBox.run(".baguette", {});
-            $(".panorama").panorama_viewer({
-                repeat: true,
-                direction: "horizontal",
-                animationTime: 150,
-                easing: "linear",
-                overlay: true
-            });
-        });
-        
-        $(".button-collapse").sideNav();
+var video = $("video.lazy");
+video.on('click', function(e){
+    var vid = video[0];
+    vid.play();
+    if (vid.requestFullscreen) {
+        vid.requestFullscreen();
+    } else if (vid.mozRequestFullScreen) {
+        vid.mozRequestFullScreen();
+    } else if (vid.webkitRequestFullscreen) {
+        vid.webkitRequestFullscreen();
+    }
+});
+
+$(function() {
+    $("img.lazy").lazyload({
+        effect : "fadeIn"
+    });
+    $("video.lazy").lazyload({
+        effect : "fadeIn"
+    });
+});
+
+$(function() {
+    baguetteBox.run(".baguette", {});
+    $(".panorama").panorama_viewer({
+        repeat: true,
+        direction: "horizontal",
+        animationTime: 150,
+        easing: "linear",
+        overlay: true
+    });
+});
+
+$(".button-collapse").sideNav();
         </script>
-    </main>
-    {% include 'footer.html'%}
+        </main>
+        {% include 'footer.html'%}
     </body>
 </html>

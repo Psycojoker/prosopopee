@@ -193,3 +193,46 @@ Exemple::
   - type: bordered-picture
     color: "#333"
 
+Video support
+~~~~~~~~~~~~~
+
+For bordered-picture, full-picture and pictures-group it's possible to use
+video instead of pictures. You have to specify with the "type" key that it's a
+video.
+
+The video will be converted using either ffmpeg or avconv (depending on the one
+specified in the settings, ffmpeg being the default one).
+
+Exemple for pictures-group::
+
+  - type: pictures-group
+    images:
+      -
+        - name: VID_20160312_174602.mp4
+          type: video
+        - snapseed-06-02.jpeg
+        - name: snapseed-04.jpeg
+          text: plop2
+        - snapseed-05.jpeg
+        - snapseed-07.jpeg
+      -
+        - snapseed-01.jpeg
+
+Exemple for bordered-picture::
+
+  - type: bordered-picture
+    image:
+      name: VID_20160312_174602.mp4
+      type: video
+
+And for full-picture::
+
+  - type: full-picture
+    image:
+      name: VID_20160312_174602.mp4
+      type: video
+    text:
+      title: Title Text
+      sub_title: Sub title text
+      date: 2016-03-11
+      date_end: 2016-03-25

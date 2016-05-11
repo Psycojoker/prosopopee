@@ -252,3 +252,14 @@ nav ul li > a.item-menu::before {
     letter-spacing: 3px;
     font-style: normal;
 }
+
+.gallery-cover video.fillWidth {
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.gallery-cover img.fillWidth {
+    width: 100%;
+}

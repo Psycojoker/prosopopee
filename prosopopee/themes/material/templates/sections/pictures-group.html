@@ -1,33 +1,48 @@
 {% if section.background %}
-<div style="padding: 1px 0px;background: {{ section.background }};">
-{% endif %}
-<div class="pictures-group baguette">
-    <div class="row">
-        {% for line in section.images %}
-        <div class="pictures-line">
-            {% for image in line %}
-            {% set caption = image.text %}
-            {% set image = Image(image) %}
-            {{ image.copy() }}
-            <div class="col">
-                <div class="card">
-                    <div class="picture card-image caption">
-                        <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
-                            <img src="{{ image.generate_thumbnail("x600") }}">
-                            {% if caption %}
-                            <div class="caption__overlay center">
-                                <h5 class="caption__overlay__title">{{ caption }}</h5>
-                            </div>
-                            {% endif %}
-                        </a>
+<div id="bg-section" style="background: {{ section.background }};">
+    {% endif %}
+    <div class="pictures-group baguette">
+        <div class="row">
+            {% for line in section.images %}
+            <div class="pictures-line">
+                {% for image in line %}
+                {% if image.type == "video" %}
+                {% set video = Video(image) %}
+                {{ video.copy() }}
+                {% else %}
+                {% set caption = image.text %}
+                {% set image = Image(image) %}
+                {{ image.copy() }}
+                {% endif %}
+                <div class="col">
+                    <div class="card">
+                        {% if video %}
+                        <div class="picture card-image">
+                            <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}">
+                            <video class="lazy" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted="">
+                                <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+                            </video>
+                        </div>
+                        {% set video = "" %}
+                        {% else %}
+                        <div class="picture card-image caption">
+                            <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
+                                <img class="lazy" data-original="{{ image.generate_thumbnail("x600") }}">
+                                {% if caption %}
+                                <div class="caption__overlay center">
+                                    <h5 class="caption__overlay__title">{{ caption }}</h5>
+                                </div>
+                                {% endif %}
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
+                {% endfor %}
             </div>
             {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-{% if section.background %}
+    {% if section.background %}
 </div>
 {% endif %}
