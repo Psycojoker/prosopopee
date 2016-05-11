@@ -51,7 +51,7 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
-        error(SETTINGS["ffmpeg"], "I couldn't find a binary to convert video and I ask to do so, abort")
+        error(SETTINGS["ffmpeg"] is False, "I couldn't find a binary to convert video and I ask to do so, abort")
 
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
