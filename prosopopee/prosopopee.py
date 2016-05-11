@@ -330,7 +330,7 @@ def main():
     # this should probably be a factory
     Image.base_dir = os.getcwd()
     Image.target_dir = os.path.join(os.getcwd(), "build")
-    
+
     Video.base_dir = os.getcwd()
     Video.target_dir = os.path.join(os.getcwd(), "build")
 
