@@ -1,0 +1,10 @@
+language: python
+install:
+  - pip install -r requirements.txt
+  - python setup.py develop
+python:
+  - "2.7"
+script:
+  - cd example && prosopopee
+notifications:
+  irc: "chat.freenode.net#prosopopee"
