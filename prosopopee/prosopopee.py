@@ -26,7 +26,7 @@ SETTINGS = {
     },
     "ffmpeg": {
         "binary": "ffmpeg",
-        "loglevel": "panic",
+        "loglevel": "error",
         "format": "webm",
         "resolution": "1280x720",
         "bitrate": "3900k",
