@@ -74,15 +74,14 @@ class Video(object):
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
-            print(command)
-            os.system(command)
+            error(os.system(command) == 0, "gm command failed")
         else:
             command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
             command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
             print(command)
-            os.system(command)
+            error(os.system(command) == 0, "gm command failed")
             print(command2)
-            os.system(command2)
+            error(os.system(command2) == 0, "gm command failed")
 
         CACHE.cache_picture(source, target, options)
 
@@ -142,7 +141,7 @@ class Image(object):
         warning("Generation", source)
 
         print(command)
-        os.system(command)
+        error(os.system(command) == 0, "gm command failed")
 
         CACHE.cache_picture(source, target, options)
 
