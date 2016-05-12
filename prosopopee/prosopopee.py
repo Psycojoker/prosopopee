@@ -279,7 +279,12 @@ def main():
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
                   "in %s" % (os.path.join(gallery, "settings.yaml")))
 
-            cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+            if isinstance(gallery_settings["cover"], dict):
+                cover_image_path = os.path.join(gallery, gallery_settings["cover"]["name"])
+                cover_image_type = gallery_settings["cover"]["type"]
+            else:
+                cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+                cover_image_type = "image"
 
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
                   "%s" % (gallery, cover_image_path))
@@ -290,7 +295,7 @@ def main():
                 "sub_title": gallery_settings.get("sub_title", ""),
                 "date": gallery_settings.get("date", ""),
                 "tags": gallery_settings.get("tags", ""),
-                "cover_type": gallery_settings.get("cover_type", ""),
+                "cover_type": cover_image_type,
                 "cover": cover_image_path,
             })
 
