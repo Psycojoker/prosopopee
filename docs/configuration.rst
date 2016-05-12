@@ -81,7 +81,7 @@ Prosopopée can use ffmpeg or libav and if you want you can customize the settin
     settings:
       ffmpeg:
         binary: "ffmpeg"
-        loglevel: "panic"
+        loglevel: "error"
         format: "webm"
         resolution: "1280x720"
         bitrate: "3900k"
