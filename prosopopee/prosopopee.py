@@ -321,14 +321,13 @@ def main():
             link=gallery
         ).encode("Utf-8"))
 
-        if settings["rss"]:
-            feed_xml = open(os.path.join("build", "feed.xml"), "w")
+    if settings["rss"]:
+        feed_xml = open(os.path.join("build", "feed.xml"), "w")
 
-            feed_xml.write(feed_template.render(
-                settings=settings,
-                link=gallery,
-                galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
-            ).encode("Utf-8"))
+        feed_xml.write(feed_template.render(
+            settings=settings,
+            galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+        ).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 
