@@ -9,6 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import error, warning, okgreen
 
+
 DEFAULTS = {
     "rss": True,
     "share": False,
@@ -25,7 +26,7 @@ SETTINGS = {
     },
     "ffmpeg": {
         "binary": "ffmpeg",
-        "loglevel": "panic",
+        "loglevel": "error",
         "format": "webm",
         "resolution": "1280x720",
         "bitrate": "3900k",
@@ -39,6 +40,8 @@ class Video(object):
     target_dir = ""
 
     def __init__(self, options):
+        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
+
         # assuming string
         if not isinstance(options, dict):
             options = {"name": options}
@@ -51,8 +54,6 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
-        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
-
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
             return
@@ -62,7 +63,7 @@ class Video(object):
            "target": target,
            "loglevel": "-loglevel %s" % options["loglevel"],
            "resolution": "-s %s" % options["resolution"],
-           "preselect": "-vpre %s" % options["preselect"],
+           "preselect": "-pre %s" % options["preselect"],
            "resize": "-vf scale=-1:%s" % options.get("resize"),
            "bitrate": "-b %s" % options["bitrate"],
            "format": "-f %s" % options["format"],
@@ -73,15 +74,14 @@ class Video(object):
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
-            print(command)
-            os.system(command)
+            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
             command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
             command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
             print(command)
-            os.system(command)
+            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
             print(command2)
-            os.system(command2)
+            error(os.system(command2) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
         CACHE.cache_picture(source, target, options)
 
@@ -141,7 +141,7 @@ class Image(object):
         warning("Generation", source)
 
         print(command)
-        os.system(command)
+        error(os.system(command) == 0, "gm command failed")
 
         CACHE.cache_picture(source, target, options)
 
@@ -279,7 +279,12 @@ def main():
             error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
                   "in %s" % (os.path.join(gallery, "settings.yaml")))
 
-            cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+            if isinstance(gallery_settings["cover"], dict):
+                cover_image_path = os.path.join(gallery, gallery_settings["cover"]["name"])
+                cover_image_type = gallery_settings["cover"]["type"]
+            else:
+                cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+                cover_image_type = "image"
 
             error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
                   "%s" % (gallery, cover_image_path))
@@ -290,7 +295,7 @@ def main():
                 "sub_title": gallery_settings.get("sub_title", ""),
                 "date": gallery_settings.get("date", ""),
                 "tags": gallery_settings.get("tags", ""),
-                "cover_type": gallery_settings.get("cover_type", ""),
+                "cover_type": cover_image_type,
                 "cover": cover_image_path,
             })
 
