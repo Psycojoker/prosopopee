@@ -9,6 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import error, warning, okgreen
 
+
 DEFAULTS = {
     "rss": True,
     "share": False,
