@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: python
 install:
-  - sudo apt-get install graphicsmagick ffmpeg
+  - sudo apt-get install graphicsmagick libav-tools
   - pip install -r requirements.txt
   - python setup.py develop
 python:
