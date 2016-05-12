@@ -1,4 +1,5 @@
 sudo: required
+dist: trusty
 language: python
 install:
   - sudo apt-get install graphicsmagick ffmpeg
