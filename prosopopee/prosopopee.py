@@ -40,6 +40,8 @@ class Video(object):
     target_dir = ""
 
     def __init__(self, options):
+        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
+
         # assuming string
         if not isinstance(options, dict):
             options = {"name": options}
@@ -52,8 +54,6 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
-        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
-
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
             return
