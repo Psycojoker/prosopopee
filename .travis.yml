@@ -1,7 +1,7 @@
 sudo: required
 language: python
 install:
-  - sudo apt-get install graphicsmagick
+  - sudo apt-get install graphicsmagick ffmpeg
   - pip install -r requirements.txt
   - python setup.py develop
 python:
