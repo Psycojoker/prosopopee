@@ -63,7 +63,7 @@ class Video(object):
            "target": target,
            "loglevel": "-loglevel %s" % options["loglevel"],
            "resolution": "-s %s" % options["resolution"],
-           "preselect": "-vpre %s" % options["preselect"],
+           "preselect": "-pre %s" % options["preselect"],
            "resize": "-vf scale=-1:%s" % options.get("resize"),
            "bitrate": "-b %s" % options["bitrate"],
            "format": "-f %s" % options["format"],
