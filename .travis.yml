@@ -7,6 +7,7 @@ install:
 python:
   - "2.7"
 script:
+  - gm -version
   - cd example && prosopopee
 notifications:
   irc: "chat.freenode.net#prosopopee"
