@@ -261,5 +261,5 @@ nav ul li > a.item-menu::before {
 }
 
 .gallery-cover img.fillWidth {
-    width: 100%;
+    height: 100%;
 }
