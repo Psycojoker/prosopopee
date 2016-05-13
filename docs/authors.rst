@@ -11,3 +11,4 @@ By chronological order:
  * CapsLock
  * Julien Malik
  * Titoko
+ * 0x010C
