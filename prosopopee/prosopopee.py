@@ -30,7 +30,6 @@ SETTINGS = {
         "format": "webm",
         "resolution": "1280x720",
         "bitrate": "3900k",
-        "preselect": "libvpx-720p"
     }
 }
 
@@ -63,7 +62,6 @@ class Video(object):
            "target": target,
            "loglevel": "-loglevel %s" % options["loglevel"],
            "resolution": "-s %s" % options["resolution"],
-           "preselect": "-pre %s" % options["preselect"],
            "resize": "-vf scale=-1:%s" % options.get("resize"),
            "bitrate": "-b %s" % options["bitrate"],
            "format": "-f %s" % options["format"],
@@ -76,12 +74,9 @@ class Video(object):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
-            command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
-            command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i {source} -c:v libvpx {bitrate} -qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k -c:a libvorbis -b:a 100k {resolution} {format} -y {target}".format(**ffmpeg_switches)
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
-            print(command2)
-            error(os.system(command2) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
         CACHE.cache_picture(source, target, options)
 
