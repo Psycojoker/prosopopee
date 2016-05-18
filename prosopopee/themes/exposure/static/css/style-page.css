@@ -401,3 +401,12 @@ a.google {
 .video-container video.fillWidth {
   width: 100%;
 }
+
+@media only screen and (max-device-width : 992px) {
+
+.pictures-line {
+    display: inherit;
+}
+
+}
+
