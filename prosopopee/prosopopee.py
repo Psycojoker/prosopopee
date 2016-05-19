@@ -185,6 +185,7 @@ class Image(object):
     def __repr__(self):
         return self.name
 
+
 def init():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
@@ -212,7 +213,7 @@ def init():
             SETTINGS["ffmpeg"]["binary"] = "avconv"
             warning("Video", "I couldn't locate ffmpeg but I could find avconv, switching to avconv for video conversion")
         else:
-            warning("Video", "I can't locate the "+ conv_video +" binary, "
+            warning("Video", "I can't locate the " + conv_video + " binary, "
                     "please install the '" + conv_video + "' package.\n")
             warning("Video", "I won't be able to encode video and I will stop if I encounter a video to convert")
             SETTINGS["ffmpeg"] = False
@@ -229,6 +230,67 @@ def init():
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
     return settings
+
+
+def build_gallery(gallery, settings,templates):
+    gallery_index_template = templates.get_template("gallery-index.html")
+    page_template = templates.get_template("page.html")
+
+    gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
+
+    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
+    error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
+
+    if gallery_settings.get("public", True):
+        error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
+                                             "title" % (os.path.join(gallery, "settings.yaml")))
+        error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
+                                             "in %s" % (os.path.join(gallery, "settings.yaml")))
+
+        if isinstance(gallery_settings["cover"], dict):
+            cover_image_path = os.path.join(gallery, gallery_settings["cover"]["name"])
+            cover_image_type = gallery_settings["cover"]["type"]
+        else:
+            cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+            cover_image_type = "image"
+
+        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
+                                                "%s" % (gallery, cover_image_path))
+
+        gallery_cover = {
+            "title": gallery_settings["title"],
+            "link": gallery,
+            "sub_title": gallery_settings.get("sub_title", ""),
+            "date": gallery_settings.get("date", ""),
+            "tags": gallery_settings.get("tags", ""),
+            "cover_type": cover_image_type,
+            "cover": cover_image_path,
+        }
+
+    if not os.path.exists(os.path.join("build", gallery)):
+        os.makedirs(os.path.join("build", gallery))
+
+    # this should probably be a factory
+    Image.base_dir = os.path.join(os.getcwd(), gallery)
+    Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
+
+    Video.base_dir = os.path.join(os.getcwd(), gallery)
+    Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
+
+    template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
+
+    index_html = open(os.path.join("build", gallery, "index.html"), "w")
+
+    index_html.write(template_to_render.render(
+        settings=settings,
+        gallery=gallery_settings,
+        Image=Image,
+        Video=Video,
+        link=gallery
+    ).encode("Utf-8"))
+
+    return gallery_cover
+
 
 def main():
     settings = init()
@@ -262,8 +324,6 @@ def main():
     templates = Environment(loader=FileSystemLoader(templates_dir))
 
     index_template = templates.get_template("index.html")
-    gallery_index_template = templates.get_template("gallery-index.html")
-    page_template = templates.get_template("page.html")
     feed_template = templates.get_template("feed.xml")
 
     # XXX recursively merge directories
@@ -276,58 +336,7 @@ def main():
         shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"), os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
-        gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
-
-        error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
-        error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
-
-        if gallery_settings.get("public", True):
-            error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                  "title" % (os.path.join(gallery, "settings.yaml")))
-            error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                  "in %s" % (os.path.join(gallery, "settings.yaml")))
-
-            if isinstance(gallery_settings["cover"], dict):
-                cover_image_path = os.path.join(gallery, gallery_settings["cover"]["name"])
-                cover_image_type = gallery_settings["cover"]["type"]
-            else:
-                cover_image_path = os.path.join(gallery, gallery_settings["cover"])
-                cover_image_type = "image"
-
-            error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
-                  "%s" % (gallery, cover_image_path))
-
-            front_page_galleries_cover.append({
-                "title": gallery_settings["title"],
-                "link": gallery,
-                "sub_title": gallery_settings.get("sub_title", ""),
-                "date": gallery_settings.get("date", ""),
-                "tags": gallery_settings.get("tags", ""),
-                "cover_type": cover_image_type,
-                "cover": cover_image_path,
-            })
-
-        if not os.path.exists(os.path.join("build", gallery)):
-            os.makedirs(os.path.join("build", gallery))
-
-        # this should probably be a factory
-        Image.base_dir = os.path.join(os.getcwd(), gallery)
-        Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
-
-        Video.base_dir = os.path.join(os.getcwd(), gallery)
-        Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
-
-        template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
-
-        index_html = open(os.path.join("build", gallery, "index.html"), "w")
-
-        index_html.write(template_to_render.render(
-            settings=settings,
-            gallery=gallery_settings,
-            Image=Image,
-            Video=Video,
-            link=gallery
-        ).encode("Utf-8"))
+        front_page_galleries_cover.append(build_gallery(gallery, settings, templates))
 
     if settings["rss"]:
         feed_xml = open(os.path.join("build", "feed.xml"), "w")
