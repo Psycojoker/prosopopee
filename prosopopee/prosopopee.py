@@ -29,7 +29,11 @@ SETTINGS = {
         "loglevel": "error",
         "format": "webm",
         "resolution": "1280x720",
-        "bitrate": "3900k",
+        "vbitrate": "3900k",
+        "abitrate": "100k",
+        "audio": "libvorbis",
+        "video": "libvpx",
+        "other": "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
     }
 }
 
@@ -63,9 +67,13 @@ class Video(object):
            "loglevel": "-loglevel %s" % options["loglevel"],
            "resolution": "-s %s" % options["resolution"],
            "resize": "-vf scale=-1:%s" % options.get("resize"),
-           "bitrate": "-b %s" % options["bitrate"],
+           "vbitrate": "-b:v %s" % options["vbitrate"],
+           "abitrate": "-b:v %s" % options["abitrate"],
            "format": "-f %s" % options["format"],
-           "binary": "%s" % options["binary"]
+           "binary": "%s" % options["binary"],
+           "video": "-c:v %s" % options["video"],
+           "audio": "-c:a %s" % options["audio"],
+           "other": "%s" % options["other"]
         }
 
         warning("Generation", source)
@@ -74,7 +82,7 @@ class Video(object):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
-            command = "{binary} {loglevel} -i {source} -c:v libvpx {bitrate} -qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k -c:a libvorbis -b:a 100k {resolution} {format} -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
@@ -178,7 +186,16 @@ class Image(object):
 
 
 def main():
+    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
+          "settings.yaml in the current working directory")
+    
     settings = yaml.safe_load(open("settings.yaml", "r"))
+
+    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
+
+    for key, value in DEFAULTS.items():
+        if key not in settings:
+            settings[key] = value
 
     if settings["settings"].get("ffmpeg"):
         SETTINGS["ffmpeg"].update(settings["settings"]["ffmpeg"])
@@ -200,14 +217,6 @@ def main():
             warning("Video", "I won't be able to encode video and I will stop if I encounter a video to convert")
             SETTINGS["ffmpeg"] = False
 
-    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
-          "settings.yaml in the current working directory")
-
-    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
-
-    for key, value in DEFAULTS.items():
-        if key not in settings:
-            settings[key] = value
 
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
