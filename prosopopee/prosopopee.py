@@ -185,11 +185,10 @@ class Image(object):
     def __repr__(self):
         return self.name
 
-
-def main():
+def init():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
-    
+
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
@@ -229,6 +228,10 @@ def main():
 
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
+    return settings
+
+def main():
+    settings = init()
 
     front_page_galleries_cover = []
 
