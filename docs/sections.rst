@@ -208,28 +208,26 @@ Exemple for pictures-group::
   - type: pictures-group
     images:
       -
-        - name: VID_20160312_174602.mp4
+        - name: video.mp4
           type: video
-        - snapseed-06-02.jpeg
-        - name: snapseed-04.jpeg
-          text: plop2
-        - snapseed-05.jpeg
-        - snapseed-07.jpeg
+        - image1.jpeg
+        - image2.jpeg
       -
-        - snapseed-01.jpeg
+        - image3.jpeg
+        - image4.jpeg
 
 Exemple for bordered-picture::
 
   - type: bordered-picture
     image:
-      name: VID_20160312_174602.mp4
+      name: video.mp4
       type: video
 
 And for full-picture::
 
   - type: full-picture
     image:
-      name: VID_20160312_174602.mp4
+      name: video.mp4
       type: video
     text:
       title: Title Text
