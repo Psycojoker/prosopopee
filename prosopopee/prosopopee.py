@@ -292,6 +292,27 @@ def build_gallery(gallery, settings,templates):
     return gallery_cover
 
 
+def build_index(settings, front_page_galleries_cover,templates):
+    index_template = templates.get_template("index.html")
+
+    front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+
+    # this should probably be a factory
+    Image.base_dir = os.getcwd()
+    Image.target_dir = os.path.join(os.getcwd(), "build")
+
+    Video.base_dir = os.getcwd()
+    Video.target_dir = os.path.join(os.getcwd(), "build")
+
+    index_html = open(os.path.join("build", "index.html"), "w")
+
+    index_html.write(index_template.render(
+        settings=settings,
+        galleries=front_page_galleries_cover,
+        Image=Image,
+        Video=Video
+    ).encode("Utf-8"))
+
 def main():
     settings = init()
 
@@ -323,7 +344,6 @@ def main():
 
     templates = Environment(loader=FileSystemLoader(templates_dir))
 
-    index_template = templates.get_template("index.html")
     feed_template = templates.get_template("feed.xml")
 
     # XXX recursively merge directories
@@ -346,23 +366,7 @@ def main():
             galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
         ).encode("Utf-8"))
 
-    front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
-
-    # this should probably be a factory
-    Image.base_dir = os.getcwd()
-    Image.target_dir = os.path.join(os.getcwd(), "build")
-
-    Video.base_dir = os.getcwd()
-    Video.target_dir = os.path.join(os.getcwd(), "build")
-
-    index_html = open(os.path.join("build", "index.html"), "w")
-
-    index_html.write(index_template.render(
-        settings=settings,
-        galleries=front_page_galleries_cover,
-        Image=Image,
-        Video=Video
-    ).encode("Utf-8"))
+    build_index(settings, front_page_galleries_cover, templates)
 
 
 if __name__ == '__main__':
