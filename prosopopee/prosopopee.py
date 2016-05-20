@@ -80,6 +80,7 @@ class Video(object):
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+            print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
             command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)

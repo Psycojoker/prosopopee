@@ -8,9 +8,9 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        {% for galleries_line in galleries|reverse|batch(2)|reverse %}
+        {% for galleries_line in galleries|reverse|batch(1)|reverse %}
         {% for gallery in galleries_line|reverse %}
-        <div class="col s12 m12 l{{ 12 // galleries_line|length }}">
+        <div class="col s12 m12 l8 push-l2">
             <a href="{{ gallery.link }}">    
                 <div class="card hoverable blue-grey lighten-5">
                     <div class="card-image">
@@ -66,7 +66,7 @@
             </a>    
         </div>
         {% endfor %}
-    {% endfor %}
+        {% endfor %}
     </div>
 </div>
 
