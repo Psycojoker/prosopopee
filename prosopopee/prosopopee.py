@@ -426,7 +426,7 @@ def main():
             settings=settings,
             galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
         ).encode("Utf-8"))
-    print 'Build homepage'
+
     build_index(settings, front_page_galleries_cover, templates)
 
 
