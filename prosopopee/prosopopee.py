@@ -232,16 +232,30 @@ def init():
     return settings
 
 
-def build_gallery(gallery, settings,templates):
+def build_gallery(gallery, settings,templates, parents_gallery=False):
     gallery_index_template = templates.get_template("gallery-index.html")
     page_template = templates.get_template("page.html")
+    gallery_cover = {}
+    if parents_gallery:
+        parents_gallery = os.path.join(parents_gallery, gallery)
+    else:
+        parents_gallery = gallery
+
+    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(parents_gallery,x)) and os.path.exists(
+        os.path.join(os.getcwd(), gallery, x, "settings.yaml")), os.listdir(os.path.join(os.getcwd(), gallery)))
+
+    if not os.path.exists(os.path.join("build", gallery)):
+        if parents_gallery:
+            os.makedirs(os.path.join("build", parents_gallery, gallery))
+        else:
+            os.makedirs(os.path.join("build", gallery))
 
     gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
     error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
 
-    if gallery_settings.get("public", True):
+    if gallery_settings.get("public", True) or dirs:
         error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
                                              "title" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
@@ -267,8 +281,15 @@ def build_gallery(gallery, settings,templates):
             "cover": cover_image_path,
         }
 
-    if not os.path.exists(os.path.join("build", gallery)):
-        os.makedirs(os.path.join("build", gallery))
+        if dirs:
+            sub_page_galleries_cover = []
+
+            for subgallery in dirs:
+                sub_page_galleries_cover.append(build_gallery(subgallery, settings, templates, gallery))
+
+            build_index(settings, sub_page_galleries_cover, templates)
+            return gallery_cover
+
 
     # this should probably be a factory
     Image.base_dir = os.path.join(os.getcwd(), gallery)
@@ -292,10 +313,10 @@ def build_gallery(gallery, settings,templates):
     return gallery_cover
 
 
-def build_index(settings, front_page_galleries_cover,templates):
+def build_index(settings, galleries_cover, templates):
     index_template = templates.get_template("index.html")
 
-    front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+    galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
 
     # this should probably be a factory
     Image.base_dir = os.getcwd()
@@ -308,10 +329,11 @@ def build_index(settings, front_page_galleries_cover,templates):
 
     index_html.write(index_template.render(
         settings=settings,
-        galleries=front_page_galleries_cover,
+        galleries=galleries_cover,
         Image=Image,
         Video=Video
     ).encode("Utf-8"))
+
 
 def main():
     settings = init()
@@ -365,7 +387,7 @@ def main():
             settings=settings,
             galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
         ).encode("Utf-8"))
-
+    print 'Build homepage'
     build_index(settings, front_page_galleries_cover, templates)
 
 
