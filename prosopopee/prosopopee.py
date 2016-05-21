@@ -232,28 +232,28 @@ def init():
     return settings
 
 
-def build_gallery(gallery, settings,templates, parents_gallery=False):
-    gallery_index_template = templates.get_template("gallery-index.html")
-    page_template = templates.get_template("page.html")
-    gallery_cover = {}
-    if parents_gallery:
-        parents_gallery = os.path.join(parents_gallery, gallery)
+def build_gallery(gallery, settings, templates, parent_galleries=False):
+
+    if parent_galleries:
+        gallery_path = os.path.join(parent_galleries, gallery)
     else:
-        parents_gallery = gallery
+        gallery_path = gallery
 
-    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(parents_gallery,x)) and os.path.exists(
-        os.path.join(os.getcwd(), gallery, x, "settings.yaml")), os.listdir(os.path.join(os.getcwd(), gallery)))
-
-    if not os.path.exists(os.path.join("build", gallery)):
-        if parents_gallery:
-            os.makedirs(os.path.join("build", parents_gallery, gallery))
-        else:
-            os.makedirs(os.path.join("build", gallery))
-
-    gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery, "settings.yaml"), "r"))
+    gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery_path, "settings.yaml"), "r"))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
     error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
+
+    gallery_index_template = templates.get_template("gallery-index.html")
+    page_template = templates.get_template("page.html")
+    gallery_cover = {}
+
+    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(gallery_path, x)) and
+                  os.path.exists(os.path.join(os.getcwd(), gallery_path, x, "settings.yaml")),
+                  os.listdir(os.path.join(os.getcwd(), gallery_path)))
+
+    if not os.path.exists(os.path.join("build", gallery_path)):
+            os.makedirs(os.path.join("build", gallery_path))
 
     if gallery_settings.get("public", True) or dirs:
         error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
@@ -262,10 +262,12 @@ def build_gallery(gallery, settings,templates, parents_gallery=False):
                                              "in %s" % (os.path.join(gallery, "settings.yaml")))
 
         if isinstance(gallery_settings["cover"], dict):
-            cover_image_path = os.path.join(gallery, gallery_settings["cover"]["name"])
+            cover_image_path = os.path.join(gallery_path, gallery_settings["cover"]["name"])
+            cover_image_url = os.path.join(gallery, gallery_settings["cover"]["name"])
             cover_image_type = gallery_settings["cover"]["type"]
         else:
-            cover_image_path = os.path.join(gallery, gallery_settings["cover"])
+            cover_image_path = os.path.join(gallery_path, gallery_settings["cover"])
+            cover_image_url = os.path.join(gallery, gallery_settings["cover"])
             cover_image_type = "image"
 
         error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
@@ -278,29 +280,31 @@ def build_gallery(gallery, settings,templates, parents_gallery=False):
             "date": gallery_settings.get("date", ""),
             "tags": gallery_settings.get("tags", ""),
             "cover_type": cover_image_type,
-            "cover": cover_image_path,
+            "cover": cover_image_url,
         }
 
         if dirs:
             sub_page_galleries_cover = []
 
             for subgallery in dirs:
-                sub_page_galleries_cover.append(build_gallery(subgallery, settings, templates, gallery))
+                sub_page_galleries_cover.append(
+                    build_gallery(subgallery, settings, templates, gallery_path)
+                )
 
-            build_index(settings, sub_page_galleries_cover, templates)
+            build_index(settings, sub_page_galleries_cover, templates, gallery_path)
             return gallery_cover
 
 
     # this should probably be a factory
-    Image.base_dir = os.path.join(os.getcwd(), gallery)
-    Image.target_dir = os.path.join(os.getcwd(), "build", gallery)
+    Image.base_dir = os.path.join(os.getcwd(), gallery_path)
+    Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
 
-    Video.base_dir = os.path.join(os.getcwd(), gallery)
-    Video.target_dir = os.path.join(os.getcwd(), "build", gallery)
+    Video.base_dir = os.path.join(os.getcwd(), gallery_path)
+    Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
-    index_html = open(os.path.join("build", gallery, "index.html"), "w")
+    index_html = open(os.path.join("build", gallery_path, "index.html"), "w")
 
     index_html.write(template_to_render.render(
         settings=settings,
@@ -313,19 +317,19 @@ def build_gallery(gallery, settings,templates, parents_gallery=False):
     return gallery_cover
 
 
-def build_index(settings, galleries_cover, templates):
+def build_index(settings, galleries_cover, templates, gallery_path=''):
     index_template = templates.get_template("index.html")
 
     galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
 
     # this should probably be a factory
-    Image.base_dir = os.getcwd()
-    Image.target_dir = os.path.join(os.getcwd(), "build")
+    Image.base_dir = os.path.join(os.getcwd(), gallery_path)
+    Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
 
-    Video.base_dir = os.getcwd()
-    Video.target_dir = os.path.join(os.getcwd(), "build")
+    Video.base_dir = os.path.join(os.getcwd(), gallery_path)
+    Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
 
-    index_html = open(os.path.join("build", "index.html"), "w")
+    index_html = open(os.path.join("build", gallery_path, "index.html"), "w")
 
     index_html.write(index_template.render(
         settings=settings,
