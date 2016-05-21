@@ -208,16 +208,16 @@ def init():
     error(os.system("which gm > /dev/null") == 0, "I can't locate the gm binary, "
           "please install the 'graphicsmagick' package.\n")
 
-    if os.system("which " + conv_video +" > /dev/null") != 0:
+    if os.system("which " + conv_video + " > /dev/null") != 0:
         if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
             SETTINGS["ffmpeg"]["binary"] = "avconv"
-            warning("Video", "I couldn't locate ffmpeg but I could find avconv, switching to avconv for video conversion")
+            warning("Video", "I couldn't locate ffmpeg but I could find avconv, "
+                             "switching to avconv for video conversion")
         else:
             warning("Video", "I can't locate the " + conv_video + " binary, "
                     "please install the '" + conv_video + "' package.\n")
             warning("Video", "I won't be able to encode video and I will stop if I encounter a video to convert")
             SETTINGS["ffmpeg"] = False
-
 
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
@@ -294,7 +294,6 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
             build_index(settings, sub_page_galleries_cover, templates, gallery_path)
             return gallery_cover
 
-
     # this should probably be a factory
     Image.base_dir = os.path.join(os.getcwd(), gallery_path)
     Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
@@ -344,7 +343,8 @@ def main():
 
     front_page_galleries_cover = []
 
-    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
+    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and
+                  os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
     error(dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
@@ -356,9 +356,10 @@ def main():
     theme = settings["settings"].get("theme", "exposure")
 
     theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
-    available_themes = theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes")))
+    available_themes = theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                                                  "themes")))
 
-    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % (available_themes))
+    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
 
     templates_dir = [
         os.path.realpath(os.path.join(os.getcwd(), "templates")),
@@ -366,7 +367,8 @@ def main():
     ]
 
     if theme != "exposure":
-        templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "exposure", "templates"))
+        templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                          "themes", "exposure", "templates"))
 
     templates = Environment(loader=FileSystemLoader(templates_dir))
 
@@ -379,7 +381,8 @@ def main():
     if os.path.exists(os.path.join(os.getcwd(), "static")):
         shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", "static"))
     else:
-        shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"), os.path.join(os.getcwd(), "build", "static"))
+        shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"),
+                        os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
         front_page_galleries_cover.append(build_gallery(gallery, settings, templates))
