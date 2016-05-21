@@ -284,14 +284,46 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
         }
 
         if dirs:
+            subgallery_theme = gallery_settings.get("theme")
+            if subgallery_theme:
+                theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme))
+                available_themes = subgallery_theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                                                              "themes")))
+
+                error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
+
+                templates_dir = [
+                    os.path.realpath(os.path.join(os.getcwd(), "templates")),
+                    os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme, "templates")
+                ]
+
+                if subgallery_theme != "exposure":
+                    templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                                      "themes", "exposure", "templates"))
+
+                subgallery_templates = Environment(loader=FileSystemLoader(templates_dir))
+            else:
+                subgallery_theme = settings.get("theme", "exposure")
+                subgallery_templates = templates
+
+            # XXX recursively merge directories
+            if os.path.exists(os.path.join(os.getcwd(), "build", gallery_path, "static")):
+                shutil.rmtree(os.path.join(os.getcwd(), "build", gallery_path, "static"))
+
+            if os.path.exists(os.path.join(os.getcwd(), "static")):
+                shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", gallery_path, "static"))
+            else:
+                shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme, "static"),
+                                os.path.join(os.getcwd(), "build", gallery_path,"static"))
+
             sub_page_galleries_cover = []
 
             for subgallery in dirs:
                 sub_page_galleries_cover.append(
-                    build_gallery(subgallery, settings, templates, gallery_path)
+                    build_gallery(subgallery, settings, subgallery_templates, gallery_path)
                 )
 
-            build_index(settings, sub_page_galleries_cover, templates, gallery_path)
+            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             return gallery_cover
 
     # this should probably be a factory
