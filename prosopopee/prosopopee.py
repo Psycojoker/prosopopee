@@ -324,6 +324,7 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
                 )
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
+            gallery_cover['sub_gallery'] = sub_page_galleries_cover
             return gallery_cover
 
     # this should probably be a factory
@@ -403,7 +404,7 @@ def main():
                                           "themes", "exposure", "templates"))
 
     templates = Environment(loader=FileSystemLoader(templates_dir))
-
+    templates.add_extension('jinja2.ext.with_')
     feed_template = templates.get_template("feed.xml")
 
     # XXX recursively merge directories
@@ -424,7 +425,7 @@ def main():
 
         feed_xml.write(feed_template.render(
             settings=settings,
-            galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+            galleries=reversed(sorted(filter(lambda x: x != {}, front_page_galleries_cover), key=lambda x: x["date"]))
         ).encode("Utf-8"))
 
     build_index(settings, front_page_galleries_cover, templates)
