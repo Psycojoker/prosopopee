@@ -33,7 +33,7 @@ a {
     height: auto;
 }
 
-img {
+.image img {
     width: 100%;
     height: auto;
     display: block;
@@ -132,7 +132,7 @@ a.google {
 }
 
 .author-meta {
-    padding-bottom: 7em;
+    padding: 3em 0 7em 0;
 }
 
 .author-info {
@@ -141,17 +141,19 @@ a.google {
     font-size: 19px;
 }
 
+.author-meta a {
+    color: #333;
+}
+
 .author-info h4 {
     text-transform: uppercase;
-    text-align: center;
     font-family: 'crimson', serif;
     color: black;
     font-style: normal;
     font-weight: bold;
 }
 .author-info .desc {
-    width: 350px;
-    margin: auto;
+    width: auto;
     padding-bottom: 10px;
     font-style: normal;
     font-size: 14px;
