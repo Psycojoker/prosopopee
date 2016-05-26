@@ -256,7 +256,7 @@ footer a {
 }
 
 
-.share, .author {
+.share, .author-meta {
     text-align: center;
     height: auto;
     position: relative;
@@ -310,25 +310,30 @@ a.google {
     background-position: -172px 0 !important;
 }
 
-.author img.circle {
+.author-meta img.circle {
     border-radius: 50%;
     width: 80px;
 }
 
-.author {
+.author-meta {
     padding-bottom: 7em;
 }
 
-.author-meta {
+.author-info {
     color: #ccc;
     font-style: italic;
     font-size: 19px;
 }
 
-.author h4 {
+.author-info h4 {
     text-transform: uppercase;
+    text-align: center;
+    font-family: 'crimson', serif;
+    color: black;
+    font-style: normal;
+    font-weight: bold;
 }
-.author .desc {
+.author-info .desc {
     width: 350px;
     margin: auto;
     padding-bottom: 10px;
@@ -343,7 +348,7 @@ a.google {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 0;
     width: 100%;
     height: auto;
 }
