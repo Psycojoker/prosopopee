@@ -1,5 +1,5 @@
 {% set image = Image(section.image) %}
 {{ image.copy() }}
-<section class="panorama">
+<section class="image">
     <img src="{{ image.generate_thumbnail("x800") }}">
 </section>
