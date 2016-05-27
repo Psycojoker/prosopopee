@@ -27,12 +27,16 @@ a {
     text-decoration: none;
 }
 
+.panorama,
+.bordered-picture,
 .image {
     position: relative;
     width: 100%;
     height: auto;
 }
 
+.panorama img,
+.bordered-picture img,
 .image img {
     width: 100%;
     height: auto;
@@ -68,6 +72,8 @@ h3 {
     text-transform: uppercase;
 }
 
+.bordered-picture img,
+.panorama img,
 .pictures-group img {
     margin: 15px 0;
     display: block;
