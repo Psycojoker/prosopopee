@@ -72,6 +72,7 @@ $(function() {
     });
 });
 
+{% if settings.settings.light_mode %}
 var slowLoad = window.setTimeout( function() {
     var html_node = document.getElementsByTagName('html')[0];
     var div = document.createElement('div');
@@ -101,7 +102,7 @@ var slowLoad = window.setTimeout( function() {
 	div.appendChild(dismiss_container);
 
 	html_node.appendChild(div);
-}, 10 );
+}, 1000 );
 
 window.addEventListener( 'load', function() {
     try {
@@ -112,6 +113,7 @@ window.addEventListener( 'load', function() {
     }
 
 });
+{% endif %}
 
         </script>
 
