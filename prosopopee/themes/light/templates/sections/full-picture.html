@@ -9,10 +9,10 @@
     <div class="image">
         {% if video %}
         <video autoplay loop muted class="fillWidth">
-            <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+            <source src="../{{ video }}" type="video/webm" data-source="../{{ video }}" data-format="vp8" data-extension="webm">
         </video>
         {% else %}
-        <img  src="{{ image.generate_thumbnail("x800") }}">
+        <img  src="../{{ image.generate_thumbnail("x800") }}">
         {% endif %}
     </div>
     {% if section.text %}

@@ -15,6 +15,7 @@ DEFAULTS = {
     "share": False,
     "settings": {},
     "show_date": True,
+    "light_mode": False,
 }
 
 SETTINGS = {
@@ -256,6 +257,7 @@ def main():
     if theme != "exposure":
         templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "exposure", "templates"))
 
+
     templates = Environment(loader=FileSystemLoader(templates_dir))
 
     index_template = templates.get_template("index.html")
@@ -325,6 +327,35 @@ def main():
             Video=Video,
             link=gallery
         ).encode("Utf-8"))
+
+        if settings["settings"].get("light_mode", True):
+            print "light mode enable"
+            if not os.path.exists(os.path.join("build", gallery, "light")):
+                os.makedirs(os.path.join("build", gallery, "light"))
+
+            if os.path.exists(os.path.join(os.getcwd(), "build", gallery, "light", "static")):
+                shutil.rmtree(os.path.join(os.getcwd(), "build", gallery, "light", "static"))
+
+            shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "light", "static"),
+                            os.path.join(os.getcwd(), "build", gallery, "light","static"))
+
+            light_templates_dir = os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "light", "templates")
+            light_templates = Environment(loader=FileSystemLoader(light_templates_dir))
+            light_gallery_index_template = light_templates.get_template("gallery-index.html")
+
+            light_template_to_render = light_gallery_index_template
+
+            index_html = open(os.path.join("build", gallery, "light", "index.html"), "w")
+
+            index_html.write(light_template_to_render.render(
+                settings=settings,
+                gallery=gallery_settings,
+                Image=Image,
+                Video=Video,
+                link=gallery
+            ).encode("Utf-8"))
+
+
 
     if settings["rss"]:
         feed_xml = open(os.path.join("build", "feed.xml"), "w")

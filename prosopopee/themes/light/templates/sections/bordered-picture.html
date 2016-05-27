@@ -8,13 +8,13 @@
 {% endif %}
 {% if video %}
 <section class="bordered-picture">
-    <video class="lazy" id="video" poster="{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
-        <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+    <video class="lazy" id="video" poster="../{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
+        <source src="../{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
     </video>
 </section>
 {% else %}
 <section class="bordered-picture">
-    <img src="{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
+    <img src="../{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
 </section>
 {% endif %}
 

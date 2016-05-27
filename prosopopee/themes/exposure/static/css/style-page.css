@@ -415,3 +415,30 @@ a.google {
 
 }
 
+#slow-notice {
+    width:300px;
+    position: absolute;
+    top:0;
+    left:50%;
+    margin-left: -160px;
+    background-color: #F0DE7D;
+    text-align: center;
+    z-index: 999;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+#slow-notice a,
+#slow-notice .dismiss {
+    color: #000;
+    text-decoration: underline;
+    cursor:pointer;
+}
+
+#slow-notice .dismiss-container {
+    text-align:right;
+    padding-top:10px;
+    font-size: 10px;
+}
+
