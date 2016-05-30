@@ -244,8 +244,6 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
     error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
 
-    gallery_index_template = templates.get_template("gallery-index.html")
-    page_template = templates.get_template("page.html")
     gallery_cover = {}
 
     dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(gallery_path, x)) and
@@ -255,7 +253,9 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
     if not os.path.exists(os.path.join("build", gallery_path)):
             os.makedirs(os.path.join("build", gallery_path))
 
-    if gallery_settings.get("public", True) or dirs:
+    if not gallery_settings.get("public", True):
+        build_private_gallery(settings, gallery_settings, gallery_path, templates)
+    else:
         error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
                                              "title" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
@@ -325,7 +325,13 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
-            return gallery_cover
+
+    return gallery_cover
+
+
+def build_private_gallery(settings, gallery_settings, gallery_path, template):
+    gallery_index_template = template.get_template("gallery-index.html")
+    page_template = template.get_template("page.html")
 
     # this should probably be a factory
     Image.base_dir = os.path.join(os.getcwd(), gallery_path)
@@ -343,10 +349,8 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
         gallery=gallery_settings,
         Image=Image,
         Video=Video,
-        link=gallery
+        link=gallery_path
     ).encode("Utf-8"))
-
-    return gallery_cover
 
 
 def build_index(settings, galleries_cover, templates, gallery_path=''):
