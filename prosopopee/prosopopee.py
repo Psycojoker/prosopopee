@@ -232,6 +232,50 @@ def init():
     return settings
 
 
+def get_gallery_templates(theme, gallery_path="", parent_templates=None):
+    if theme:
+        theme_path = os.path.exists(
+            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
+        available_themes = theme, "', '".join(
+            os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                    "themes")))
+
+        error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
+
+        templates_dir = [
+            os.path.realpath(os.path.join(os.getcwd(), "templates")),
+            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
+        ]
+
+        if theme != "exposure":
+            templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
+                                              "themes", "exposure", "templates"))
+
+        subgallery_templates = Environment(loader=FileSystemLoader(templates_dir))
+    else:
+        if parent_templates:
+            theme = "exposure"
+            subgallery_templates = parent_templates
+        else:
+            templates_dir = [
+                os.path.realpath(os.path.join(os.getcwd(), "templates")),
+                os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
+            ]
+            subgallery_templates = Environment(loader=FileSystemLoader(templates_dir))
+
+    # XXX recursively merge directories
+    if os.path.exists(os.path.join(os.getcwd(), "build", gallery_path, "static")):
+        shutil.rmtree(os.path.join(os.getcwd(), "build", gallery_path, "static"))
+
+    if os.path.exists(os.path.join(os.getcwd(), "static")):
+        shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", gallery_path, "static"))
+    else:
+        shutil.copytree(
+            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"),
+            os.path.join(os.getcwd(), "build", gallery_path, "static"))
+    return subgallery_templates
+
+
 def build_galleries(gallery, settings, templates, parent_galleries=False):
 
     if parent_galleries:
@@ -256,7 +300,6 @@ def build_galleries(gallery, settings, templates, parent_galleries=False):
     if not gallery_settings.get("public", True):
         build_gallery(settings, gallery_settings, gallery_path, templates)
     else:
-        print "build :" + gallery_path + " : " + gallery
         error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
                                              "title" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
@@ -285,38 +328,9 @@ def build_galleries(gallery, settings, templates, parent_galleries=False):
         }
 
         if dirs:
-            subgallery_theme = gallery_settings.get("theme")
-            if subgallery_theme:
-                theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme))
-                available_themes = subgallery_theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                                                              "themes")))
-
-                error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
-
-                templates_dir = [
-                    os.path.realpath(os.path.join(os.getcwd(), "templates")),
-                    os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme, "templates")
-                ]
-
-                if subgallery_theme != "exposure":
-                    templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                                      "themes", "exposure", "templates"))
-
-                subgallery_templates = Environment(loader=FileSystemLoader(templates_dir))
-            else:
-                subgallery_theme = settings.get("theme", "exposure")
-                subgallery_templates = templates
-
-            # XXX recursively merge directories
-            if os.path.exists(os.path.join(os.getcwd(), "build", gallery_path, "static")):
-                shutil.rmtree(os.path.join(os.getcwd(), "build", gallery_path, "static"))
-
-            if os.path.exists(os.path.join(os.getcwd(), "static")):
-                shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", gallery_path, "static"))
-            else:
-                shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", subgallery_theme, "static"),
-                                os.path.join(os.getcwd(), "build", gallery_path,"static"))
-
+            theme = gallery_settings.get("theme") if gallery_settings.get("theme") else settings.get("theme",
+                                                                                                     "exposure")
+            subgallery_templates = get_gallery_templates(theme, gallery_path, templates)
             sub_page_galleries_cover = []
 
             for subgallery in dirs:
@@ -394,35 +408,9 @@ def main():
         os.makedirs("build")
 
     theme = settings["settings"].get("theme", "exposure")
-
-    theme_path = os.path.exists(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
-    available_themes = theme, "', '".join(os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                                                  "themes")))
-
-    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
-
-    templates_dir = [
-        os.path.realpath(os.path.join(os.getcwd(), "templates")),
-        os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
-    ]
-
-    if theme != "exposure":
-        templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                          "themes", "exposure", "templates"))
-
-    templates = Environment(loader=FileSystemLoader(templates_dir))
+    templates = get_gallery_templates(theme)
     templates.add_extension('jinja2.ext.with_')
     feed_template = templates.get_template("feed.xml")
-
-    # XXX recursively merge directories
-    if os.path.exists(os.path.join(os.getcwd(), "build", "static")):
-        shutil.rmtree(os.path.join(os.getcwd(), "build", "static"))
-
-    if os.path.exists(os.path.join(os.getcwd(), "static")):
-        shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", "static"))
-    else:
-        shutil.copytree(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"),
-                        os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
         front_page_galleries_cover.append(build_galleries(gallery, settings, templates))
