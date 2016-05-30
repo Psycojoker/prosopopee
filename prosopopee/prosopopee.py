@@ -328,7 +328,6 @@ def main():
         ).encode("Utf-8"))
 
         if settings["settings"].get("light_mode"):
-            print "light mode enable"
             if not os.path.exists(os.path.join("build", gallery, "light")):
                 os.makedirs(os.path.join("build", gallery, "light"))
 
