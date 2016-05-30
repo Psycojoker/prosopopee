@@ -232,7 +232,7 @@ def init():
     return settings
 
 
-def build_gallery(gallery, settings, templates, parent_galleries=False):
+def build_galleries(gallery, settings, templates, parent_galleries=False):
 
     if parent_galleries:
         gallery_path = os.path.join(parent_galleries, gallery)
@@ -254,8 +254,9 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
             os.makedirs(os.path.join("build", gallery_path))
 
     if not gallery_settings.get("public", True):
-        build_private_gallery(settings, gallery_settings, gallery_path, templates)
+        build_gallery(settings, gallery_settings, gallery_path, templates)
     else:
+        print "build :" + gallery_path + " : " + gallery
         error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
                                              "title" % (os.path.join(gallery, "settings.yaml")))
         error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
@@ -320,16 +321,18 @@ def build_gallery(gallery, settings, templates, parent_galleries=False):
 
             for subgallery in dirs:
                 sub_page_galleries_cover.append(
-                    build_gallery(subgallery, settings, subgallery_templates, gallery_path)
+                    build_galleries(subgallery, settings, subgallery_templates, gallery_path)
                 )
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
+        else:
+            build_gallery(settings, gallery_settings, gallery_path, templates)
 
     return gallery_cover
 
 
-def build_private_gallery(settings, gallery_settings, gallery_path, template):
+def build_gallery(settings, gallery_settings, gallery_path, template):
     gallery_index_template = template.get_template("gallery-index.html")
     page_template = template.get_template("page.html")
 
@@ -422,7 +425,7 @@ def main():
                         os.path.join(os.getcwd(), "build", "static"))
 
     for gallery in dirs:
-        front_page_galleries_cover.append(build_gallery(gallery, settings, templates))
+        front_page_galleries_cover.append(build_galleries(gallery, settings, templates))
 
     if settings["rss"]:
         feed_xml = open(os.path.join("build", "feed.xml"), "w")
