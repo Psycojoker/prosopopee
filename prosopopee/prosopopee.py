@@ -276,17 +276,17 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
     return subgallery_templates
 
 
-def build_galleries(gallery, settings, templates, parent_galleries=False):
+def build_galleries(gallery_name, settings, parent_templates, parent_gallery_path=False):
 
-    if parent_galleries:
-        gallery_path = os.path.join(parent_galleries, gallery)
+    if parent_gallery_path:
+        gallery_path = os.path.join(parent_gallery_path, gallery_name)
     else:
-        gallery_path = gallery
+        gallery_path = gallery_name
 
     gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery_path, "settings.yaml"), "r"))
 
-    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery, "settings.yaml")))
-    error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery, "settings.yaml")))
+    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery_name, "settings.yaml")))
+    error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery_name, "settings.yaml")))
 
     gallery_cover = {}
 
@@ -298,39 +298,14 @@ def build_galleries(gallery, settings, templates, parent_galleries=False):
             os.makedirs(os.path.join("build", gallery_path))
 
     if not gallery_settings.get("public", True):
-        build_gallery(settings, gallery_settings, gallery_path, templates)
+        build_gallery(settings, gallery_settings, gallery_path, parent_templates)
     else:
-        error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                                             "title" % (os.path.join(gallery, "settings.yaml")))
-        error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                                             "in %s" % (os.path.join(gallery, "settings.yaml")))
-
-        if isinstance(gallery_settings["cover"], dict):
-            cover_image_path = os.path.join(gallery_path, gallery_settings["cover"]["name"])
-            cover_image_url = os.path.join(gallery, gallery_settings["cover"]["name"])
-            cover_image_type = gallery_settings["cover"]["type"]
-        else:
-            cover_image_path = os.path.join(gallery_path, gallery_settings["cover"])
-            cover_image_url = os.path.join(gallery, gallery_settings["cover"])
-            cover_image_type = "image"
-
-        error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
-                                                "%s" % (gallery, cover_image_path))
-
-        gallery_cover = {
-            "title": gallery_settings["title"],
-            "link": gallery,
-            "sub_title": gallery_settings.get("sub_title", ""),
-            "date": gallery_settings.get("date", ""),
-            "tags": gallery_settings.get("tags", ""),
-            "cover_type": cover_image_type,
-            "cover": cover_image_url,
-        }
+        gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
         if dirs:
             theme = gallery_settings.get("theme") if gallery_settings.get("theme") else settings.get("theme",
                                                                                                      "exposure")
-            subgallery_templates = get_gallery_templates(theme, gallery_path, templates)
+            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates)
             sub_page_galleries_cover = []
 
             for subgallery in dirs:
@@ -341,8 +316,39 @@ def build_galleries(gallery, settings, templates, parent_galleries=False):
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
         else:
-            build_gallery(settings, gallery_settings, gallery_path, templates)
+            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
 
+    return gallery_cover
+
+
+def create_cover(gallery_name, gallery_settings, gallery_path):
+    error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
+                                         "title" % (os.path.join(gallery_name, "settings.yaml")))
+
+    error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
+                                         "in %s" % (os.path.join(gallery_name, "settings.yaml")))
+
+    if isinstance(gallery_settings["cover"], dict):
+        cover_image_path = os.path.join(gallery_path, gallery_settings["cover"]["name"])
+        cover_image_url = os.path.join(gallery_name, gallery_settings["cover"]["name"])
+        cover_image_type = gallery_settings["cover"]["type"]
+    else:
+        cover_image_path = os.path.join(gallery_path, gallery_settings["cover"])
+        cover_image_url = os.path.join(gallery_name, gallery_settings["cover"])
+        cover_image_type = "image"
+
+    error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
+                                            "%s" % (gallery_name, cover_image_path))
+
+    gallery_cover = {
+        "title": gallery_settings["title"],
+        "link": gallery_name,
+        "sub_title": gallery_settings.get("sub_title", ""),
+        "date": gallery_settings.get("date", ""),
+        "tags": gallery_settings.get("tags", ""),
+        "cover_type": cover_image_type,
+        "cover": cover_image_url,
+    }
     return gallery_cover
 
 
