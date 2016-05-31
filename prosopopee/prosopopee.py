@@ -276,7 +276,7 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
     return subgallery_templates
 
 
-def build_galleries(gallery_name, settings, parent_templates, parent_gallery_path=False):
+def process_directory(gallery_name, settings, parent_templates, parent_gallery_path=False):
 
     if parent_gallery_path:
         gallery_path = os.path.join(parent_gallery_path, gallery_name)
@@ -310,7 +310,7 @@ def build_galleries(gallery_name, settings, parent_templates, parent_gallery_pat
 
             for subgallery in dirs:
                 sub_page_galleries_cover.append(
-                    build_galleries(subgallery, settings, subgallery_templates, gallery_path)
+                    process_directory(subgallery, settings, subgallery_templates, gallery_path)
                 )
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
@@ -419,7 +419,7 @@ def main():
     feed_template = templates.get_template("feed.xml")
 
     for gallery in dirs:
-        front_page_galleries_cover.append(build_galleries(gallery, settings, templates))
+        front_page_galleries_cover.append(process_directory(gallery, settings, templates))
 
     if settings["rss"]:
         feed_xml = open(os.path.join("build", "feed.xml"), "w")
