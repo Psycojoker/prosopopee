@@ -107,6 +107,15 @@ a {
     margin-right: 21%;
 }
 
+.text {
+    text-align: center;
+    font-family: 'crimson', serif;
+    font-size: 0.9em;
+    line-height: 1.7em;
+    margin-left: 21%;
+    margin-right: 21%;
+}
+
 .paragraph {
     text-align: left;
     font-family: 'crimson', serif;
