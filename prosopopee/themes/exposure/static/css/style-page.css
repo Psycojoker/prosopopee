@@ -116,6 +116,14 @@ a {
     margin-right: 21%;
 }
 
+.title {
+    text-transform: uppercase;
+    font-family: 'montserrat', sans-serif;
+    font-size: 2.5vw;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
 .paragraph {
     text-align: left;
     font-family: 'crimson', serif;
