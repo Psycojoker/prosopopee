@@ -2,7 +2,17 @@
     {% if section.title %}<h2 class="title">{{ section.title }}</h2>{% endif %}
     <div class="youtubeCentered">
         <div class="youtubeVideoWrapper">
-            <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.id }}" frameborder="0" allowfullscreen></iframe>
+            {% if section.youtube.startswith("https://www.youtube.com/") %}
+            <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.youtube.split("v=")[1].split("&")[0] }}" frameborder="0" allowfullscreen></iframe>
+            {% elif section.youtube.startswith("https://youtu.be") %}
+                {% if section.youtube.endswith("/") %}
+                <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.youtube.split("/")[-2] }}" frameborder="0" allowfullscreen></iframe>
+                {% else %}
+                <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.youtube.split("/")[-1] }}" frameborder="0" allowfullscreen></iframe>
+                {% endif %}
+            {% else %}
+            <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.youtube }}" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
         </div>
     </div>
 </section>
