@@ -1,0 +1,8 @@
+<section class="youtube">
+    {% if section.title %}<h2 class="title">{{ section.title }}</h2>{% endif %}
+    <div class="youtubeCentered">
+        <div class="youtubeVideoWrapper">
+            <iframe width="80%" height="auto" src="https://www.youtube.com/embed/{{ section.id }}" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</section>
