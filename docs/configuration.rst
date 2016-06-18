@@ -44,7 +44,7 @@ homepage that is better suited for a static page. You'll need to specify
 case you didn't specified "public: false" you'll **need** to specify a "cover:"
 entry like any other gallery.
 
-**NOTE**: except the "static: " option to disappear quite soon for a more
+**NOTE**: expect the "static: " option to disappear quite soon for a more
 generic approach to "choose your page style".
 
 Global settings
