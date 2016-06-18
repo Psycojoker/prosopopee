@@ -189,7 +189,7 @@ class Image(object):
 def main():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
-    
+
     settings = yaml.safe_load(open("settings.yaml", "r"))
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
