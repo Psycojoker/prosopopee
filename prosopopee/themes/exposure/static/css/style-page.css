@@ -350,7 +350,7 @@ a.google {
     left: 0;
     z-index: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .full-picture video {
@@ -358,6 +358,7 @@ a.google {
     min-width: 100%; min-height: 100%;
     width: auto; height: auto; z-index: -100;
     background-size: cover;
+    object-fit: fill;
 }
 
 .bordered-picture video {
