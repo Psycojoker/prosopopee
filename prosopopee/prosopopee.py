@@ -29,8 +29,11 @@ SETTINGS = {
         "loglevel": "error",
         "format": "webm",
         "resolution": "1280x720",
-        "bitrate": "3900k",
-        "preselect": "libvpx-720p"
+        "vbitrate": "3900k",
+        "abitrate": "100k",
+        "audio": "libvorbis",
+        "video": "libvpx",
+        "other": "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
     }
 }
 
@@ -63,25 +66,26 @@ class Video(object):
            "target": target,
            "loglevel": "-loglevel %s" % options["loglevel"],
            "resolution": "-s %s" % options["resolution"],
-           "preselect": "-pre %s" % options["preselect"],
            "resize": "-vf scale=-1:%s" % options.get("resize"),
-           "bitrate": "-b %s" % options["bitrate"],
+           "vbitrate": "-b:v %s" % options["vbitrate"],
+           "abitrate": "-b:v %s" % options["abitrate"],
            "format": "-f %s" % options["format"],
-           "binary": "%s" % options["binary"]
+           "binary": "%s" % options["binary"],
+           "video": "-c:v %s" % options["video"],
+           "audio": "-c:a %s" % options["audio"],
+           "other": "%s" % options["other"]
         }
 
         warning("Generation", source)
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
-            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
-        else:
-            command = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 1 -an {format} -y {target}".format(**ffmpeg_switches)
-            command2 = "{binary} {loglevel} -i {source} {resolution} {preselect} {bitrate} -pass 2 -acodec libvorbis -ab 100k {format} -y {target}".format(**ffmpeg_switches)
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
-            print(command2)
-            error(os.system(command2) == 0, "%s command failed" % ffmpeg_switches["binary"])
+        else:
+            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
+            print(command)
+            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
         CACHE.cache_picture(source, target, options)
 
@@ -183,7 +187,16 @@ class Image(object):
 
 
 def main():
+    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
+          "settings.yaml in the current working directory")
+    
     settings = yaml.safe_load(open("settings.yaml", "r"))
+
+    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
+
+    for key, value in DEFAULTS.items():
+        if key not in settings:
+            settings[key] = value
 
     if settings["settings"].get("ffmpeg"):
         SETTINGS["ffmpeg"].update(settings["settings"]["ffmpeg"])
@@ -205,14 +218,6 @@ def main():
             warning("Video", "I won't be able to encode video and I will stop if I encounter a video to convert")
             SETTINGS["ffmpeg"] = False
 
-    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
-          "settings.yaml in the current working directory")
-
-    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
-
-    for key, value in DEFAULTS.items():
-        if key not in settings:
-            settings[key] = value
 
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
@@ -321,14 +326,13 @@ def main():
             link=gallery
         ).encode("Utf-8"))
 
-        if settings["rss"]:
-            feed_xml = open(os.path.join("build", "feed.xml"), "w")
+    if settings["rss"]:
+        feed_xml = open(os.path.join("build", "feed.xml"), "w")
 
-            feed_xml.write(feed_template.render(
-                settings=settings,
-                link=gallery,
-                galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
-            ).encode("Utf-8"))
+        feed_xml.write(feed_template.render(
+            settings=settings,
+            galleries=reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
+        ).encode("Utf-8"))
 
     front_page_galleries_cover = reversed(sorted(front_page_galleries_cover, key=lambda x: x["date"]))
 

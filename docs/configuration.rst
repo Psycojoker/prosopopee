@@ -80,12 +80,29 @@ Prosopopée can use ffmpeg or libav and if you want you can customize the settin
 
     settings:
       ffmpeg:
-        binary: "ffmpeg"
-        loglevel: "error"
-        format: "webm"
-        resolution: "1280x720"
-        bitrate: "3900k"
-        preselect: "libvpx-720p"
+        binary: "ffmpeg",
+        loglevel: "error",
+        format: "webm",
+        resolution: "1280x720",
+        vbitrate: "3900k",
+        abitrate: "100k",
+        audio: "libvorbis",
+        video: "libvpx",
+        other: "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
+
+The meaning of the currently supported FFMEG or LIBAV's settings is as follows :
+
+ * `binary` the binary you will use for convert the video (ffmpeg or avconv)
+ * `loglevel` Set the logging level used by the library
+ * `format` Force input or output file format
+ * `resolution` Set frame size
+ * `vbitrate` Set video bitrate
+ * `abitrate` Set audio bitrate
+ * `audio` Set the audio codec
+ * `video` Set the video codec
+ * `other` Set different options if you need more
+
+
 
 Themes
 ~~~~~~

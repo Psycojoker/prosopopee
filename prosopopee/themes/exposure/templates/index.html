@@ -32,10 +32,10 @@
       {% endif %}
       {% if video %}
       <div class="gallery-cover">
-          <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
           <video autoplay loop muted class="fillWidth">
               <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
           </video>
+          <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
       </div>
       {% set video = "" %}
       {% else %}
