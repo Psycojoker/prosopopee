@@ -358,13 +358,13 @@ a.google {
     min-width: 100%; min-height: 100%;
     width: auto; height: auto; z-index: -100;
     background-size: cover;
-    object-fit: fill;
 }
 
 .bordered-picture video {
     width: 77%;
     margin-left: 11.5%;
     margin-right: 11.5%;
+    object-fit: fill;
 }
 
 .bg-section {
