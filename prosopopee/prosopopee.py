@@ -290,7 +290,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
     gallery_cover = {}
 
-    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(gallery_path, x)) and
+    sub_galleries = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(gallery_path, x)) and
                   os.path.exists(os.path.join(os.getcwd(), gallery_path, x, "settings.yaml")),
                   os.listdir(os.path.join(os.getcwd(), gallery_path)))
 
@@ -302,13 +302,18 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     else:
         gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
-        if dirs:
-            theme = gallery_settings.get("theme") if gallery_settings.get("theme") else settings.get("theme",
-                                                                                                     "exposure")
+        if sub_galleries:
+            error(gallery_settings.get("sections"),
+                  "The gallery in %s can't have both sections and subgalleries" % (os.path.join(gallery_name,
+                                                                                                "settings.yaml")))
+
+            # Sub galleries found, create index with them instead of a gallery
+            theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
+
             subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates)
             sub_page_galleries_cover = []
 
-            for subgallery in dirs:
+            for subgallery in sub_galleries:
                 sub_page_galleries_cover.append(
                     process_directory(subgallery, settings, subgallery_templates, gallery_path)
                 )
@@ -316,6 +321,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
         else:
+            # No sub galleries found, create a gallery
             build_gallery(settings, gallery_settings, gallery_path, parent_templates)
 
     return gallery_cover
