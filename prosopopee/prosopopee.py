@@ -303,7 +303,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
         gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
         if sub_galleries:
-            error(gallery_settings.get("sections"),
+            error(gallery_settings.get("sections") is not False,
                   "The gallery in %s can't have both sections and subgalleries" % (os.path.join(gallery_name,
                                                                                                 "settings.yaml")))
 
