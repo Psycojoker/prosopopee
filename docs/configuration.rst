@@ -63,6 +63,7 @@ Currently a `gm` settings key allows to customize the default GraphicsMagick's b
         auto-orient: True
         strip: True
         resize: 50%
+        progressive: True
 
 The meaning of the currently supported GraphicsMagick's settings is as follows:
 
@@ -70,6 +71,7 @@ The meaning of the currently supported GraphicsMagick's settings is as follows:
  * `auto-orient` change the orientation of pictures so they are upright (based on corresponding EXIF tags if present)
  * `strip` removes all profiles and text attributes from the image (good for privacy, slightly reduce file size)
  * `resize` can be used to resize the fullsize version of pictures. by default, input image size is preserved
+ * `progressive` converts classic baseline JPEG files to progressive JPEG, and interlace PNG/GIF files (improve the page loading impression, slightly reduce file size)
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
 
