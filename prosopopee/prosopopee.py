@@ -22,7 +22,8 @@ SETTINGS = {
         "quality": 75,
         "auto-orient": True,
         "strip": True,
-        "resize": None
+        "resize": None,
+        "progressive": True
     },
     "ffmpeg": {
         "binary": "ffmpeg",
@@ -138,10 +139,11 @@ class Image(object):
            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
            "strip": "-strip" if options["strip"] else "",
            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
+           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
+           "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
 
-        command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
+        command = "gm convert {source} {auto-orient} {strip} {progressive} {quality} {resize} {target}".format(**gm_switches)
         warning("Generation", source)
 
         print(command)
