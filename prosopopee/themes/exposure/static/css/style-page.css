@@ -98,13 +98,30 @@ a {
     min-width: 0.5em;
 }
 
-.text {
+.quote {
     text-align: center;
     font-family: 'crimson', serif;
     font-size: 1.6em;
     line-height: 1.8em;
     margin-left: 21%;
     margin-right: 21%;
+}
+
+.text {
+    text-align: center;
+    font-family: 'crimson', serif;
+    font-size: 0.9em;
+    line-height: 1.7em;
+    margin-left: 21%;
+    margin-right: 21%;
+}
+
+.title {
+    text-transform: uppercase;
+    font-family: 'montserrat', sans-serif;
+    font-size: 2.5vw;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 .paragraph {
@@ -416,3 +433,22 @@ a.google {
 
 }
 
+.youtubeVideoWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+}
+
+.youtubeVideoWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.youtubeCentered {
+    margin-left: 10%;
+    margin-right: 10%;
+}
