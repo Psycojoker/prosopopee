@@ -143,7 +143,7 @@ class Image(object):
            "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
 
-        command = "gm convert {source} {auto-orient} {strip} {progressive} {quality} {resize} {target}".format(**gm_switches)
+        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
         warning("Generation", source)
 
         print(command)
