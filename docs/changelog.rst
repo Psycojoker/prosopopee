@@ -11,6 +11,7 @@ Changelog
  * make code a bit more robust by Bram
  * basic CI on travis by Bram
  * Light mode by beudbeud
+ * progressive JPEG/GIF/PNG by default for a better loading experience by 0x010C following sebian's blogpost
 
 0.3.1 (2016-04-13)
 

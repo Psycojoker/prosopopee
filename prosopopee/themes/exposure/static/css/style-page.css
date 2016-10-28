@@ -350,7 +350,7 @@ a.google {
     left: 0;
     z-index: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .full-picture video {
@@ -364,6 +364,7 @@ a.google {
     width: 77%;
     margin-left: 11.5%;
     margin-right: 11.5%;
+    object-fit: fill;
 }
 
 .bg-section {
