@@ -299,9 +299,6 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     if not os.path.exists(os.path.join("build", gallery_path)):
             os.makedirs(os.path.join("build", gallery_path))
 
-    # Prepare light mode
-    if gallery_settings.get("light_mode",False) and not os.path.exists(os.path.join("build", gallery_path, "light")):
-        os.makedirs(os.path.join("build", gallery_path, "light"))
 
     if not gallery_settings.get("public", True):
         build_gallery(settings, gallery_settings, gallery_path, parent_templates)
@@ -388,7 +385,11 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     ).encode("Utf-8"))
 
     #Build light mode gallery
-    if gallery_settings.get("light_mode",False):
+    if gallery_settings.get("light_mode", False) or (
+                settings["settings"].get("light_mode", False) and gallery_settings.get("light_mode") is None):
+        # Prepare light mode
+        if not os.path.exists(os.path.join("build", gallery_path, "light")):
+            os.makedirs(os.path.join("build", gallery_path, "light"))
         gallery_light_path = os.path.join(gallery_path, "light")
         light_templates = get_gallery_templates("light", gallery_light_path)
 
