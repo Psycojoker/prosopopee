@@ -256,7 +256,7 @@ footer a {
 }
 
 
-.share, .author {
+.share, .author-meta {
     text-align: center;
     height: auto;
     position: relative;
@@ -310,25 +310,30 @@ a.google {
     background-position: -172px 0 !important;
 }
 
-.author img.circle {
+.author-meta img.circle {
     border-radius: 50%;
     width: 80px;
 }
 
-.author {
+.author-meta {
     padding-bottom: 7em;
 }
 
-.author-meta {
+.author-info {
     color: #ccc;
     font-style: italic;
     font-size: 19px;
 }
 
-.author h4 {
+.author-info h4 {
     text-transform: uppercase;
+    text-align: center;
+    font-family: 'crimson', serif;
+    color: black;
+    font-style: normal;
+    font-weight: bold;
 }
-.author .desc {
+.author-info .desc {
     width: 350px;
     margin: auto;
     padding-bottom: 10px;
@@ -343,9 +348,9 @@ a.google {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .full-picture video {
@@ -359,6 +364,7 @@ a.google {
     width: 77%;
     margin-left: 11.5%;
     margin-right: 11.5%;
+    object-fit: fill;
 }
 
 .bg-section {
@@ -408,5 +414,32 @@ a.google {
     display: inherit;
 }
 
+}
+
+#slow-notice {
+    width:300px;
+    position: absolute;
+    top:0;
+    left:50%;
+    margin-left: -160px;
+    background-color: #F0DE7D;
+    text-align: center;
+    z-index: 999;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+#slow-notice a,
+#slow-notice .dismiss {
+    color: #000;
+    text-decoration: underline;
+    cursor:pointer;
+}
+
+#slow-notice .dismiss-container {
+    text-align:right;
+    padding-top:10px;
+    font-size: 10px;
 }
 

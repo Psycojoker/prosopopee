@@ -79,6 +79,7 @@ a {
     height: 100%;
     background-position: center center;
     background-size: cover;
+    overflow: hidden;
 }
 
 .gallery-title {
@@ -262,4 +263,5 @@ nav ul li > a.item-menu::before {
 
 .gallery-cover img.fillWidth {
     height: 100%;
+    width: 100%;
 }

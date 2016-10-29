@@ -22,7 +22,8 @@ SETTINGS = {
         "quality": 75,
         "auto-orient": True,
         "strip": True,
-        "resize": None
+        "resize": None,
+        "progressive": True
     },
     "ffmpeg": {
         "binary": "ffmpeg",
@@ -138,10 +139,11 @@ class Image(object):
            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
            "strip": "-strip" if options["strip"] else "",
            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else ""
+           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
+           "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
 
-        command = "gm convert {source} {auto-orient} {strip} {quality} {resize} {target}".format(**gm_switches)
+        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
         warning("Generation", source)
 
         print(command)
@@ -297,6 +299,10 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     if not os.path.exists(os.path.join("build", gallery_path)):
             os.makedirs(os.path.join("build", gallery_path))
 
+    # Prepare light mode
+    if gallery_settings.get("light_mode",False) and not os.path.exists(os.path.join("build", gallery_path, "light")):
+        os.makedirs(os.path.join("build", gallery_path, "light"))
+
     if not gallery_settings.get("public", True):
         build_gallery(settings, gallery_settings, gallery_path, parent_templates)
     else:
@@ -380,6 +386,30 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         Video=Video,
         link=gallery_path
     ).encode("Utf-8"))
+
+    #Build light mode gallery
+    if gallery_settings.get("light_mode",False):
+        gallery_light_path = os.path.join(gallery_path, "light")
+        light_templates = get_gallery_templates("light", gallery_light_path)
+
+        Image.base_dir = os.path.join(os.getcwd(), gallery_path)
+        Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+
+        Video.base_dir = os.path.join(os.getcwd(), gallery_path)
+        Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+
+        light_template_to_render = light_templates.get_template("gallery-index.html")
+
+        index_html = open(os.path.join("build", gallery_light_path, "index.html"), "w")
+
+        index_html.write(light_template_to_render.render(
+            settings=settings,
+            gallery=gallery_settings,
+            Image=Image,
+            Video=Video,
+            link=gallery_light_path
+        ).encode("Utf-8"))
+
 
 
 def build_index(settings, galleries_cover, templates, gallery_path=''):

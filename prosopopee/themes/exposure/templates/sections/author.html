@@ -1,13 +1,14 @@
 {% set image = Image(section.image) %}
 {{ image.copy() }}
-<div class="author">
+<div class="author-meta">
     <img src={{ image.generate_thumbnail("200x200") }} alt="" class="circle">
     <div>
-        <span class=author-meta>Story by</span>
+        <span class=author-info>Story by
         <h4>{{ section.name }}</h4>
         {% if section.text %}
         <div class=desc>{{ section.text }}</div>
         {% endif %}
+        </span>
     </div>
     <div class="separator"></div>
     <div>

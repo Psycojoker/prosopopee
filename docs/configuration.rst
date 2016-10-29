@@ -13,7 +13,7 @@ The files organisation is quite simple:
 Root settings.yaml
 ------------------
 
-The root settings.yaml should contains 2 keys : one for the title of your website and one for the subtitle. It should looks like that::
+The root settings.yaml should contains 2 keys: one for the title of your website and one for the subtitle. It should looks like that::
 
     title: My exploration of the outside world
     sub_title: it's a scary place, don't go there
@@ -41,11 +41,11 @@ For example, this could be the content of `settings.yaml` in `about` folder::
 
 You can use the `static` option to get a template closer to the one of the
 homepage that is better suited for a static page. You'll need to specify
-"public: false" if you don't want to list this page on the homepage. On you
+"public: false" if you don't want to list this page on the homepage. On
 case you didn't specified "public: false" you'll **need** to specify a "cover:"
 entry like any other gallery.
 
-**NOTE**: except the "static: " option to disepear quite soon for a more
+**NOTE**: expect the "static: " option to disappear quite soon for a more
 generic approach to "choose your page style".
 
 Global settings
@@ -64,13 +64,15 @@ Currently a `gm` settings key allows to customize the default GraphicsMagick's b
         auto-orient: True
         strip: True
         resize: 50%
+        progressive: True
 
-The meaning of the currently supported GraphicsMagick's settings is as follows :
+The meaning of the currently supported GraphicsMagick's settings is as follows:
 
  * `quality` allows to customize the compression level of thumbnails (between 0 and 100)
  * `auto-orient` change the orientation of pictures so they are upright (based on corresponding EXIF tags if present)
  * `strip` removes all profiles and text attributes from the image (good for privacy, slightly reduce file size)
  * `resize` can be used to resize the fullsize version of pictures. by default, input image size is preserved
+ * `progressive` converts classic baseline JPEG files to progressive JPEG, and interlace PNG/GIF files (improve the page loading impression, slightly reduce file size)
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
 
@@ -120,6 +122,16 @@ To specify the theme, add the "theme" key in your "settings" key or your
     sub_title: it's a scary place, don't go there
     settings:
       theme: material
+
+Light mode
+~~~~~~~~~~
+
+Prosopopée has a support light mode, for all gallery you need add /light on the url.
+When this mode is enable Prosopopée build the gallery with light theme (no Js and pics size is 800px)::
+
+    settings:
+      light_mode: true    
+
 
 Licence
 ~~~~~~~
@@ -193,7 +205,7 @@ _______
       - type: bordered-picture
         image: another_picture.jpg
 
-And here is an example or a **private** gallery (notice the ``public`` keyword)::
+And here is an example of a **private** gallery (notice the ``public`` keyword)::
 
     title: Gallery title
     sub_title: Gallery sub-title

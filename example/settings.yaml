@@ -3,3 +3,4 @@ sub_title: "The subtitle"
 settings:
   gm:
     quality: 80
+  light_mode: true
