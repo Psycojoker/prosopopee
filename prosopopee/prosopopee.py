@@ -259,7 +259,7 @@ def main():
         templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", "exposure", "templates"))
 
 
-    templates = Environment(loader=FileSystemLoader(templates_dir))
+    templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
 
     index_template = templates.get_template("index.html")
     gallery_index_template = templates.get_template("gallery-index.html")
