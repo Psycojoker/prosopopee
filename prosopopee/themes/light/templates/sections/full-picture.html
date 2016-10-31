@@ -1,3 +1,8 @@
+{% if settings.settings.light_mode %}
+{% set pathstatic = ".." %}
+{% else %}
+{% set pathstatic = "." %}
+{% endif %}
 {% if section.image.type == "video" %}
 {% set video = Video(section.image) %}
 {{ video.copy() }}
@@ -9,10 +14,10 @@
     <div class="image">
         {% if video %}
         <video autoplay loop muted class="fillWidth">
-            <source src="../{{ video }}" type="video/webm" data-source="../{{ video }}" data-format="vp8" data-extension="webm">
+          <source src="{{ pathstatic }}/{{ video }}" type="video/webm" data-source="{{ pathstatic }}/{{ video }}" data-format="vp8" data-extension="webm">
         </video>
         {% else %}
-        <img  src="../{{ image.generate_thumbnail("x800") }}">
+        <img  src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
         {% endif %}
     </div>
     {% if section.text %}

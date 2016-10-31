@@ -7,14 +7,14 @@
         <atom:link href="{{ settings.url }}/feed.xml" rel="self" type="application/rss+xml" />
 
         {% for gallery in galleries %}
-        {% set absolute_url = settings.url + "/" + gallery.link -%}
+        {% set absolute_url = settings.url + "/" + gallery.link %}
 		<item>
 			<title>{{ gallery.title }}</title>
 			<link>{{ absolute_url }}</link>
             <guid>{{ gallery.link }}</guid>
-            {% if gallery.sub_title -%}
+            {% if gallery.sub_title %}
             <description>{{ gallery.sub_title }}</description>
-            {% endif -%}
+            {% endif %}
 			<pubDate>{{ gallery.date }}</pubDate>
 		</item>
 		{% endfor %}
