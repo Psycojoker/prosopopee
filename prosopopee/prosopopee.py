@@ -439,10 +439,10 @@ def main():
 
     front_page_galleries_cover = []
 
-    dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and
+    galleries_dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and
                   os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
 
-    error(dirs, "I can't find at least one directory with a settings.yaml in the current working "
+    error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
 
@@ -454,7 +454,7 @@ def main():
     templates.add_extension('jinja2.ext.with_')
     feed_template = templates.get_template("feed.xml")
 
-    for gallery in dirs:
+    for gallery in galleries_dirs:
         front_page_galleries_cover.append(process_directory(gallery, settings, templates))
 
     if settings["rss"]:
