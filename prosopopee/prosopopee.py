@@ -290,7 +290,10 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     else:
         gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
-        if sub_galleries:
+        if not sub_galleries:
+            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
+
+        else:
             error(gallery_settings.get("sections") is not False,
                   "The gallery in %s can't have both sections and subgalleries" % gallery_name.joinpath("settings.yaml"))
 
@@ -307,9 +310,6 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
-        else:
-            # No sub galleries found, create a gallery
-            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
 
     return gallery_cover
 
