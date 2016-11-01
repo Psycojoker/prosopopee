@@ -10,7 +10,7 @@
         <img class="lazy" src="{{ video.generate_thumbnail("720") }}">
         <video autoplay loop muted class="fillWidth">
             <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
-        </video>                                                                                                                                               
+        </video>
         {% else %}
         <img class="responsive-img" src="{{ image }}">
         {% endif %}
