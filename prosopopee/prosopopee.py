@@ -368,7 +368,8 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         link=gallery_path
     ).encode("Utf-8"))
 
-    #Build light mode gallery
+    # XXX shouldn't this be a call to build_gallery?
+    # Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
                 settings["settings"].get("light_mode", False) and\
                 gallery_settings.get("light_mode") is None
