@@ -1,16 +1,19 @@
 {% if section.background or section.color %}
-<div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+    <div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
 {% endif %}
+
 <div class="container">
-	{% if section.title %}
-	<div id="{{ section.title }}" class="scrollspy">
-		<h2>{{ section.title }}</h2>
-		{% else %}
-		<div class="separator"></div>
-		{% endif %}
-		<p class="flow-text">{{ section.text }}</p>
-	</div>
+    {% if section.title %}
+        <div id="{{ section.title }}" class="scrollspy">
+        <h2>{{ section.title }}</h2>
+    {% else %}
+        <div class="separator"></div>
+    {% endif %}
+
+    <p class="flow-text">{{ section.text }}</p>
+    </div>
 </div>
+
 {% if section.background or section.color %}
-</div>
+    </div>
 {% endif %}
