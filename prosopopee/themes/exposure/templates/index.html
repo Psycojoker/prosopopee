@@ -26,19 +26,15 @@
             {% if gallery.cover_type == "video" %}
                 {% set video = Video(gallery.cover) %}
                 {{ video.copy() }}
-            {% else %}
-                {% set cover = Image(gallery.cover) %}
-                {{ cover.copy() }}
-            {% endif %}
-            {% if video %}
                 <div class="gallery-cover">
                     <video autoplay loop muted class="fillWidth">
                         <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
                     </video>
                     <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
                 </div>
-                {% set video = "" %}
             {% else %}
+                {% set cover = Image(gallery.cover) %}
+                {{ cover.copy() }}
                 <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
             {% endif %}
             </div><!-- comment tricks against space between inline-block
