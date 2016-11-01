@@ -1,49 +1,51 @@
 {% if section.background %}
-<div class="bg-section" style="background: {{ section.background }};">
-    {% endif %}
-    <section class="pictures-group baguette">
-        {% for line in section.images %}
-        <div class="pictures-line">
-            {% for image in line %}
-            {% if image.type == "video" %}
+    <div class="bg-section" style="background: {{ section.background }};">
+{% endif %}
+
+<section class="pictures-group baguette">
+{% for line in section.images %}
+    <div class="pictures-line">
+    {% for image in line %}
+        {% if image.type == "video" %}
             {% set caption = image.text %}
             {% set video = Video(image) %}
             {{ video.copy() }}
-            {% else %}
+        {% else %}
             {% set caption = image.text %}
             {% set image = Image(image) %}
             {{ image.copy() }}
-            {% endif %}
-            <div class="picture caption">
-                {% if video %}
-                <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="" alt="">
-                <video class="lazy" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
-                    <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
-                </video>
-                {% if caption %}
+        {% endif %}
+        <div class="picture caption">
+        {% if video %}
+            <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="" alt="">
+            <video class="lazy" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
+                <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+            </video>
+            {% if caption %}
                 <div class="caption__overlay">
                     <h5 class="caption__overlay__title">{{ caption }}</h5>
                 </div>
-                {% endif %}
-                {% set video = "" %}
-                {% else %}
-                <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
-                    <img class="lazy" src="" data-original="{{ image.generate_thumbnail("x600") }}" alt="">
-                    {% if caption %}
+            {% endif %}
+            {% set video = "" %}
+        {% else %}
+            <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
+                <img class="lazy" src="" data-original="{{ image.generate_thumbnail("x600") }}" alt="">
+                {% if caption %}
                     <div class="caption__overlay">
                         <h5 class="caption__overlay__title">{{ caption }}</h5>
                     </div>
-                    {% endif %}
-                </a>
                 {% endif %}
-            </div>
-            {% if not loop.last %}
-            <div class="separator"></div>
-            {% endif %}
-            {% endfor %}
+            </a>
+        {% endif %}
         </div>
-        {% endfor %}
-    </section>
-    {% if section.background %}
-</div>
+        {% if not loop.last %}
+            <div class="separator"></div>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endfor %}
+</section>
+
+{% if section.background %}
+    </div>
 {% endif %}
