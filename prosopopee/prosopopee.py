@@ -281,7 +281,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
     gallery_cover = {}
 
-    sub_galleries = [x.joinpath("settings.yaml") for x in Path(".").joinpath(gallery_path).listdir() if x.joinpath("settings.yaml").exists()]
+    sub_galleries = [x for x in Path(".").joinpath(gallery_path).listdir() if x.joinpath("settings.yaml").exists()]
 
     Path("build").joinpath(gallery_path).makedirs_p()
 
@@ -423,7 +423,7 @@ def main():
 
     front_page_galleries_cover = []
 
-    galleries_dirs = [x.joinpath("settings.yaml") for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
+    galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
 
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
