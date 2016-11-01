@@ -35,7 +35,7 @@
             {% else %}
                 {% set cover = Image(gallery.cover) %}
                 {{ cover.copy() }}
-                <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
+                <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}'), url('{{ cover.generate_thumbnail("x450") }}');"></div>
             {% endif %}
             </div><!-- comment tricks against space between inline-block
         -->{% endfor %}
