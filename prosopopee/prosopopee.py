@@ -370,7 +370,10 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
     #Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
-                settings["settings"].get("light_mode", False) and gallery_settings.get("light_mode") is None):
+                settings["settings"].get("light_mode", False) and\
+                gallery_settings.get("light_mode") is None
+            ):
+
         # Prepare light mode
         Path("build").joinpath(gallery_path, "light").makedirs_p()
         gallery_light_path = Path(gallery_path).joinpath("light")
