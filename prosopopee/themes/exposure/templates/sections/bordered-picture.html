@@ -36,7 +36,7 @@
                     <source srcset="{{ image.generate_thumbnail("x800") }}" media="(max-width: 800px)">
                     <source srcset="{{ image.generate_thumbnail("x1366") }}" media="(max-width: 1366px)">
                     <source srcset="{{ image.generate_thumbnail("x1920") }}" media="(max-width: 1920px)">
-                    <img class="lazy" src="{{ image }}" data-original="{{ image }}" alt="">
+                    <img src="{{ image }}" data-original="{{ image }}" alt="">
                 </picture>
                 {% if caption %}
                     <div class="caption__overlay">
