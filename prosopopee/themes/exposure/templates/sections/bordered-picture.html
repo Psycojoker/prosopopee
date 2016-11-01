@@ -1,16 +1,18 @@
 {% if section.image.type == "video" %}
-{% set video = Video(section.image) %}
-{% set caption = section.text %}
-{{ video.copy() }}
+    {% set video = Video(section.image) %}
+    {% set caption = section.text %}
+    {{ video.copy() }}
 {% else %}
-{% set image = Image(section.image) %}
-{% set caption = section.text %}
-{{ image.copy() }}
+    {% set image = Image(section.image) %}
+    {% set caption = section.text %}
+    {{ image.copy() }}
 {% endif %}
+
 {% if section.background %}
-<div class="bg-section" style="background: {{ section.background }};">
-    {% endif %}
-    {% if video %}
+    <div class="bg-section" style="background: {{ section.background }};">
+{% endif %}
+
+{% if video %}
     <section class="bordered-picture baguette" style="position: relative;">
         <div class="caption">
             <img class="lazy" data-original="{{ video.generate_thumbnail("2000") }}" src="" alt="">
@@ -18,27 +20,27 @@
                 <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
             </video>
             {% if caption %}
-            <div class="caption__overlay">
-                <h5 class="caption__overlay__title">{{ caption }}</h5>
-            </div>
+                <div class="caption__overlay">
+                    <h5 class="caption__overlay__title">{{ caption }}</h5>
+                </div>
             {% endif %}
         </div>
     </section>
-    {% else %}
+{% else %}
     <section class="bordered-picture baguette">
         <div class="caption">
             <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
                 <img class="lazy" src="" data-original="{{ image }}" alt="">
                 {% if caption %}
-                <div class="caption__overlay">
-                    <h5 class="caption__overlay__title">{{ caption }}</h5>
-                </div>
+                    <div class="caption__overlay">
+                        <h5 class="caption__overlay__title">{{ caption }}</h5>
+                    </div>
                 {% endif %}
-        </div>
             </a>
-            {% endif %}
+        </div>
     </section>
-    {% if section.background %}
-</div>
 {% endif %}
 
+{% if section.background %}
+    </div>
+{% endif %}
