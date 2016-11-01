@@ -281,9 +281,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     else:
         gallery_path = gallery_name
 
-    from ipdb import launch_ipdb_on_exception
-    with launch_ipdb_on_exception():
-        gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
+    gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
