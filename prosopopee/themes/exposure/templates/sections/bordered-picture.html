@@ -1,18 +1,11 @@
-{% if section.image.type == "video" %}
-    {% set video = Video(section.image) %}
-    {% set caption = section.text %}
-    {{ video.copy() }}
-{% else %}
-    {% set image = Image(section.image) %}
-    {% set caption = section.text %}
-    {{ image.copy() }}
-{% endif %}
-
 {% if section.background %}
     <div class="bg-section" style="background: {{ section.background }};">
 {% endif %}
 
-{% if video %}
+{% if section.image.type == "video" %}
+    {% set video = Video(section.image) %}
+    {% set caption = section.text %}
+    {{ video.copy() }}
     <section class="bordered-picture baguette" style="position: relative;">
         <div class="caption">
             <img class="lazy" data-original="{{ video.generate_thumbnail("2000") }}" src="" alt="">
@@ -27,6 +20,9 @@
         </div>
     </section>
 {% else %}
+    {% set image = Image(section.image) %}
+    {% set caption = section.text %}
+    {{ image.copy() }}
     <section class="bordered-picture baguette">
         <div class="caption">
             <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
