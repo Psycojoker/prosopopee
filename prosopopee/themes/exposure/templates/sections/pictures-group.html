@@ -6,17 +6,11 @@
 {% for line in section.images %}
     <div class="pictures-line">
     {% for image in line %}
+        <div class="picture caption">
         {% if image.type == "video" %}
             {% set caption = image.text %}
             {% set video = Video(image) %}
             {{ video.copy() }}
-        {% else %}
-            {% set caption = image.text %}
-            {% set image = Image(image) %}
-            {{ image.copy() }}
-        {% endif %}
-        <div class="picture caption">
-        {% if video %}
             <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="" alt="">
             <video class="lazy" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
                 <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
@@ -26,8 +20,10 @@
                     <h5 class="caption__overlay__title">{{ caption }}</h5>
                 </div>
             {% endif %}
-            {% set video = "" %}
         {% else %}
+            {% set caption = image.text %}
+            {% set image = Image(image) %}
+            {{ image.copy() }}
             <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
                 data-at-450="{{ image.generate_thumbnail("x450") }}"
                 data-at-800="{{ image.generate_thumbnail("x800") }}"
