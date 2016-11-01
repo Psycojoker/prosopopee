@@ -1,0 +1,7 @@
+title: my second gallery
+sub_title: some subtitle
+date: 2015-12-08
+cover:
+  type: video
+  name: video.mp4
+theme: exposure

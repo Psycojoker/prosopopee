@@ -1,0 +1,18 @@
+{% set absolute_url = settings.url + "/" + link -%}
+<div class=share>
+<h5>Share this story</h5>
+<ul class="icon">
+    <li>
+        <a class="twitter" href="https://twitter.com/share?text={{ gallery.name }}&url={{absolute_url}}{%if gallery.tags %}&hashtags={% for tag in gallery.tags -%}{{ tag }}{% if not loop.lirst and not loop.last %},{% endif %}{% endfor -%}{% endif -%}"  target="_blank">Twitter</a>
+    </li>
+    <li>
+    <a class="facebook" href="http://www.facebook.com/share.php?u={{absolute_url}}" target="_blank">Facebook</a>
+    </li>
+    <li>
+    <a class="pinterest" href="http://www.pinterest.com/pin/create/button/?url={{absolute_url}}" target="_blank">Pinterest</a>
+    </li>
+    <li>
+    <a class="google" href="https://plus.google.com/share?url={{absolute_url}}" target="_blank">Google +</a>
+    </li>
+</ul>
+</div>

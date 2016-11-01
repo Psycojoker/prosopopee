@@ -8,6 +8,7 @@ The files organisation is quite simple:
  * in the root directory of your project you need a settings.yaml file that will contains the title and subtitle of your gallery
  * for each gallery you'll need a folder that also contains a settings.yaml file that will describe how to display the content on your gallery
  * and you put the pictures of the gallery inside the gallery folder
+ * or other directory, in the gallery became an index (so pictures won't be display, only cover of child gallery)
 
 Root settings.yaml
 ------------------
@@ -63,6 +64,7 @@ Currently a `gm` settings key allows to customize the default GraphicsMagick's b
         auto-orient: True
         strip: True
         resize: 50%
+        progressive: True
 
 The meaning of the currently supported GraphicsMagick's settings is as follows:
 
@@ -70,6 +72,7 @@ The meaning of the currently supported GraphicsMagick's settings is as follows:
  * `auto-orient` change the orientation of pictures so they are upright (based on corresponding EXIF tags if present)
  * `strip` removes all profiles and text attributes from the image (good for privacy, slightly reduce file size)
  * `resize` can be used to resize the fullsize version of pictures. by default, input image size is preserved
+ * `progressive` converts classic baseline JPEG files to progressive JPEG, and interlace PNG/GIF files (improve the page loading impression, slightly reduce file size)
 
 Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
 
@@ -119,6 +122,16 @@ To specify the theme, add the "theme" key in your "settings" key or your
     sub_title: it's a scary place, don't go there
     settings:
       theme: material
+
+Light mode
+~~~~~~~~~~
+
+Prosopopée has a support light mode, for all gallery you need add /light on the url.
+When this mode is enable Prosopopée build the gallery with light theme (no Js and pics size is 800px)::
+
+    settings:
+      light_mode: true    
+
 
 Licence
 ~~~~~~~

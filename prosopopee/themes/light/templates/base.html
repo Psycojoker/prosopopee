@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        {% block css %}
+        {% endblock %}
+        {% if settings.rss -%}
+        <link rel="alternate" type="application/rss+xml" title="{{ settings.title }}" href="{{ settings.url }}/feed.xml" />
+        {% endif -%}
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>{{ settings.title }}</title>
+    </head>
+
+    <body>
+
+        <div class="gallery-header">
+            {% block logo %}
+            {% endblock %}
+            <h1>{{ settings.title }}</h1>
+            {% if settings.sub_title -%}<h4>{{ settings.sub_title }}</h4>{% endif -%}
+            <hr>
+            {% if settings.menu -%}
+            {% include 'menu.html' %}
+            {% endif -%}
+        </div>
+
+
+        {% block content %}
+        {% endblock %}
+
+        {% include 'footer.html' %}
+
+    </body>
+</html>
