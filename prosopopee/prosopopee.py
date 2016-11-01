@@ -237,32 +237,21 @@ def get_settings():
 
 
 def get_gallery_templates(theme, gallery_path="", parent_templates=None):
-    if theme:
-        theme_path = Path(__file__).parent.joinpath("themes", theme).exists()
+    theme_path = Path(__file__).parent.joinpath("themes", theme).exists()
 
-        available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
+    available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
 
-        error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
+    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
 
-        templates_dir = [
-            Path(".").joinpath("templates").realpath(),
-            Path(__file__).parent.joinpath("themes", theme, "templates")
-        ]
+    templates_dir = [
+        Path(".").joinpath("templates").realpath(),
+        Path(__file__).parent.joinpath("themes", theme, "templates")
+    ]
 
-        if theme != "exposure":
-            templates_dir.append(Path(__file__).parent.joinpath("themes", "exposure", "templates"))
+    if theme != "exposure":
+        templates_dir.append(Path(__file__).parent.joinpath("themes", "exposure", "templates"))
 
-        subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
-    else:
-        if parent_templates:
-            theme = "exposure"
-            subgallery_templates = parent_templates
-        else:
-            templates_dir = [
-                Path(".").joinpath("templates").realpath(),
-                Path(__file__).parent.joinpath("themes", theme, "templates")
-            ]
-            subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
+    subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
 
     Path(".").joinpath("build", gallery_path, "static").rmtree_p()
 
