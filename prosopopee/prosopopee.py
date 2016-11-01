@@ -4,6 +4,8 @@ import os
 import yaml
 import shutil
 
+from path import Path
+
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
@@ -40,8 +42,8 @@ SETTINGS = {
 
 
 class Video(object):
-    base_dir = ""
-    target_dir = ""
+    base_dir = Path()
+    target_dir = Path()
 
     def __init__(self, options):
         error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
@@ -91,7 +93,7 @@ class Video(object):
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
-        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
+        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
         options = self.options.copy()
         self.ffmpeg(source, target, options)
         return ""
@@ -99,7 +101,7 @@ class Video(object):
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.png" % gm_geometry
 
-        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
+        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
 
         options = self.options.copy()
         options.update({"resize": gm_geometry})
@@ -152,7 +154,7 @@ class Image(object):
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
-        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, self.name)
+        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
 
         # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
@@ -175,7 +177,7 @@ class Image(object):
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-" + gm_geometry + "." + self.name.split(".")[-1]
 
-        source, target = os.path.join(self.base_dir, self.name), os.path.join(self.target_dir, thumbnail_name)
+        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
 
         options = self.options.copy()
         options.update({"resize": gm_geometry})
@@ -189,7 +191,7 @@ class Image(object):
 
 
 def get_settings():
-    error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
+    error(Path("settings.yaml").exists(), "I can't find a "
           "settings.yaml in the current working directory")
 
     settings = yaml.safe_load(open("settings.yaml", "r"))
@@ -231,83 +233,69 @@ def get_settings():
 
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
+
     return settings
 
 
 def get_gallery_templates(theme, gallery_path="", parent_templates=None):
-    if theme:
-        theme_path = os.path.exists(
-            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme))
-        available_themes = theme, "', '".join(
-            os.listdir(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                    "themes")))
+    theme_path = Path(__file__).parent.joinpath("themes", theme).exists()
 
-        error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
+    available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
 
-        templates_dir = [
-            os.path.realpath(os.path.join(os.getcwd(), "templates")),
-            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
-        ]
+    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
 
-        if theme != "exposure":
-            templates_dir.append(os.path.join(os.path.split(os.path.realpath(__file__))[0],
-                                              "themes", "exposure", "templates"))
+    templates_dir = [
+        Path(".").joinpath("templates").realpath(),
+        Path(__file__).parent.joinpath("themes", theme, "templates")
+    ]
 
-        subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
-    else:
-        if parent_templates:
-            theme = "exposure"
-            subgallery_templates = parent_templates
-        else:
-            templates_dir = [
-                os.path.realpath(os.path.join(os.getcwd(), "templates")),
-                os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "templates")
-            ]
-            subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
+    if theme != "exposure":
+        templates_dir.append(Path(__file__).parent.joinpath("themes", "exposure", "templates"))
 
-    # XXX recursively merge directories
-    if os.path.exists(os.path.join(os.getcwd(), "build", gallery_path, "static")):
-        shutil.rmtree(os.path.join(os.getcwd(), "build", gallery_path, "static"))
+    subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
 
-    if os.path.exists(os.path.join(os.getcwd(), "static")):
-        shutil.copytree(os.path.join(os.getcwd(), "static"), os.path.join(os.getcwd(), "build", gallery_path, "static"))
+    Path(".").joinpath("build", gallery_path, "static").rmtree_p()
+
+    if Path(".").joinpath("static").exists():
+        shutil.copytree(Path(".").joinpath("static"), Path(".").joinpath("build", gallery_path, "static"))
+
     else:
         shutil.copytree(
-            os.path.join(os.path.split(os.path.realpath(__file__))[0], "themes", theme, "static"),
-            os.path.join(os.getcwd(), "build", gallery_path, "static"))
+            Path(__file__).parent.joinpath("themes", theme, "static"),
+            Path(".").joinpath("build", gallery_path, "static")
+        )
+
     return subgallery_templates
 
 
 def process_directory(gallery_name, settings, parent_templates, parent_gallery_path=False):
     if parent_gallery_path:
-        gallery_path = os.path.join(parent_gallery_path, gallery_name)
+        gallery_path = parent_gallery_path.joinpath(gallery_name)
     else:
         gallery_path = gallery_name
 
-    gallery_settings = yaml.safe_load(open(os.path.join(os.getcwd(), gallery_path, "settings.yaml"), "r"))
+    gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
 
-    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % (os.path.join(gallery_name, "settings.yaml")))
-    error(gallery_settings.get("title"), "You should specify a title in %s" % (os.path.join(gallery_name, "settings.yaml")))
+    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
+    error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
 
     gallery_cover = {}
 
-    sub_galleries = filter(lambda x: x not in (".", "..") and os.path.isdir(os.path.join(gallery_path, x)) and
-                  os.path.exists(os.path.join(os.getcwd(), gallery_path, x, "settings.yaml")),
-                  os.listdir(os.path.join(os.getcwd(), gallery_path)))
+    sub_galleries = [x for x in Path(".").joinpath(gallery_path).listdir() if x.joinpath("settings.yaml").exists()]
 
-    if not os.path.exists(os.path.join("build", gallery_path)):
-            os.makedirs(os.path.join("build", gallery_path))
-
+    Path("build").joinpath(gallery_path).makedirs_p()
 
     if not gallery_settings.get("public", True):
         build_gallery(settings, gallery_settings, gallery_path, parent_templates)
     else:
         gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
-        if sub_galleries:
+        if not sub_galleries:
+            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
+
+        else:
             error(gallery_settings.get("sections") is not False,
-                  "The gallery in %s can't have both sections and subgalleries" % (os.path.join(gallery_name,
-                                                                                                "settings.yaml")))
+                  "The gallery in %s can't have both sections and subgalleries" % gallery_name.joinpath("settings.yaml"))
 
             # Sub galleries found, create index with them instead of a gallery
             theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
@@ -317,35 +305,32 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
             for subgallery in sub_galleries:
                 sub_page_galleries_cover.append(
-                    process_directory(subgallery, settings, subgallery_templates, gallery_path)
+                    process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
                 )
 
             build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
-        else:
-            # No sub galleries found, create a gallery
-            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
 
     return gallery_cover
 
 
 def create_cover(gallery_name, gallery_settings, gallery_path):
     error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                                         "title" % (os.path.join(gallery_name, "settings.yaml")))
+                                         "title" % gallery_name.joinpath("settings.yaml"))
 
     error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                                         "in %s" % (os.path.join(gallery_name, "settings.yaml")))
+                                         "in %s" % gallery_name.joinpath("settings.yaml"))
 
     if isinstance(gallery_settings["cover"], dict):
-        cover_image_path = os.path.join(gallery_path, gallery_settings["cover"]["name"])
-        cover_image_url = os.path.join(gallery_name, gallery_settings["cover"]["name"])
+        cover_image_path = gallery_path.joinpath(gallery_settings["cover"]["name"])
+        cover_image_url = gallery_name.joinpath(gallery_settings["cover"]["name"])
         cover_image_type = gallery_settings["cover"]["type"]
     else:
-        cover_image_path = os.path.join(gallery_path, gallery_settings["cover"])
-        cover_image_url = os.path.join(gallery_name, gallery_settings["cover"])
+        cover_image_path = gallery_path.joinpath(gallery_settings["cover"])
+        cover_image_url = gallery_name.joinpath(gallery_settings["cover"])
         cover_image_type = "image"
 
-    error(os.path.exists(cover_image_path), "File for %s cover image doesn't exist at "
+    error(cover_image_path.exists(), "File for %s cover image doesn't exist at "
                                             "%s" % (gallery_name, cover_image_path))
 
     gallery_cover = {
@@ -365,15 +350,15 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     page_template = template.get_template("page.html")
 
     # this should probably be a factory
-    Image.base_dir = os.path.join(os.getcwd(), gallery_path)
-    Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+    Image.base_dir = Path(".").joinpath(gallery_path)
+    Image.target_dir = Path(".").joinpath("build", gallery_path)
 
-    Video.base_dir = os.path.join(os.getcwd(), gallery_path)
-    Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+    Video.base_dir = Path(".").joinpath(gallery_path)
+    Video.target_dir = Path(".").joinpath("build", gallery_path)
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
-    index_html = open(os.path.join("build", gallery_path, "index.html"), "w")
+    index_html = open(Path("build").joinpath(gallery_path, "index.html"), "w")
 
     index_html.write(template_to_render.render(
         settings=settings,
@@ -383,24 +368,27 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         link=gallery_path
     ).encode("Utf-8"))
 
-    #Build light mode gallery
+    # XXX shouldn't this be a call to build_gallery?
+    # Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
-                settings["settings"].get("light_mode", False) and gallery_settings.get("light_mode") is None):
+                settings["settings"].get("light_mode", False) and\
+                gallery_settings.get("light_mode") is None
+            ):
+
         # Prepare light mode
-        if not os.path.exists(os.path.join("build", gallery_path, "light")):
-            os.makedirs(os.path.join("build", gallery_path, "light"))
-        gallery_light_path = os.path.join(gallery_path, "light")
+        Path("build").joinpath(gallery_path, "light").makedirs_p()
+        gallery_light_path = Path(gallery_path).joinpath("light")
         light_templates = get_gallery_templates("light", gallery_light_path)
 
-        Image.base_dir = os.path.join(os.getcwd(), gallery_path)
-        Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+        Image.base_dir = Path(".").joinpath(gallery_path)
+        Image.target_dir = Path(".").joinpath("build", gallery_path)
 
-        Video.base_dir = os.path.join(os.getcwd(), gallery_path)
-        Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+        Video.base_dir = Path(".").joinpath(gallery_path)
+        Video.target_dir = Path(".").joinpath("build", gallery_path)
 
         light_template_to_render = light_templates.get_template("gallery-index.html")
 
-        index_html = open(os.path.join("build", gallery_light_path, "index.html"), "w")
+        index_html = open(Path("build").joinpath(gallery_light_path, "index.html"), "w")
 
         index_html.write(light_template_to_render.render(
             settings=settings,
@@ -418,13 +406,13 @@ def build_index(settings, galleries_cover, templates, gallery_path=''):
     galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
 
     # this should probably be a factory
-    Image.base_dir = os.path.join(os.getcwd(), gallery_path)
-    Image.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+    Image.base_dir = Path(".").joinpath(gallery_path)
+    Image.target_dir = Path(".").joinpath("build", gallery_path)
 
-    Video.base_dir = os.path.join(os.getcwd(), gallery_path)
-    Video.target_dir = os.path.join(os.getcwd(), "build", gallery_path)
+    Video.base_dir = Path(".").joinpath(gallery_path)
+    Video.target_dir = Path(".").joinpath("build", gallery_path)
 
-    index_html = open(os.path.join("build", gallery_path, "index.html"), "w")
+    index_html = open(Path("build").joinpath(gallery_path, "index.html"), "w")
 
     index_html.write(index_template.render(
         settings=settings,
@@ -439,15 +427,13 @@ def main():
 
     front_page_galleries_cover = []
 
-    galleries_dirs = filter(lambda x: x not in (".", "..") and os.path.isdir(x) and
-                  os.path.exists(os.path.join(os.getcwd(), x, "settings.yaml")), os.listdir(os.getcwd()))
+    galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
 
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
 
-    if not os.path.exists("build"):
-        os.makedirs("build")
+    Path("build").makedirs_p()
 
     theme = settings["settings"].get("theme", "exposure")
     templates = get_gallery_templates(theme)
@@ -458,7 +444,7 @@ def main():
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
-        feed_xml = open(os.path.join("build", "feed.xml"), "w")
+        feed_xml = open(Path("build").joinpath("feed.xml"), "w")
 
         feed_xml.write(feed_template.render(
             settings=settings,
