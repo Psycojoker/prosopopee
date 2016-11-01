@@ -29,7 +29,12 @@
 {% else %}
     <section class="bordered-picture baguette">
         <div class="caption">
-            <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}>
+            <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
+                data-at-450="{{ image.generate_thumbnail("x450") }}"
+                data-at-800="{{ image.generate_thumbnail("x800") }}"
+                data-at-1366="{{ image.generate_thumbnail("x1366") }}"
+                data-at-1920="{{ image.generate_thumbnail("x1920") }}"
+                >
                 <img class="lazy" src="" data-original="{{ image }}" alt="">
                 {% if caption %}
                     <div class="caption__overlay">
