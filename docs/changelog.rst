@@ -3,15 +3,19 @@ Changelog
 
 0.4 (unreleased)
 
+ * greatly improved loading speed of pages with several different technics (see below)
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
  * possibility to use video in section and cover by beudbeud (and a bit of Bram)
  * add lazyload for pics by beudbeud
  * if a theme doesn't have a section, fallback on exposure theme which is considered the default one by titoko
- * code cleaning by Bram
+ * code and templates cleaning by Bram
  * make code a bit more robust by Bram
  * basic CI on travis by Bram
  * Light mode by beudbeud
  * progressive JPEG/GIF/PNG by default for a better loading experience by 0x010C following sebian's blogpost
+ * <picture> element support for smoother loading by Bram
+ * resposive mode of baguette by Bram
+ * several background images for smoother loading by Bram
 
 0.3.1 (2016-04-13)
 
