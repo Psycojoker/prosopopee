@@ -188,7 +188,7 @@ class Image(object):
         return self.name
 
 
-def init():
+def get_settings():
     error(os.path.exists(os.path.join(os.getcwd(), "settings.yaml")), "I can't find a "
           "settings.yaml in the current working directory")
 
@@ -435,7 +435,7 @@ def build_index(settings, galleries_cover, templates, gallery_path=''):
 
 
 def main():
-    settings = init()
+    settings = get_settings()
 
     front_page_galleries_cover = []
 
