@@ -1,5 +1,10 @@
+{% if settings.settings.light_mode %}
+{% set pathstatic = ".." %}
+{% else %}
+{% set pathstatic = "." %}
+{% endif %}
 {% set image = Image(section.image) %}
 {{ image.copy() }}
 <section class="panorama">
-    <img src="../{{ image.generate_thumbnail("x800") }}">
+  <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
 </section>

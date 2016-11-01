@@ -1,3 +1,8 @@
+{% if settings.settings.light_mode %}
+{% set pathstatic = ".." %}
+{% else %}
+{% set pathstatic = "." %}
+{% endif %}
 <section class="pictures-group">
     {% for line in section.images %}
     {% for image in line %}
@@ -12,12 +17,12 @@
     {% endif %}
     <div class="image">
         {% if video %}
-        <video id="video" poster="../{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
-            <source src="../{{ video }}" type="video/webm" data-source="../{{ video }}" data-format="vp8" data-extension="webm">
+        <video id="video" poster="{{ pathstatic }}/{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
+          <source src="{{ pathstatic }}/{{ video }}" type="video/webm" data-source="{{ pathstatic }}/{{ video }}" data-format="vp8" data-extension="webm">
         </video>
         {% set video = "" %}
         {% else %}
-        <img src="../{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
+        <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
         {% endif %}
     </div>
     {% endfor %}

@@ -1,9 +1,9 @@
 {% if settings.licence is not defined %}
-{% set licence_url = 'https://creativecommons.org/licenses/by-sa/3.0/' -%}
-{% set licence_name = 'CC-BY-SA' -%}
+{% set licence_url = 'https://creativecommons.org/licenses/by-sa/3.0/' %}
+{% set licence_name = 'CC-BY-SA' %}
 {% else %}
-{% set licence_url = settings.licence.url -%}
-{% set licence_name = settings.licence.name -%}
+{% set licence_url = settings.licence.url %}
+{% set licence_name = settings.licence.name %}
 {% endif %}
 
 <footer>
