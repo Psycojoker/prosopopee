@@ -452,12 +452,12 @@ def main():
     theme = settings["settings"].get("theme", "exposure")
     templates = get_gallery_templates(theme)
     templates.add_extension('jinja2.ext.with_')
-    feed_template = templates.get_template("feed.xml")
 
     for gallery in galleries_dirs:
         front_page_galleries_cover.append(process_directory(gallery, settings, templates))
 
     if settings["rss"]:
+        feed_template = templates.get_template("feed.xml")
         feed_xml = open(os.path.join("build", "feed.xml"), "w")
 
         feed_xml.write(feed_template.render(
