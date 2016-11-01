@@ -5,7 +5,7 @@ Changelog
 
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
  * possibility to use video in section and cover by beudbeud (and a bit of Bram)
- * add lazyload for pics by behavior
+ * add lazyload for pics by beudbeud
  * if a theme doesn't have a section, fallback on exposure theme which is considered the default one by titoko
  * code cleaning by Bram
  * make code a bit more robust by Bram
