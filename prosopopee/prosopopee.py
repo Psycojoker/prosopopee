@@ -233,6 +233,7 @@ def get_settings():
 
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
+
     return settings
 
 
@@ -257,10 +258,13 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
 
     if Path(".").joinpath("static").exists():
         shutil.copytree(Path(".").joinpath("static"), Path(".").joinpath("build", gallery_path, "static"))
+
     else:
         shutil.copytree(
             Path(__file__).parent.joinpath("themes", theme, "static"),
-            Path(".").joinpath("build", gallery_path, "static"))
+            Path(".").joinpath("build", gallery_path, "static")
+        )
+
     return subgallery_templates
 
 
