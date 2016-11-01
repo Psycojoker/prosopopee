@@ -29,7 +29,7 @@
     </div>
 </section>
 {% else %}
-<section class="full-picture" style="background: transparent url('{{ image }}') no-repeat fixed center top / cover;">
+<section class="full-picture" style="background: transparent url('{{ image }}') no-repeat fixed center top / cover, transparent url('{{ image.generate_thumbnail("x450") }}') no-repeat fixed center top / cover;">
     {% if section.text %}
     <div class="picture-text">
         <div class="picture-text-column">
