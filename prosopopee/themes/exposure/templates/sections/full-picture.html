@@ -32,7 +32,7 @@
     {% set image = Image(section.image) %}
     {{ image.copy() }}
 
-    <section class="full-picture" style="background: url('{{ image }}') no-repeat fixed center top / cover, url('{{ image }}') no-repeat fixed center top / cover; background-color: rgba(0, 0, 0, 0) ">
+    <section class="full-picture" style="background: url('{{ image }}') no-repeat fixed center top / cover, url('{{ image }}') no-repeat fixed center top / cover transparent;">
 
     {% if section.text %}
         <div class="picture-text">
