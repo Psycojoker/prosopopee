@@ -2,6 +2,7 @@ title: my first gallery
 sub_title: some subtitle
 date: 2015-12-08
 cover: stuff.png
+light_mode: true
 sections:
   - type: full-picture
     image: stuff.png

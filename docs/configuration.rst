@@ -8,6 +8,7 @@ The files organisation is quite simple:
  * in the root directory of your project you need a settings.yaml file that will contains the title and subtitle of your gallery
  * for each gallery you'll need a folder that also contains a settings.yaml file that will describe how to display the content on your gallery
  * and you put the pictures of the gallery inside the gallery folder
+ * or other directory, in the gallery became an index (so pictures won't be display, only cover of child gallery)
 
 Root settings.yaml
 ------------------
