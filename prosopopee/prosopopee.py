@@ -358,15 +358,15 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
-    index_html = open(Path("build").joinpath(gallery_path, "index.html"), "w")
-
-    index_html.write(template_to_render.render(
+    html = template_to_render.render(
         settings=settings,
         gallery=gallery_settings,
         Image=Image,
         Video=Video,
         link=gallery_path
-    ).encode("Utf-8"))
+    ).encode("Utf-8")
+
+    open(Path("build").joinpath(gallery_path, "index.html"), "w").write(html)
 
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
@@ -388,16 +388,15 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
         light_template_to_render = light_templates.get_template("gallery-index.html")
 
-        index_html = open(Path("build").joinpath(gallery_light_path, "index.html"), "w")
-
-        index_html.write(light_template_to_render.render(
+        html = light_template_to_render.render(
             settings=settings,
             gallery=gallery_settings,
             Image=Image,
             Video=Video,
             link=gallery_light_path
-        ).encode("Utf-8"))
+        ).encode("Utf-8")
 
+        open(Path("build").joinpath(gallery_light_path, "index.html"), "w").write(html)
 
 
 def build_index(settings, galleries_cover, templates, gallery_path=''):
@@ -412,14 +411,14 @@ def build_index(settings, galleries_cover, templates, gallery_path=''):
     Video.base_dir = Path(".").joinpath(gallery_path)
     Video.target_dir = Path(".").joinpath("build", gallery_path)
 
-    index_html = open(Path("build").joinpath(gallery_path, "index.html"), "w")
-
-    index_html.write(index_template.render(
+    html = index_template.render(
         settings=settings,
         galleries=galleries_cover,
         Image=Image,
         Video=Video
-    ).encode("Utf-8"))
+    ).encode("Utf-8")
+
+    open(Path("build").joinpath(gallery_path, "index.html"), "w").write(html)
 
 
 def main():
@@ -444,12 +443,13 @@ def main():
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
-        feed_xml = open(Path("build").joinpath("feed.xml"), "w")
 
-        feed_xml.write(feed_template.render(
+        xml = feed_template.render(
             settings=settings,
             galleries=reversed(sorted(filter(lambda x: x != {}, front_page_galleries_cover), key=lambda x: x["date"]))
-        ).encode("Utf-8"))
+        ).encode("Utf-8")
+
+        open(Path("build").joinpath("feed.xml"), "w").write(xml)
 
     build_index(settings, front_page_galleries_cover, templates)
 
