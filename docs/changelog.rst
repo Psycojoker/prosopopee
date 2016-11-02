@@ -16,6 +16,7 @@ Changelog
  * <picture> element support for smoother loading by Bram
  * resposive mode of baguette by Bram
  * several background images for smoother loading by Bram
+ * optimise write time to avoid blank pages during regeneration by Bram
 
 0.3.1 (2016-04-13)
 
