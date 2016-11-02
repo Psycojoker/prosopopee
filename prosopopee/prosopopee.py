@@ -99,7 +99,7 @@ class Video(object):
         return ""
 
     def generate_thumbnail(self, gm_geometry):
-        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.png" % gm_geometry
+        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.jpg" % gm_geometry
 
         source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
 
