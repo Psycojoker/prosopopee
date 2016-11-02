@@ -32,7 +32,7 @@
     {% set image = Image(section.image) %}
     {{ image.copy() }}
 
-    <section class="full-picture" style="background: url('{{ image }}') no-repeat fixed center top / cover, url('{{ image.generate_thumbnail("x450") }}') no-repeat fixed center top / cover transparent;">
+    <section class="full-picture" style="background: url('{{ image.generate_thumbnail("x2000") }}') no-repeat fixed center top / cover, url('{{ image.generate_thumbnail("x450") }}') no-repeat fixed center top / cover transparent;">
 
     {% if section.text %}
         <div class="picture-text">
