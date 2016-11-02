@@ -308,7 +308,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
                     process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
                 )
 
-            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, True)
+            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
 
     return gallery_cover
