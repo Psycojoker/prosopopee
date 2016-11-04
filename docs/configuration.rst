@@ -176,6 +176,15 @@ For activate the RSS you need add this key in **root** settings.yaml::
     url: "http://prosopopee.com"
 
 
+Open Graph Meta
+~~~~~~~~~~~~~~~
+
+For activate the Open Graph Meta  you need add this key in **root** settings.yaml::
+
+    og: true
+
+Optionnal: You need use description and lang key in settings gallery.
+
 Gallery settings.yaml
 ---------------------
 
