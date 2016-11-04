@@ -106,14 +106,29 @@ The meaning of the currently supported FFMEG or LIBAV's settings is as follows :
  * `other` Set different options if you need more
 
 
+Light Mode
+~~~~~~~~~~
+
+::
+  settings:
+    ligh-mode: true
+
+With this option Prospopee make a sub directory with light version of your gallery. 
+This light gallery use less JS, picture in low size etc..
+
+For access to this light gallery, add /light in the url of the gallery.
+
+If you want only light theme you can see below.
+
 
 Themes
 ~~~~~~
 
-Prosopopée has a support for various themes. As for now, only 2 themes are available:
+Prosopopée has a support for various themes. As for now, only 3 themes are available:
 
  * the default one called "exposure"
  * "material" based on materialcss
+ * light 
 
 To specify the theme, add the "theme" key in your "settings" key or your
 **root** settings.yaml. For example::
