@@ -363,7 +363,8 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         gallery=gallery_settings,
         Image=Image,
         Video=Video,
-        link=gallery_path
+        link=gallery_path,
+        name=gallery_path.split('/', 1)[-1]
     ).encode("Utf-8")
 
     open(Path("build").joinpath(gallery_path, "index.html"), "w").write(html)
