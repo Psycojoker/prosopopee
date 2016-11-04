@@ -1,11 +1,10 @@
 {% if settings.licence is not defined %}
-{% set licence_url = 'https://creativecommons.org/licenses/by-sa/3.0/' -%}
-{% set licence_name = 'CC-BY-SA' -%}
+{% set licence_url = 'https://creativecommons.org/licenses/by-sa/3.0/' %}
+{% set licence_name = 'CC-BY-SA' %}
 {% else %}
-{% set licence_url = settings.licence.url -%}
-{% set licence_name = settings.licence.name -%}
+{% set licence_url = settings.licence.url %}
+{% set licence_name = settings.licence.name %}
 {% endif %}
-
 <footer>
-    <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="{{ licence_url }}">{{ licence_name }}</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
+  <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="{{ licence_url }}">{{ licence_name }}</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
 </footer>

@@ -5,36 +5,46 @@
 {% endif %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <link type="text/css" rel="stylesheet" href="{{ pathstatic }}/static/css/fonts.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="{{ pathstatic }}/static/css/style-page.css"  media="screen,projection"/>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="{{ pathstatic }}/static/css/fonts.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{ pathstatic }}/static/css/style-page.css"  media="screen,projection"/>
 
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>{{ gallery.title }} · {{ settings.title }}</title>
-    </head>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% if gallery.description %}
+    <meta name="description" content="{{ gallery.description }}" />
+    {% endif %}
+    {% if gallery.lang %}
+    <meta name="language" content="{{ gallery.lang }}" />
+    {% endif %}
+    {% if settings.settings.og %}
+    {% include "opengraph.html" %}
+    {% endif %}
 
-    <body>
-        <div id="wrapper">
-        {% for section in gallery.sections %}
-        {% include "sections/" + section.type + ".html" %}
-        {% endfor %}
+    <title>{{ gallery.title }} · {{ settings.title }}</title>
+  </head>
 
-        {% if settings.share %}
-        {% include "share.html" %}
-        {% endif %}
+  <body>
+    <div id="wrapper">
+      {% for section in gallery.sections %}
+      {% include "sections/" + section.type + ".html" %}
+      {% endfor %}
 
-        <div class="back-to-home">
-            <hr>
-            <a href="../../">
-                <div id="logo" src="./static/img/logo.svg">
-                    HOME
-                </div>
-            </a>
-        </div>
-        </div>
-        {% include "footer.html" %}
-    </body>
+      {% if settings.share %}
+      {% include "share.html" %}
+      {% endif %}
+
+      <div class="back-to-home">
+        <hr>
+        <a href="../../">
+          <div id="logo" src="./static/img/logo.svg">
+            HOME
+          </div>
+        </a>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </body>
 </html>
