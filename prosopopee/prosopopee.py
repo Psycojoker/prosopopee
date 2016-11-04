@@ -394,7 +394,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
             gallery=gallery_settings,
             Image=Image,
             Video=Video,
-            link=gallery_light_path
+            link=gallery_light_path,
             name=gallery_path.split('/', 1)[-1]
         ).encode("Utf-8")
 
