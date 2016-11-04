@@ -196,6 +196,8 @@ _______
     sub_title: Gallery sub-title
     date: 2016-01-15
     cover: my_cover_picture.jpg
+    description: Some text
+    lang: en_US
     tags:
       - #yolo
       - #travel
