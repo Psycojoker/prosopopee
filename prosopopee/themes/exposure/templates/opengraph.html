@@ -1,7 +1,7 @@
 
 {% set absolute_url = settings.url + "/" + name + "/" %}
 <meta property="og:title" content="{{ gallery.title }}"/>
-<meta property="og:image" content="{{ absolute_url }}{{ gallery.cover }}"/>
+<meta property="og:image" content="{{ absolute_url }}{{ gallery.cover.generate_thumbnail("x900") }}"/>
 <meta property="og:site_name" content="{{ settings.title }}"/>
 {% if gallery.description %}
 <meta property="og:description" content="{{ gallery.description }}"/>
