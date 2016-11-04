@@ -185,6 +185,8 @@ For activate the Open Graph Meta  you need add this key in **root** settings.yam
 
 Optionnal: You need use description and lang key in settings gallery.
 
+for more informations about Open Graph http://ogp.me/
+
 Gallery settings.yaml
 ---------------------
 
