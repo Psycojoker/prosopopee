@@ -1,18 +1,14 @@
 {% if section.background or section.color %}
-    <div class="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
-{% endif %}
-
-<section class="paragraph">
-
+<div class="bg-section" style="{% if section.background %}background: {{ section.background }};{% endif %}{% if section.color %}color: {{ section.color }};{% endif %}">
+  {% endif %}
+  <section class="paragraph">
     {% if section.title %}
-        <h2>{{ section.title }}</h2>
+    <h2>{{ section.title }}</h2>
     {% else %}
-        <div class="separator"></div>
+    <div class="separator"></div>
     {% endif %}
-
     <p>{{ section.text }}</p>
-</section>
-
-{% if section.background or section.color %}
-    </div>
+  </section>
+  {% if section.background or section.color %}
+</div>
 {% endif %}

@@ -1,132 +1,127 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <link type="text/css" rel="stylesheet" href="../static/css/fonts.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
-
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	{% if gallery.description %}
-        <meta name="description" content="{{ gallery.description }}" />
-	{% endif %}
-	{% if gallery.lang %}
-	<meta name="language" content="{{ gallery.lang }}" />
-	{% endif %}
-        <title>{{ gallery.title }} · {{ settings.title }}</title>
-    </head>
-
-    <body>
-        {% for section in gallery.sections %}
-        {% include "sections/" + section.type + ".html" %}
-        {% endfor %}
-
-        {% if settings.share %}
-        {% include "share.html" %}
-        {% endif %}
-
-        <div class="back-to-home">
-            <hr>
-            <a href="../">
-                <div id="logo" src="./../static/img/logo.svg">
-                    HOME
-                </div>
-            </a>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="../static/css/fonts.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% if gallery.description %}
+    <meta name="description" content="{{ gallery.description }}" />
+    {% endif %}
+    {% if gallery.lang %}
+    <meta name="language" content="{{ gallery.lang }}" />
+    {% endif %}
+    {% if settings.settings.og %}
+    {% include "opengraph.html" %}
+    {% endif %}
+    <title>{{ gallery.title }} · {{ settings.title }}</title>
+  </head>
+  <body>
+    {% for section in gallery.sections %}
+    {% include "sections/" + section.type + ".html" %}
+    {% endfor %}
+    {% if settings.share %}
+    {% include "share.html" %}
+    {% endif %}
+    <div class="back-to-home">
+      <hr>
+      <a href="../">
+        <div id="logo" src="./../static/img/logo.svg">
+          HOME
         </div>
-
-        <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../static/js/picturefill.min.js" charset="utf-8"></script>
-        <script type="text/javascript">
+      </a>
+    </div>
+    <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/picturefill.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
 $(function() {
 
-    baguetteBox.run(".baguette", {});
+  baguetteBox.run(".baguette", {});
 
-    $(".panorama").panorama_viewer({
-        repeat: true,
-        direction: "horizontal",
-        animationTime: 150,
-        easing: "linear",
-        overlay: true
-    });
+  $(".panorama").panorama_viewer({
+    repeat: true,
+    direction: "horizontal",
+    animationTime: 150,
+    easing: "linear",
+    overlay: true
+  });
 });
 
 var video = $("video.lazy");
 video.on('click', function(e){
-    var vid = video[0];
-    vid.play();
-    if (vid.requestFullscreen) {
-        vid.requestFullscreen();
-    } else if (vid.mozRequestFullScreen) {
-        vid.mozRequestFullScreen();
-    } else if (vid.webkitRequestFullscreen) {
-        vid.webkitRequestFullscreen();
-    }
+  var vid = video[0];
+  vid.play();
+  if (vid.requestFullscreen) {
+    vid.requestFullscreen();
+  } else if (vid.mozRequestFullScreen) {
+    vid.mozRequestFullScreen();
+  } else if (vid.webkitRequestFullscreen) {
+    vid.webkitRequestFullscreen();
+  }
 });
 
 $(function() {
-    $("img.lazy").lazyload({
-        effect : "fadeIn"
-    });
-    $("video.lazy").lazyload({
-        effect : "fadeIn"
-    });
-    $("section.lazy").lazyload({
-        effect : "fadeIn"
-    });
+  $("img.lazy").lazyload({
+    effect : "fadeIn"
+  });
+  $("video.lazy").lazyload({
+    effect : "fadeIn"
+  });
+  $("section.lazy").lazyload({
+    effect : "fadeIn"
+  });
 });
 
 {% if settings.settings.light_mode %}
 var slowLoad = window.setTimeout( function() {
-    var html_node = document.getElementsByTagName('html')[0];
-    var div = document.createElement('div');
-    div.setAttribute('id', 'slow-notice');
-    var t1 = document.createTextNode("The website is taking a long time to load.");
-    var br = document.createElement('br');
-    var t2 = document.createTextNode("You can switch to the ");
-    var a = document.createElement('a');
-    a.setAttribute('href', './light');
-    a.innerHTML = 'Light Weight Site';
+  var html_node = document.getElementsByTagName('html')[0];
+  var div = document.createElement('div');
+  div.setAttribute('id', 'slow-notice');
+  var t1 = document.createTextNode("The website is taking a long time to load.");
+  var br = document.createElement('br');
+  var t2 = document.createTextNode("You can switch to the ");
+  var a = document.createElement('a');
+  a.setAttribute('href', './light');
+  a.innerHTML = 'Light Weight Site';
 
-    var dismiss = document.createElement('span');
-    dismiss.innerHTML = '[x] dismiss';
-    dismiss.setAttribute('class', 'dismiss');
-    dismiss.onclick = function() {
-        html_node.removeChild(div);
-    }
+  var dismiss = document.createElement('span');
+  dismiss.innerHTML = '[x] dismiss';
+  dismiss.setAttribute('class', 'dismiss');
+  dismiss.onclick = function() {
+    html_node.removeChild(div);
+  }
 
-    var dismiss_container = document.createElement('div');
-    dismiss_container.appendChild(dismiss);
-    dismiss_container.setAttribute('class', 'dismiss-container');
+  var dismiss_container = document.createElement('div');
+  dismiss_container.appendChild(dismiss);
+  dismiss_container.setAttribute('class', 'dismiss-container');
 
-    div.appendChild(t1);
-    div.appendChild(br);
-    div.appendChild(t2);
-    div.appendChild(a);
-    div.appendChild(dismiss_container);
+  div.appendChild(t1);
+  div.appendChild(br);
+  div.appendChild(t2);
+  div.appendChild(a);
+  div.appendChild(dismiss_container);
 
-    html_node.appendChild(div);
+  html_node.appendChild(div);
 }, 1000 );
 
 window.addEventListener( 'load', function() {
-    try {
-        window.clearTimeout( slowLoad );
-        html_node.removeChild(div);
-    } catch (e){
-        // that's okay.
-    }
+  try {
+    window.clearTimeout( slowLoad );
+    html_node.removeChild(div);
+  } catch (e){
+    // that's okay.
+  }
 
 });
 {% endif %}
-
-        </script>
-
-        {% include "footer.html" %}
-
-    </body>
+    </script>
+    {% include "footer.html" %}
+  </body>
 </html>

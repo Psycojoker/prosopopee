@@ -1,19 +1,19 @@
 <nav>
   <div class="nav-wrapper">
     <ul>
-      {%- for line in settings.menu -%}
+      {% for line in settings.menu %}
       {% set file_name, menu_name = line.items()[0] %}
       {% if file_name.startswith('http') %}
-        {% set file_name = file_name %}
+      {% set file_name = file_name %}
       {% elif gallery %}
-        {% set file_name = "../"+file_name %}
-      {%- endif -%}
-      {%- if loop.first -%}
+      {% set file_name = "../"+file_name %}
+      {% endif %}
+      {% if loop.first %}
       <li><a href={{ file_name }} class=first-item-menu>{{ menu_name  }}</a></li>
       {% else %}
       <li><a href={{ file_name }} class=item-menu>{{ menu_name }}</a></li>
-      {%- endif -%}
-      {%- endfor -%}
+      {% endif %}
+      {% endfor %}
     </ul>
   </div>
 </nav>

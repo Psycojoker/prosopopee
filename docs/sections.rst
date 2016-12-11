@@ -46,6 +46,12 @@ Without text::
   - type: full-picture
     image: big_picture.jpg
 
+  
+If you want fixed backgroup use can use this optionnal option (only with the exposure theme)::
+
+  - type: full-picture
+    fixed: true
+
 Bordered picture
 ________________
 

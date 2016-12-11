@@ -176,6 +176,17 @@ For activate the RSS you need add this key in **root** settings.yaml::
     url: "http://prosopopee.com"
 
 
+Open Graph Meta
+~~~~~~~~~~~~~~~
+
+For activate the Open Graph Meta  you need add this key in **root** settings.yaml::
+
+    og: true
+
+Optionnal: You need use description and lang key in settings gallery.
+
+for more informations about Open Graph http://ogp.me/
+
 Gallery settings.yaml
 ---------------------
 
@@ -196,6 +207,8 @@ _______
     sub_title: Gallery sub-title
     date: 2016-01-15
     cover: my_cover_picture.jpg
+    description: Some text
+    lang: en_US
     tags:
       - #yolo
       - #travel
