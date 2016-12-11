@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4 (unreleased)
+0.4 (2016-12-11)
 
  * greatly improved loading speed of pages with several different technics (see below)
  * RSS https://prosopopee.readthedocs.org/en/latest/configuration.html#rss by beudbeud
