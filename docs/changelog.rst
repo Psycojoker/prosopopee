@@ -17,6 +17,7 @@ Changelog
  * resposive mode of baguette by Bram
  * several background images for smoother loading by Bram
  * optimise write time to avoid blank pages during regeneration by Bram
+ * optional opengraph support by beudbeud https://prosopopee.readthedocs.io/en/latest/configuration.html#open-graph-meta
 
 0.3.1 (2016-04-13)
 
