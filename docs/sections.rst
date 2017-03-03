@@ -139,10 +139,10 @@ This section is for add audio file with HTML5 player.
 
 ::
   - type: audio
-    image:
-    name: song.ogg
-    type: audio
     title: Title of song 
+    image:
+      name: song.ogg
+      type: audio
 
 
 Author
