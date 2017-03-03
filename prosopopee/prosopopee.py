@@ -37,6 +37,12 @@ SETTINGS = {
         "audio": "libvorbis",
         "video": "libvpx",
         "other": "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
+    },
+    "ffmpeg_audio": {
+        "binary": "ffmpeg",
+        "loglevel": "error",
+        "format": "mp3",
+        "audio": "libmp3lame"
     }
 }
 
@@ -113,6 +119,55 @@ class Video(object):
     def __repr__(self):
         return self.name
 
+class Audio(object):
+    base_dir = Path()
+    target_dir = Path()
+
+    def __init__(self, options):
+        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert audio and I ask to do so, abort")
+
+        # assuming string
+        if not isinstance(options, dict):
+            options = {"name": options}
+        # used for caching, if it's modified -> regenerate
+        self.options = SETTINGS["ffmpeg_audio"].copy()
+        self.options.update(options)
+
+    @property
+    def name(self):
+        return self.options["name"]
+
+    def ffmpeg(self, source, target, options):
+        if not CACHE.needs_to_be_generated(source, target, options):
+            okgreen("Skipped", source + " is already generated")
+            return
+
+        ffmpeg_switches = {
+           "source": source,
+           "target": target,
+           "binary": "%s" % options["binary"],
+           "format": ".%s" % options["format"],
+           "loglevel": "-loglevel %s" % options["loglevel"],
+           "audio": "-c:a %s" % options["audio"],
+        }
+
+        warning("Generation", source)
+        
+        command = "{binary} {loglevel} -i {source} {audio} -y {target}{format}".format(**ffmpeg_switches)
+        print(command)
+        error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
+
+        CACHE.cache_picture(source, target, options)
+
+    def copy(self):
+        print self.base_dir
+        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
+        options = self.options.copy()
+        self.ffmpeg(source, target, options)
+        return ""
+
+    def __repr__(self):
+        return self.name
 
 class Image(object):
     base_dir = ""
@@ -188,7 +243,6 @@ class Image(object):
 
     def __repr__(self):
         return self.name
-
 
 def get_settings():
     error(Path("settings.yaml").exists(), "I can't find a "
@@ -356,6 +410,9 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     Video.base_dir = Path(".").joinpath(gallery_path)
     Video.target_dir = Path(".").joinpath("build", gallery_path)
 
+    Audio.base_dir = Path(".").joinpath(gallery_path)
+    Audio.target_dir = Path(".").joinpath("build", gallery_path)
+
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
     html = template_to_render.render(
@@ -363,6 +420,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         gallery=gallery_settings,
         Image=Image,
         Video=Video,
+        Audio=Audio,
         link=gallery_path,
         name=gallery_path.split('/', 1)[-1]
     ).encode("Utf-8")
