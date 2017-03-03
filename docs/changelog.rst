@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5 (unreleased)
+
+ * Add audio HTML5 player
+
 0.4 (2016-12-11)
 
  * greatly improved loading speed of pages with several different technics (see below)
