@@ -132,6 +132,19 @@ How to use it::
   - type: panorama
     image: 7.jpg
 
+Audio
+_____
+
+This section is for add audio file with HTML5 player.
+
+::
+  - type: audio
+    image:
+    name: song.ogg
+    type: audio
+    title: Title of song 
+
+
 Author
 ______
 
