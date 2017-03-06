@@ -135,9 +135,8 @@ How to use it::
 Audio
 _____
 
-This section is for add audio file with HTML5 player.
+This section is for add audio file with HTML5 player.::
 
-::
   - type: audio
     title: Title of song 
     image:

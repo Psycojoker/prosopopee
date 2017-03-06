@@ -109,9 +109,9 @@ The meaning of the currently supported FFMEG or LIBAV's settings is as follows :
 Light Mode
 ~~~~~~~~~~
 
-::
+For enabled the light mode::
 
-settings:
+  settings:
     light_mode: true
 
 With this option Prospopee make a sub directory with light version of your gallery. 
