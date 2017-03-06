@@ -1,0 +1,8 @@
+{% if section.image.type == "audio" %}
+{% set audio = Audio(section.image) %}
+{{ audio.copy() }}
+{% endif %}
+<h2>{% if section.title %}{{ section.title }}{% else %}{{ audio }}{% endif %}</h2>
+<audio controls>
+  <source src="{{ audio }}.mp3" type="audio/mpeg">
+</audio>
