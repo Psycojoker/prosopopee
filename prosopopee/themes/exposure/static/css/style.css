@@ -261,9 +261,13 @@ nav ul li > a.item-menu::before {
     left: 0px;
 }
 
-.gallery-cover img.fillWidth {
-    height: 100%;
-    width: 100%;
+.gallery-cover img.fillWidth,
+.gallery-cover video.fillWidth {
+  top: 0;bottom: 0;right: 0;left: 0;margin: auto;
+}
+
+.gallery-cover video.fillWidth {
+  min-width: 50%;
 }
 
 .back-to-home {
