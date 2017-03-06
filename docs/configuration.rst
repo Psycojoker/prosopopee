@@ -110,8 +110,9 @@ Light Mode
 ~~~~~~~~~~
 
 ::
-  settings:
-    ligh-mode: true
+
+settings:
+    light_mode: true
 
 With this option Prospopee make a sub directory with light version of your gallery. 
 This light gallery use less JS, picture in low size etc..
