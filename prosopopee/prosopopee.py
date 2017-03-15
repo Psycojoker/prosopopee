@@ -92,7 +92,7 @@ class Video(object):
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
-            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {othee} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
@@ -118,6 +118,7 @@ class Video(object):
 
     def __repr__(self):
         return self.name
+
 
 class Audio(object):
     base_dir = Path()
@@ -152,7 +153,7 @@ class Audio(object):
         }
 
         warning("Generation", source)
-        
+
         command = "{binary} {loglevel} -i {source} {audio} -y {target}{format}".format(**ffmpeg_switches)
         print(command)
         error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
@@ -160,7 +161,6 @@ class Audio(object):
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
-        print self.base_dir
         source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
         options = self.options.copy()
         self.ffmpeg(source, target, options)
@@ -168,6 +168,7 @@ class Audio(object):
 
     def __repr__(self):
         return self.name
+
 
 class Image(object):
     base_dir = ""
@@ -243,6 +244,7 @@ class Image(object):
 
     def __repr__(self):
         return self.name
+
 
 def get_settings():
     error(Path("settings.yaml").exists(), "I can't find a "
@@ -430,7 +432,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
-                settings["settings"].get("light_mode", False) and\
+                settings["settings"].get("light_mode", False) and
                 gallery_settings.get("light_mode") is None
             ):
 
@@ -457,6 +459,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         ).encode("Utf-8")
 
         open(Path("build").joinpath(gallery_light_path, "index.html"), "w").write(html)
+
 
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False):
     index_template = templates.get_template("index.html")
