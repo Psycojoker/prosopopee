@@ -447,6 +447,9 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         Video.base_dir = Path(".").joinpath(gallery_path)
         Video.target_dir = Path(".").joinpath("build", gallery_path)
 
+        Audio.base_dir = Path(".").joinpath(gallery_path)
+        Audio.target_dir = Path(".").joinpath("build", gallery_path)
+
         light_template_to_render = light_templates.get_template("gallery-index.html")
 
         html = light_template_to_render.render(
@@ -454,6 +457,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
             gallery=gallery_settings,
             Image=Image,
             Video=Video,
+            Audio=Audio,
             link=gallery_light_path,
             name=gallery_path.split('/', 1)[-1]
         ).encode("Utf-8")
