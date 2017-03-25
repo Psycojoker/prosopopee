@@ -1,4 +1,5 @@
 import os
+import yaml
 from flask import Flask, render_template, send_file, request
 
 from prosopopee import main as build_everything, get_settings
@@ -59,10 +60,30 @@ def save_base_settings():
 def save_settings(path):
     # TODO error in yaml
 
-    assert request.form["settings"]
     open(os.path.join(path, "settings.yaml"), "w").write(request.form["settings"])
 
     build_everything()
+
+    return "ok"
+
+
+@app.route("/new_gallery/", methods=["POST"])
+def new_gallery():
+    os.makedirs(request.form["folder_name"])
+    settings = yaml.dump({
+        "title": request.form["title"].encode("Utf-8"),
+        "date": request.form["date"].encode("Utf-8"),
+        "sections": [{
+            "type": "full-picture",
+            "image": "example.png",
+            "text": {
+                "title": request.form["title"].encode("Utf-8"),
+                "date": request.form["date"].encode("Utf-8"),
+            }
+        }]
+    }, default_flow_style=False)
+
+    open(os.path.join(request.form["folder_name"], "settings.yaml"), "w").write(settings)
 
     return "ok"
 

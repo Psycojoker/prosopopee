@@ -42,7 +42,7 @@ body {
     border-left: solid grey 2px;
 }
 
-#save {
+.button {
     width: 100%;
     border-radius: 0;
     border: 0;
@@ -50,12 +50,13 @@ body {
     background-color: lightgrey;
 }
 
-#save:hover {
+.button:hover {
     background-color: #e1e1e1;
     cursor: pointer;
 }
 
-#save.loading, #save.loading:hover, #save.loading:active {
+.button.loading, .button.loading:hover, .button.loading:active {
     color: grey;
     background-color: orange;
+    border: 0;
 }

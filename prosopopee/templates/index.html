@@ -9,7 +9,8 @@
 <body>
 <div class="content">
     <form id="editZone">
-        <button id="save">save</button>
+        <button type="button" class="button" id="newGallery">new gallery</button>
+        <button class="button" id="save">save</button>
         <textarea name="settings" id="editor"></textarea>
     </form>
 
@@ -44,6 +45,25 @@ $(function() {
                 $("#save").removeClass("loading").html("save");
                 document.getElementById('buildIframe').contentWindow.location.reload();
             });
+    })
+
+    $("#newGallery").click(function() {
+        var folder_name = prompt("Folder name");
+        var title = prompt("Title");
+        var date = prompt("Date");
+
+        if (confirm("Are those correct?\nFolder name: " + folder_name + "\nTitle : " + title + "\nDAte : " + date)) {
+            $("#new_gallery").addClass("loading");
+            $.post("/new_gallery/", {folder_name: folder_name, title: title, date: date})
+                .done(function(data) {
+                    // TODO doesn't support sub_galleries
+                    var _theframe = document.getElementById("buildIframe");
+                    _theframe.contentWindow.location.href = _theframe.baseURI + "build/" + folder_name + "/";
+                    context["current_gallery"] = iframe.contentWindow.location.pathname
+
+                    $("#new_gallery").removeClass("loading");
+                })
+        }
     })
 
 })
