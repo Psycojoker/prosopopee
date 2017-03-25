@@ -16,9 +16,20 @@ def build_index():
 def build(path=""):
     file = os.path.join(os.path.realpath(os.curdir), "build", path)
 
+    # I get a request for a gallery folder so I need to return the index.html
     if os.path.isdir(file):
-        print "kakaaaaaaaa"
         file = os.path.join(file, "index.html")
+
+        # this is an horrible hack because iframe are broken
+        # prosopopee uses relatives links everywhere, but the iframe doesn't
+        # understand that, so if you click on a link inside the iframe, the
+        # base link on which relatives paths are based on isn't updated for
+        # whatever reason, so every related links are broken
+        #
+        # for example : on the demo gallery, load the root, requests are made on "/build/"
+        # but if you click on the first_gallery, requests for the image in <img
+        # src="1.png"> is going to be made on "/build/" while it should have
+        # been made on "/build/first_gallery/"
         file = open(file, "r").read().decode("Utf-8").replace("<head>", u'<head><base href="%s/" _target="blank">' % path)
 
         print file
