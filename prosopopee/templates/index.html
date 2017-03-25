@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="/static/css/style.css">
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="content">
+    <form id="editZone">
+        <button id="save">save</button>
+        <textarea name="settings" id="editor"></textarea>
+    </form>
+
+    <div id="prosopopeeHtml">
+        <iframe id="buildIframe" src="build/" onLoad="iframeSrcChanged(this);">
+        </iframe>
+    </div>
+</div>
+
+<script>
+var context = {
+    "current_gallery": "build/"
+}
+
+$(function() {
+    var _theframe = document.getElementById("buildIframe");
+    _theframe.contentWindow.location.href = _theframe.src;
+
+    iframeSrcChanged = function(iframe) {
+        console.log("-> " + context["current_gallery"]);
+        context["current_gallery"] = iframe.contentWindow.location.pathname
+        $.get("/settings" + context["current_gallery"] + "?_=" + (new Date).getTime()).done(function(data) {
+            document.getElementById("editor").textContent = data;
+        })
+    }
+
+    $("#editZone").submit(function(event) {
+        event.preventDefault();
+        $("#save").addClass("loading").html("saving...");
+        $.post("/save_settings" + context["current_gallery"], $("#editZone").serialize())
+            .done(function() {
+                $("#save").removeClass("loading").html("save");
+                document.getElementById('buildIframe').contentWindow.location.reload();
+            });
+    })
+
+})
+</script>
+</body>

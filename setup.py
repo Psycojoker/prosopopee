@@ -24,7 +24,10 @@ setup(name='prosopopee',
       license= 'GPLv3+',
       scripts=[],
       entry_points={
-        'console_scripts': ['prosopopee = prosopopee.prosopopee:main']
+        'console_scripts': [
+            'prosopopee = prosopopee.prosopopee:main',
+            'prosopopee-web = prosopopee.web:main',
+        ]
       },
       keywords='',
       include_package_data=True,
