@@ -60,3 +60,18 @@ body {
     background-color: orange;
     border: 0;
 }
+
+.button-green {
+    background-color: green;
+    color: white;
+}
+
+.button-green:hover {
+    background-color: lightgreen;
+    cursor: pointer;
+    color: black;
+}
+
+#editZone form {
+    margin: 0;
+}

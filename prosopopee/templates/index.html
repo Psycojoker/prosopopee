@@ -3,16 +3,25 @@
 <head>
 <link rel="stylesheet" href="/static/css/style.css">
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="/static/js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="></script>
+<script src="/static/js/jquery.form.min.js"></script>
 
 </head>
 <body>
 <div class="content">
-    <form id="editZone">
-        <button type="button" class="button" id="newGallery">new gallery</button>
-        <button class="button" id="save">save</button>
-        <textarea name="settings" id="editor"></textarea>
-    </form>
+    <div id="editZone">
+        <form id="uploadImagesForm" enctype="multipart/form-data" method="post" name="uploadImagesForm" action="/upload_images/">
+            <input id="uploadImagesInput" type="file" name="images" multiple style="display: none">
+            <input id="uploadImagesPath" name="path" type="hidden">
+            <button id="uploadImagesButton" type="button" class="button button-green">add more images</button>
+        </form>
+
+        <form id="saveForm">
+            <button type="button" class="button" id="newGallery">new gallery</button>
+            <button class="button" id="save">save</button>
+            <textarea name="settings" id="editor"></textarea>
+        </form>
+    </div>
 
     <div id="prosopopeeHtml">
         <iframe id="buildIframe" src="build/" onLoad="iframeSrcChanged(this);">
@@ -37,10 +46,10 @@ $(function() {
         })
     }
 
-    $("#editZone").submit(function(event) {
+    $("#saveForm").submit(function(event) {
         event.preventDefault();
         $("#save").addClass("loading").html("saving...");
-        $.post("/save_settings" + context["current_gallery"], $("#editZone").serialize())
+        $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
             .done(function() {
                 $("#save").removeClass("loading").html("save");
                 document.getElementById('buildIframe').contentWindow.location.reload();
@@ -64,6 +73,18 @@ $(function() {
                     $("#new_gallery").removeClass("loading");
                 })
         }
+    })
+
+    $("#uploadImagesButton").click(function() {
+        $("#uploadImagesPath").val(context["current_gallery"]);
+        $("#uploadImagesInput").click();
+        // console.log($("#uploadImagesForm").serialize());
+        // $.post("/upload_images" + context["current_gallery"], $("#uploadImagesForm").serialize());
+    })
+
+    $("#uploadImagesInput").on("change", function() {
+        console.log("prout");
+        $("#uploadImagesForm").ajaxForm().submit();
     })
 
 })
