@@ -1,5 +1,7 @@
 import os
 import yaml
+import time
+
 from flask import Flask, render_template, send_file, request
 
 from prosopopee import main as build_everything, get_settings
@@ -91,47 +93,23 @@ def new_gallery():
 
 @app.route("/upload_images/", methods=["POST"])
 def upload_images():
-    from ipdb import set_trace; set_trace()
+    path = request.form["path"].replace("/build/", "", 1)
 
-""""
-ipdb> request.form
-ImmutableMultiDict([('path', u'/build/')])
-ipdb> request.files
-ImmutableMultiDict([('images', <FileStorage: u'C7tMVgBWkAEqbbz (1).jpg' ('image/jpeg')>), ('images', <FileStorage: u'C7tMVgBWkAEqbbz.jpg-large' ('application/octet-stream')>), ('images', <FileStorage: u'DettePubliqueFrancaise_gauche_vs_droite.jpg' ('image/jpeg')>)])
-ipdb> request.files["images"]
-<FileStorage: u'C7tMVgBWkAEqbbz (1).jpg' ('image/jpeg')>
-ipdb> dir(request.files)
-['__class__', '__cmp__', '__contains__', '__copy__', '__deepcopy__', '__delattr__', '__delitem__', '__dict__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getstate__', '__gt__', '__hash__', '__init__', '__iter__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_hash_cache', '_iter_hashitems', 'add', 'clear', 'copy', 'deepcopy', 'fromkeys', 'get', 'getlist', 'has_key', 'items', 'iteritems', 'iterkeys', 'iterlists', 'iterlistvalues', 'itervalues', 'keys', 'lists', 'listvalues', 'pop', 'popitem', 'popitemlist', 'poplist', 'setdefault', 'setlist', 'setlistdefault', 'to_dict', 'update', 'values', 'viewitems', 'viewkeys', 'viewlists', 'viewlistvalues', 'viewvalues']
-ipdb> request.files.getlist("images")
-[<FileStorage: u'C7tMVgBWkAEqbbz (1).jpg' ('image/jpeg')>, <FileStorage: u'C7tMVgBWkAEqbbz.jpg-large' ('application/octet-stream')>, <FileStorage: u'DettePubliqueFrancaise_gauche_vs_droite.jpg' ('image/jpeg')>]
-ipdb> request.files.getlist("images")[0]
-<FileStorage: u'C7tMVgBWkAEqbbz (1).jpg' ('image/jpeg')>
-ipdb> z = request.files.getlist("images")[0]
-ipdb> dir(z)
-['__bool__', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__hash__', '__init__', '__iter__', '__module__', '__new__', '__nonzero__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parse_content_type', 'close', 'content_length', 'content_type', 'filename', 'headers', 'mimetype', 'mimetype_params', 'name', 'save', 'stream']
-ipdb> pdoc z.save
-Class docstring:
-    Save the file to a destination path or file object.  If the
-    destination is a file object you have to close it yourself after the
-    call.  The buffer size is the number of bytes held in memory during
-    the copy process.  It defaults to 16KB.
-    
-    For secure file saving also have a look at :func:`secure_filename`.
-    
-    :param dst: a filename or open file object the uploaded file
-                is saved to.
-    :param buffer_size: the size of the buffer.  This works the same as
-                        the `length` parameter of
-                        :func:`shutil.copyfileobj`.
-Call docstring:
-    x.__call__(...) <==> x(...)
-ipdb> request.form.keys()
-['path']
-ipdb> request.form["path"]
-u'/build/'
-ipdb> z.filename
-u'C7tMVgBWkAEqbbz (1).jpg'
-"""
+    if not path:
+        print "WARING: can't save image to root or to empty path '%s'" % request.form["path"]
+        return "WARING: can't save image to root or to empty path '%s'" % request.form["path"]
+
+    for f in request.files.getlist("images"):
+        if not os.path.exists(os.path.join(path, f.filename)):
+            filename = f.filename
+        else:
+            # avoid to overwrite existing file
+            filename = ".".join(f.filename.split(".")[:-1] + ["-%s" % int(time.time())] + f.filename.split(".")[-1:])
+
+        print "filename", "->", os.path.join(path, filename)
+        f.save(os.path.join(path, filename))
+
+    return "ok"
 
 @app.route("/")
 def index():
