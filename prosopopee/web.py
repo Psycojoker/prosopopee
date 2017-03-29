@@ -58,12 +58,14 @@ def get_gallery_settings(path):
 def save_base_settings():
     return save_settings(".")
 
+
 @app.route("/save_settings/build/<path:path>", methods=['POST'])
 def save_settings(path):
     # TODO error in yaml
 
     assert request.form["settings"]
-    open(os.path.join(path, "settings.yaml"), "w").write(request.form["settings"])
+    newdata = request.form["settings"].encode('utf-8')
+    open(os.path.join(path, "settings.yaml"), "w").write(newdata)
 
     build_everything()
 
@@ -110,6 +112,7 @@ def upload_images():
         f.save(os.path.join(path, filename))
 
     return "ok"
+
 
 @app.route("/")
 def index():

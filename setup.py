@@ -32,6 +32,6 @@ setup(name='prosopopee',
       keywords='',
       include_package_data=True,
       package_data={
-            'prosopopee': ['themes/*/*/*/*', 'themes/*/templates/*.html', 'themes/*/templates/feed.xml', 'themes/*/templates/section/*.html', 'templates/*'],
+            'prosopopee': ['themes/*/*/*/*', 'themes/*/templates/*.html', 'themes/*/templates/feed.xml', 'themes/*/templates/section/*.html', 'templates/*', 'static/*/*'],
         },
      )
