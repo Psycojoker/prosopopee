@@ -44,6 +44,13 @@ def build(path=""):
     return send_file(file, cache_timeout=0)
 
 
+# for content not stored in built gallery
+@app.route("/from_gallery/<path:path>")
+def get_from_gallery_content(path):
+    file = os.path.join(os.path.realpath(os.curdir), path)
+    return send_file(file, cache_timeout=0)
+
+
 @app.route("/settings/build/")
 def get_base_gallery_settings():
     return get_gallery_settings(".")
