@@ -79,10 +79,24 @@ body {
 #imagesZone {
     resize: horizontal;
     overflow-y: scroll;
+    oyerflow-x: hidden;
     display: none;
 }
 
 #imagesZone.active {
     display: block;
-    width: 250px;
+    width: 450px;
+}
+
+#imagesZone img {
+    width: 100%;
+}
+
+#imagesZone p {
+    padding: 5px;
+    background-color: #333;
+    color: white;
+    margin: 0;
+    margin-bottom: 3px;
+    text-align: center;
 }
