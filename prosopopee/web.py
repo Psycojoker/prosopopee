@@ -95,7 +95,9 @@ def save_settings(path):
 
 @app.route("/new_gallery/", methods=["POST"])
 def new_gallery():
-    os.makedirs(request.form["folder_name"])
+    if not os.path.exists(request.form["folder_name"]):
+        os.makedirs(request.form["folder_name"])
+
     settings = yaml.dump({
         "title": request.form["title"].encode("Utf-8"),
         "date": request.form["date"].encode("Utf-8"),
