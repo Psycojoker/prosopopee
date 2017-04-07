@@ -87,8 +87,11 @@ $(function() {
 
     $("#newGallery").click(function() {
         var folder_name = prompt("Folder name");
+        if (folder_name === null) return;
         var title = prompt("Title");
+        if (title === null) return;
         var date = prompt("Date");
+        if (date === null) return;
 
         if (confirm("Are those correct?\nFolder name: " + folder_name + "\nTitle : " + title + "\nDAte : " + date)) {
             $("#new_gallery").addClass("loading");
