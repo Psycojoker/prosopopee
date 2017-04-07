@@ -5,6 +5,7 @@
 
 <script src="/static/js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="></script>
 <script src="/static/js/jquery.form.min.js"></script>
+<script src="/static/js/jquery.hotkeys.js"></script>
 
 </head>
 <body>
@@ -60,12 +61,15 @@ $(function() {
 
     var updateGalleryImages = function(path) {
         $.get("/images" + path).done(function(data) {
-            $("#imagesZone").html(data);
+            if (data != context["current_images"]) {
+                $("#imagesZone").html(data);
+                context["current_images"] = data;
+            }
         })
     }
 
     // update settings
-    $("#saveForm").submit(function(event) {
+    var save = function(event) {
         event.preventDefault();
         $("#save").addClass("loading").html("saving...");
         $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
@@ -73,7 +77,11 @@ $(function() {
                 $("#save").removeClass("loading").html("save");
                 document.getElementById('buildIframe').contentWindow.location.reload();
             });
-    })
+    }
+
+    $("#saveForm").submit(save);
+    $("#editor").on('keydown', null, 'ctrl+s', save);
+
 
     $("#newGallery").click(function() {
         var folder_name = prompt("Folder name");
