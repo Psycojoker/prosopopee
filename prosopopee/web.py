@@ -62,7 +62,7 @@ def get_gallery_settings(path):
 
 
 @app.route("/images/build/<path:path>")
-def get_gallery_images(path):
+def get_gallery_images_list(path):
     settings = get_gallery_settings(path)
 
     images = [{
