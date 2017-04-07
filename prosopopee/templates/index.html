@@ -35,9 +35,11 @@ var context = {
 }
 
 $(function() {
+    // init
     var _theframe = document.getElementById("buildIframe");
     _theframe.contentWindow.location.href = _theframe.src;
 
+    // url changed in frame
     iframeSrcChanged = function(iframe) {
         console.log("-> " + context["current_gallery"]);
         context["current_gallery"] = iframe.contentWindow.location.pathname
@@ -46,6 +48,7 @@ $(function() {
         })
     }
 
+    // update settings
     $("#saveForm").submit(function(event) {
         event.preventDefault();
         $("#save").addClass("loading").html("saving...");
