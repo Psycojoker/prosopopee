@@ -56,7 +56,16 @@ def get_gallery_settings(path):
 
 @app.route("/images/build/<path:path>")
 def get_gallery_images(path):
-    return render_template("images_zone.html", images=[path + "/" + x for x in os.listdir(path) if x.endswith((".gif", ".png", ".jpg", ".jpeg"))])
+    settings = get_gallery_settings(path)
+
+    images = [{
+        "name": x,
+        "used": x in settings,
+    } for x in os.listdir(path) if x.endswith((".gif", ".png", ".jpg", ".jpeg"))]
+
+    images = sorted(images, key=lambda x: (x["used"], x["name"]))
+
+    return render_template("images_zone.html", images=images, path=path)
 
 
 @app.route("/save_settings/build/", methods=['POST'])
