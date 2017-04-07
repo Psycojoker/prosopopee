@@ -75,3 +75,14 @@ body {
 #editZone form {
     margin: 0;
 }
+
+#imagesZone {
+    resize: horizontal;
+    overflow-y: scroll;
+    display: none;
+}
+
+#imagesZone.active {
+    display: block;
+    width: 250px;
+}

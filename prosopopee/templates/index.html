@@ -23,6 +23,9 @@
         </form>
     </div>
 
+    <div id="imagesZone">
+    </div>
+
     <div id="prosopopeeHtml">
         <iframe id="buildIframe" src="build/" onLoad="iframeSrcChanged(this);">
         </iframe>
@@ -45,6 +48,19 @@ $(function() {
         context["current_gallery"] = iframe.contentWindow.location.pathname
         $.get("/settings" + context["current_gallery"] + "?_=" + (new Date).getTime()).done(function(data) {
             document.getElementById("editor").textContent = data;
+        })
+
+        if (context["current_gallery"] != "/build/") {
+            $("#imagesZone").addClass("active");
+            updateGalleryImages(context["current_gallery"]);
+        } else {
+            $("#imagesZone").removeClass("active");
+        }
+    }
+
+    var updateGalleryImages = function(path) {
+        $.get("/images" + path).done(function(data) {
+            $("#imagesZone").html(data);
         })
     }
 

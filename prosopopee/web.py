@@ -54,6 +54,11 @@ def get_gallery_settings(path):
     return open(os.path.join(path, "settings.yaml")).read()
 
 
+@app.route("/images/build/<path:path>")
+def get_gallery_images(path):
+    return render_template("images_zone.html", images=[path + "/" + x for x in os.listdir(path) if x.endswith((".gif", ".png", ".jpg", ".jpeg"))])
+
+
 @app.route("/save_settings/build/", methods=['POST'])
 def save_base_settings():
     return save_settings(".")
