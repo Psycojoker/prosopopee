@@ -69,7 +69,6 @@ $(function() {
             $.post("/new_gallery/", {folder_name: folder_name, title: title, date: date})
                 .done(function(data) {
                     // TODO doesn't support sub_galleries
-                    var _theframe = document.getElementById("buildIframe");
                     _theframe.contentWindow.location.href = _theframe.baseURI + "build/" + folder_name + "/";
                     context["current_gallery"] = iframe.contentWindow.location.pathname
 
