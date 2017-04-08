@@ -2,6 +2,8 @@ import os
 import yaml
 import time
 
+from PIL import Image
+
 from flask import Flask, render_template, send_file, request
 
 from prosopopee import main as build_everything, get_settings
@@ -65,10 +67,39 @@ def get_gallery_settings(path):
 def get_gallery_images_list(path):
     settings = get_gallery_settings(path)
 
+    exif_to_rotation = {
+        3: 180,
+        6: 270,
+        8: 90,
+    }
+
     images = [{
         "name": x,
         "used": x in settings,
     } for x in os.listdir(path) if x.endswith((".gif", ".png", ".jpg", ".jpeg"))]
+
+    # in 2017, browser are still a pile of crap and don't honner exif tag
+    # (except firefox and safari)
+    # so, to avoid images oriented in the bad direction, we check if we need to
+    # rotate them...
+    for image in images:
+        image_path = path + u"/" + image["name"]
+        try:
+            image = Image.open(image_path)
+        except Exception as e:
+            print "Warning: while trying to read image '%s' using Pillow, exception '%s' occured, skipping" % (image_path, e)
+            continue
+
+        # 274 if code for image rotation
+        # read exif information, try to extract if I need to rotate the image
+        # this will be done in css
+        exif = getattr(image, "_getexif", lambda: None)()
+        plop = exif.get(274) if exif else None
+        rotation = exif_to_rotation.get(plop)
+        print rotation, image_path
+
+        if rotation:
+            image.rotate(rotation, expand=True).save(image_path)
 
     images = sorted(images, key=lambda x: (x["used"], x["name"]))
 
