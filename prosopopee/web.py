@@ -39,7 +39,6 @@ def build(path=""):
         # been made on "/build/first_gallery/"
         file = open(file, "r").read().decode("Utf-8").replace("<head>", u'<head><base href="%s/" _target="blank">' % path)
 
-        print file
         return file.encode("Utf-8")
 
     if not os.path.exists(file):
