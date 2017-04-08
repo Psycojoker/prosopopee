@@ -2,6 +2,8 @@ import os
 import yaml
 import time
 
+from shutil import copyfile
+
 from PIL import Image
 
 from flask import Flask, render_template, send_file, request
@@ -100,6 +102,9 @@ def get_gallery_images_list(path):
 
         if rotation:
             image.rotate(rotation, expand=True).save(image_path)
+
+            # backup files in case I broke everything
+            copyfile(image_path, image_path + u".sav")
 
     images = sorted(images, key=lambda x: (x["used"], x["name"]))
 
