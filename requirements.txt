@@ -2,3 +2,4 @@ jinja2
 pyyaml
 path.py
 flask
+pillow
