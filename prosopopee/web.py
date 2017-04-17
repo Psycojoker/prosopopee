@@ -50,8 +50,51 @@ def build(path=""):
 # for content not stored in built gallery
 @app.route("/from_gallery/<path:path>")
 def get_from_gallery_content(path):
-    file = os.path.join(os.path.realpath(os.curdir), path)
-    return send_file(file, cache_timeout=0)
+    exif_to_rotation = {
+        3: 180,
+        6: 270,
+        8: 90,
+    }
+
+    cache_dir = get_cache_dir()
+
+    image_path = os.path.join(os.path.realpath(os.curdir), path)
+
+    image_base_name, image_extension = ".".join(image_path.split(".")[:-1]), image_path.split(".")[-1]
+
+    image_stats = os.stat(image_path)
+
+    thumbnail_name = "%s-%s-%s.%s" % (image_base_name.replace("/", "_"), image_stats.st_size, int(image_stats.st_mtime), image_extension)
+
+    thumbnail_path = os.path.join(cache_dir, "thumbnails", thumbnail_name)
+
+    if not os.path.exists(thumbnail_path):
+        try:
+            image = Image.open(image_path)
+        except Exception as e:
+            print "Warning: while trying to read image '%s' using Pillow, exception '%s' occured, skipping" % (image_path, e)
+            return send_file(image_path, cache_timeout=0)
+
+        # in 2017, browser are still a pile of crap and don't honner exif tag
+        # (except firefox and safari)
+        # so, to avoid images oriented in the bad direction, we check if we need to
+        # rotate them...
+
+        # 274 if code for image rotation
+        # read exif information, try to extract if I need to rotate the image
+        # this will be done in css
+        exif = getattr(image, "_getexif", lambda: None)()
+        plop = exif.get(274) if exif else None
+        rotation = exif_to_rotation.get(plop)
+        print rotation, image_path
+
+        if rotation:
+            image = image.rotate(rotation, expand=True)
+
+        image.thumbnail((300, 1000))
+        image.save(thumbnail_path)
+
+    return send_file(thumbnail_path, cache_timeout=0)
 
 
 @app.route("/settings/build/")
@@ -68,46 +111,28 @@ def get_gallery_settings(path):
 def get_gallery_images_list(path):
     settings = get_gallery_settings(path)
 
-    exif_to_rotation = {
-        3: 180,
-        6: 270,
-        8: 90,
-    }
-
     images = [{
         "name": x.encode("Utf-8"),
         "used": x.encode("Utf-8") in settings,
     } for x in os.listdir(path) if x.lower().endswith((".gif", ".png", ".jpg", ".jpeg"))]
 
-    # in 2017, browser are still a pile of crap and don't honner exif tag
-    # (except firefox and safari)
-    # so, to avoid images oriented in the bad direction, we check if we need to
-    # rotate them...
-    for image in images:
-        image_path = path + u"/" + image["name"]
-        try:
-            image = Image.open(image_path)
-        except Exception as e:
-            print "Warning: while trying to read image '%s' using Pillow, exception '%s' occured, skipping" % (image_path, e)
-            continue
-
-        # 274 if code for image rotation
-        # read exif information, try to extract if I need to rotate the image
-        # this will be done in css
-        exif = getattr(image, "_getexif", lambda: None)()
-        plop = exif.get(274) if exif else None
-        rotation = exif_to_rotation.get(plop)
-        print rotation, image_path
-
-        if rotation:
-            image.rotate(rotation, expand=True).save(image_path)
-
-            # backup files in case I broke everything
-            copyfile(image_path, image_path + u".sav")
-
     images = sorted(images, key=lambda x: (x["used"], x["name"]))
 
     return render_template("images_zone.html", images=images, path=path)
+
+
+def get_cache_dir():
+    current_project_key = os.path.realpath(os.curdir).replace(".", "_")
+
+    cache_dir = os.path.join(os.path.expanduser("~/.cache/prosopopee"), current_project_key)
+
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir)
+
+    if not os.path.exists(os.path.join(cache_dir, "thumbnails")):
+        os.makedirs(os.path.join(cache_dir, "thumbnails"))
+
+    return cache_dir
 
 
 @app.route("/save_settings/build/", methods=['POST'])
