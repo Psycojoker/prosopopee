@@ -1,11 +1,15 @@
 <html>
 
 <head>
+<link rel="stylesheet" href="/static/css/codemirror.css">
 <link rel="stylesheet" href="/static/css/style.css">
 
 <script src="/static/js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="></script>
 <script src="/static/js/jquery.form.min.js"></script>
 <script src="/static/js/jquery.hotkeys.js"></script>
+
+<script src="/static/js/codemirror.js"></script>
+<script src="/static/js/mode/yaml/yaml.js"></script>
 
 </head>
 <body>
@@ -37,7 +41,8 @@
 <script>
 var context = {
     "current_gallery": "/build/",
-    "current_images": ""
+    "current_images": "",
+    "CodeMirror": null
 }
 
 $(function() {
@@ -50,7 +55,10 @@ $(function() {
         console.log("-> " + context["current_gallery"]);
         context["current_gallery"] = iframe.contentWindow.location.pathname
         $.get("/settings" + context["current_gallery"] + "?_=" + (new Date).getTime()).done(function(data) {
-            document.getElementById("editor").textContent = data;
+            if (context.CodeMirror === null) {
+                context.CodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {mode: "yaml"})
+            }
+            context.CodeMirror.setValue(data);
         })
 
         if (context["current_gallery"] != "/build/") {
