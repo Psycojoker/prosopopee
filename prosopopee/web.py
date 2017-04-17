@@ -75,9 +75,9 @@ def get_gallery_images_list(path):
     }
 
     images = [{
-        "name": x,
-        "used": x in settings,
-    } for x in os.listdir(path) if x.endswith((".gif", ".png", ".jpg", ".jpeg"))]
+        "name": x.encode("Utf-8"),
+        "used": x.encode("Utf-8") in settings,
+    } for x in os.listdir(path) if x.lower().endswith((".gif", ".png", ".jpg", ".jpeg"))]
 
     # in 2017, browser are still a pile of crap and don't honner exif tag
     # (except firefox and safari)
