@@ -11,12 +11,6 @@
 <body>
 <div class="content">
     <div id="editZone">
-        <form id="uploadImagesForm" enctype="multipart/form-data" method="post" name="uploadImagesForm" action="/upload_images/">
-            <input id="uploadImagesInput" type="file" name="images" multiple style="display: none">
-            <input id="uploadImagesPath" name="path" type="hidden">
-            <button id="uploadImagesButton" type="button" class="button button-green">add more images</button>
-        </form>
-
         <form id="saveForm">
             <button type="button" class="button" id="newGallery">new gallery</button>
             <button class="button" id="save">save</button>
@@ -25,6 +19,13 @@
     </div>
 
     <div id="imagesZone">
+        <form id="uploadImagesForm" enctype="multipart/form-data" method="post" name="uploadImagesForm" action="/upload_images/">
+            <input id="uploadImagesInput" type="file" name="images" multiple style="display: none">
+            <input id="uploadImagesPath" name="path" type="hidden">
+            <button id="uploadImagesButton" type="button" class="button button-green">add more images</button>
+        </form>
+        <div id="currentGalleryImages">
+        </div>
     </div>
 
     <div id="prosopopeeHtml">
@@ -63,7 +64,7 @@ $(function() {
     var updateGalleryImages = function(path) {
         $.get("/images" + path).done(function(data) {
             if (data != context["current_images"]) {
-                $("#imagesZone").html(data);
+                $("#currentGalleryImages").html(data);
                 context["current_images"] = data;
             }
         })

@@ -85,15 +85,13 @@ body {
 }
 
 #imagesZone {
-    resize: horizontal;
-    overflow-y: scroll;
-    oyerflow-x: hidden;
     display: none;
 }
 
 #imagesZone.active {
-    display: block;
+    display: flex;
     width: 450px;
+    flex-direction: column;
 }
 
 #imagesZone img {
@@ -107,8 +105,19 @@ body {
     margin: 0;
     margin-bottom: 3px;
     text-align: center;
+    overflow: hidden;
 }
 
 #imagesZone p.unused {
     background-color: #00AF00;
+}
+
+#uploadImagesForm {
+    margin-bottom: 0;
+}
+
+#currentGalleryImages {
+    oyerflow-x: hidden;
+    overflow-y: scroll;
+    resize: horizontal;
 }
