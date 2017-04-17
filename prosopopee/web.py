@@ -2,8 +2,6 @@ import os
 import yaml
 import time
 
-from shutil import copyfile
-
 from PIL import Image
 
 from flask import Flask, render_template, send_file, request
