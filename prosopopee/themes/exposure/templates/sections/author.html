@@ -16,15 +16,17 @@
     <span>
       <a href="http://twitter.com/{{ section.twitter }}">Twitter</a>
     </span>
+    {% if section.facebook or section.website %}
     <span> | </span>
+    {% endif %}
     {% endif %}
     {% if section.facebook %}
     <span>
       <a href="http://facebook.com/{{ section.facebook }}">Facebook</a>
     </span>
-    <span> | </span>
     {% endif %}
     {% if section.website %}
+    <span> | </span>
     <span>
       <a href="{{ section.sebsite }}">{{ section.website }}</a>
     </span>

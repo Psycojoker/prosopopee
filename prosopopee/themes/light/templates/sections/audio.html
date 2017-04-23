@@ -2,12 +2,10 @@
 {% set pathstatic = ".." %}
 {% else %}
 {% set pathstatic = "." %}
-{% endif %}
-{% if section.image.type == "audio" %}
-{% set audio = Audio(section.image) %}
 {{ audio.copy() }}
 {% endif %}
+{% set audio = Audio(section.image) %}
 <h4>{% if section.title %}{{ section.title }}{% else %}{{ audio }}{% endif %}</h4>
 <audio controls>
-  <source src="{{ pathstatic }}/{{ audio }}.mp3" type="audio/mpeg">
+  <source src="{{ pathstatic }}/{{ audio }}" type="audio/mpeg">
 </audio>

@@ -147,14 +147,13 @@ class Audio(object):
            "source": source,
            "target": target,
            "binary": "%s" % options["binary"],
-           "format": ".%s" % options["format"],
            "loglevel": "-loglevel %s" % options["loglevel"],
            "audio": "-c:a %s" % options["audio"],
         }
 
         warning("Generation", source)
-
-        command = "{binary} {loglevel} -i {source} {audio} -y {target}{format}".format(**ffmpeg_switches)
+        
+        command = "{binary} {loglevel} -i {source} {audio} -y {target}".format(**ffmpeg_switches)
         print(command)
         error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
