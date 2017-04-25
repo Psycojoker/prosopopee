@@ -67,7 +67,7 @@ $('audio').mediaelementplayer({
   AndroidUseNativeControls: true
 });
 
-var video = $("video.lazy");
+var video = $("video");
 video.on('click', function(e){
   var vid = video[0];
   vid.play();
@@ -82,12 +82,15 @@ video.on('click', function(e){
 
 $(function() {
   $("img.lazy").lazyload({
+    threshold : 400,
     effect : "fadeIn"
   });
   $("video.lazy").lazyload({
+    threshold : 400,
     effect : "fadeIn"
   });
   $("section.lazy").lazyload({
+    threshold : 400,
     effect : "fadeIn"
   });
 });
@@ -122,7 +125,7 @@ var slowLoad = window.setTimeout( function() {
   div.appendChild(dismiss_container);
 
   html_node.appendChild(div);
-}, 1000 );
+}, 10000 );
 
 window.addEventListener( 'load', function() {
   try {

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="../static/css/materialize.css">
+<link rel="stylesheet" href="../static/css/styles.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ gallery.title }}</h2>
+</div>
+
+{% for section in gallery.sections %}
+{% include "sections/" + section.type + ".html" %}
+{% endfor %}
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="../" class="btn-floating btn-large red">
+        <i class="mdi-action-home"></i>
+    </a>
+</div>
+
+
+<script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+$('.button-collapse').sideNav();
+
+$(document).ready(function(){
+    $('.scrollspy').scrollSpy();
+});
+</script>
+{% endblock %}

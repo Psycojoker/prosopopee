@@ -3,13 +3,14 @@
   {% endif %}
   {% if section.image.type == "video" %}
   {% set video = Video(section.image) %}
+  {% set format = settings.ffmpeg.extension %}
   {% set caption = section.text %}
   {{ video.copy() }}
   <section class="bordered-picture baguette" style="position: relative;">
     <div class="caption">
       <img class="lazy" data-original="{{ video.generate_thumbnail("2000") }}" src="" alt="">
       <video class="lazy" id="video" poster="{{ video.generate_thumbnail("2000") }}" alt="" autoplay="autoplay" loop="loop" preload="none" muted>
-        <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+        <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
       </video>
       {% if caption %}
       <div class="caption__overlay">

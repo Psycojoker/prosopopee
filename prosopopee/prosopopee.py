@@ -36,13 +36,14 @@ SETTINGS = {
         "abitrate": "100k",
         "audio": "libvorbis",
         "video": "libvpx",
-        "other": "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
+        "other": "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k",
+        "extension": "webm"
     },
     "ffmpeg_audio": {
         "binary": "ffmpeg",
         "loglevel": "error",
-        "format": "mp3",
-        "audio": "libmp3lame"
+        "audio": "libmp3lame",
+        "extension": "mp3"
     }
 }
 
@@ -66,6 +67,10 @@ class Video(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
+        if options.get("resize"):
+            target = target
+        else:
+            target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
             return
@@ -95,6 +100,8 @@ class Video(object):
             command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
             print(command)
             error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
+            target = target + "." + options["extension"]
+            print target
 
         CACHE.cache_picture(source, target, options)
 
@@ -139,6 +146,7 @@ class Audio(object):
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
+        target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
             okgreen("Skipped", source + " is already generated")
             return
@@ -148,11 +156,11 @@ class Audio(object):
            "target": target,
            "binary": "%s" % options["binary"],
            "loglevel": "-loglevel %s" % options["loglevel"],
-           "audio": "-c:a %s" % options["audio"],
+           "audio": "-c:a %s" % options["audio"]
         }
 
         warning("Generation", source)
-        
+
         command = "{binary} {loglevel} -i {source} {audio} -y {target}".format(**ffmpeg_switches)
         print(command)
         error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
@@ -254,6 +262,10 @@ def get_settings():
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
     for key, value in DEFAULTS.items():
+        if key not in settings:
+            settings[key] = value
+
+    for key, value in SETTINGS.items():
         if key not in settings:
             settings[key] = value
 

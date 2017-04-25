@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="static/css/materialize.css">
+<link rel="stylesheet" href="static/css/gallery-dark-materialize.min.css?12295265317662713736">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Gallery -->
+<div id="portfolio" class="cx gray">
+  <div class="b e">
+    {% for galleries_line in galleries|reverse|batch(1)|reverse %}
+    {% for gallery in galleries_line|reverse %}
+    <div class="d hx hf gu gallery-item gallery-expand ce polygon">
+      <div class="gallery-curve-wrapper">
+        <a href="{{ gallery.link }}" class="gallery-cover gray">
+          {% if gallery.cover_type == "video" %}
+          {% set video = Video(gallery.cover) %}
+          {{ video.copy() }}
+          {% else %}
+          {% set cover = Image(gallery.cover) %}
+          {{ cover.copy() }}
+          {% endif %}
+          {% if video %}
+          <img class="responsive-img" src="{{ video.generate_thumbnail("900") }}">
+          <video autoplay loop muted class="fillWidth">
+            <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+          </video>
+          {% set video = "" %}
+          {% else %}
+          <img class="responsive-img" src="{{ cover.generate_thumbnail("x900") }}" alt="placeholder" crossOrigin="anonymous">
+          {% endif %}
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+<script type="text/javascript" src="static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="static/js/materialize.min.js" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+$('.button-collapse').sideNav();
+
+$(document).ready(function(){
+  $('.scrollspy').scrollSpy();
+});
+</script>
+{% endblock %}

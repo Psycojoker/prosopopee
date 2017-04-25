@@ -1,0 +1,13 @@
+{% if section.background or section.color %}
+    <div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+{% endif %}
+
+<section class="html">
+    <center>
+        {{ section.html }}
+    </center>
+</section>
+
+{% if section.background or section.color %}
+    </div>
+{% endif %}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+        <title>{{ settings.title }}</title>
+        <description>{{ settings.sub_title }}</description>
+        <link>{{ settings.url  }}</link>
+        <atom:link href="{{ settings.url }}/feed.xml" rel="self" type="application/rss+xml" />
+            {% for gallery in galleries %}
+            {% set absolute_url = settings.url + "/" %}
+                {% include "item.html" %}
+            {% endfor %}
+	</channel>
+</rss>

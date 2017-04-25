@@ -1,3 +1,9 @@
+{% set extension = settings.ffmpeg_audio.extension %}
+{% if extension == "mp3" %}
+{% set format = "mpeg" %}
+{% else %}
+{% set format = extension %}
+{% endif %}
 {% if settings.settings.light_mode %}
 {% set pathstatic = ".." %}
 {% else %}
@@ -6,6 +12,6 @@
 {% endif %}
 {% set audio = Audio(section.image) %}
 <h4>{% if section.title %}{{ section.title }}{% else %}{{ audio }}{% endif %}</h4>
-<audio controls>
-  <source src="{{ pathstatic }}/{{ audio }}" type="audio/mpeg">
+<audio controls preload=none>
+  <source src="{{ pathstatic }}/{{ audio }}.{{ extension }}" type="audio/{{ format }}">
 </audio>
