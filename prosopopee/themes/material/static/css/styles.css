@@ -9,7 +9,7 @@ main {
 }
 
 .parallax-container {
-  height: 720px;
+  height: 800px;
   min-height: 250px;
   margin-bottom: 20px;
   background-color: rgba(0, 0, 0, .4);
@@ -78,20 +78,6 @@ main {
 .bordered-picture .caption__overlay {
     margin-left: 11.5%;
     margin-right: 11.5%;
-}
-
-.pictures-line {
-    min-width: 77%;
-    width: 77%;
-    margin-left: 11.5%;
-    margin-right: 11.5%;
-    display: flex;
-    margin-bottom: 0.5em;
-}
-
-.pictures-line .picture img {
-    width: 100%;
-    height: 100%;
 }
 
 .small-card {
@@ -184,3 +170,32 @@ video.fillWidth {
     padding-top:10px;
     font-size: 10px;
 }
+
+.bordered-picture img {
+  height: 77%;
+  width: 77%;
+  margin-left: 11.5%;
+  margin-right: 11.5%;
+}
+
+.pictures-line {
+  display: flex;
+  margin-bottom: 0.5em;
+}
+
+.pictures-line .picture img {
+  width: 100%;
+}
+
+.pictures-line .separator {
+  min-width: 0.5em;
+}
+
+@media only screen and (max-device-width : 992px) {
+
+.pictures-line {
+    display: inherit;
+}
+
+}
+

@@ -1,0 +1,14 @@
+{% set audio = Audio(section.image) %}
+{% set extension = settings.ffmpeg_audio.extension %}
+{% if extension == "mp3" %}
+{% set format = "mpeg" %}
+{% else %}
+{% set format = extension %}
+{% endif %}
+{{ audio.copy() }}
+<div class="audio-player">
+  <h2>{% if section.title %}{{ section.title }}{% else %}{{ audio }}{% endif %}</h2>
+<audio controls preload=none>
+  <source src="{{ audio }}.{{ extension }}" type="audio/{{ format }}">
+</audio>
+</div>
