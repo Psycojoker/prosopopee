@@ -2,8 +2,9 @@
 
 {% block css %}
 <link rel="stylesheet" href="static/css/materialize.css">
-<link rel="stylesheet" href="static/css/gallery-dark-materialize.min.css">
+<link rel="stylesheet" href="static/css/style.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="static/css/font-awesome.css">
 {% endblock %}
 
 {% block content %}
@@ -22,15 +23,21 @@
           {% set cover = Image(gallery.cover) %}
           {{ cover.copy() }}
           {% endif %}
-          {% if video %}
-          <img class="responsive-img" src="{{ video.generate_thumbnail("400") }}">
-          <video autoplay loop muted class="fillWidth">
-            <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
-          </video>
-          {% set video = "" %}
-          {% else %}
-          <img class="responsive-img" src="{{ cover.generate_thumbnail("x400") }}" alt="placeholder" crossOrigin="anonymous">
-          {% endif %}
+          <div class="gallery-title">
+            <h2>{{ gallery.title }}</h2>
+            {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+            {% if settings.show_date and gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+            {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span> {{ tag }}</span> {% endfor -%}</div>{% endif %}
+          </div>
+        {% if video %}
+        <img class="responsive-img" src="{{ video.generate_thumbnail("400") }}">
+        <video autoplay loop muted class="fillWidth">
+          <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+        </video>
+        {% set video = "" %}
+        {% else %}
+        <img class="responsive-img" src="{{ cover.generate_thumbnail("x400") }}" alt="placeholder" crossOrigin="anonymous">
+        {% endif %}
         </a>
       </div>
     </div>

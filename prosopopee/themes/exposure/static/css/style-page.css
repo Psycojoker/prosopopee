@@ -472,3 +472,8 @@ blockquote:after {
 blockquote p {
   display: inline;
 }
+
+video.responsive-video {
+  max-width: 100%;
+  height: auto;
+}

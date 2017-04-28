@@ -116,9 +116,10 @@ nav .nav-wrapper {
 	height:100%
 }
 @media only screen and (min-width: 993px) {
-	nav a.button-collapse {
-		display:none
-	}
+  nav a.button-collapse {
+    display: unset !important;
+    margin-left: 0px;
+  }
 }
 nav .button-collapse {
 	float:left;
@@ -149,15 +150,6 @@ nav .brand-logo {
 nav .brand-logo i,nav .brand-logo i.material-icons {
 	float:left;
 	margin-right:15px
-}
-@media only screen and (min-width: 601px) {
-	nav.nav-extended .nav-wrapper {
-		min-height:64px
-	}
-	nav,nav .nav-wrapper i,nav a.button-collapse,nav a.button-collapse i {
-		height:64px;
-		line-height:64px
-	}
 }
 @font-face {
 	font-family:"Roboto";
@@ -504,3 +496,39 @@ nav .nav-header {
 	}
 }
 
+.gallery-title {
+  color: white;
+  width: 100%;
+  position: absolute;
+  top: initial;
+  bottom: 0px;
+  text-align: center;
+  z-index: 3;
+  background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
+  padding: 20% 0 10px 0;
+}
+
+.gallery-title > h2 {
+  text-transform: uppercase;
+  margin-bottom: .2em;
+  letter-spacing: 2px;
+  font-size: 1.7vw;
+}
+
+.gallery-title > h3 {
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: .7em;
+  font-weight: normal;
+  font-size: 17px;
+}
+
+.gallery-datetime {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+
+.brand-logo p {
+  margin-top: 7px;
+}

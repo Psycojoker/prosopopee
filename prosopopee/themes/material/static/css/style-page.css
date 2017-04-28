@@ -61,6 +61,9 @@ main {
     transform: translateY(0);
 }
 
+.caption__overlay h5 {
+  padding-left: 10px;
+}
 
 .caption .card-panel {
     margin: 0;
