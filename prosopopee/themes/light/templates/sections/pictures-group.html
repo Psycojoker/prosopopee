@@ -7,18 +7,18 @@
     {% for line in section.images %}
     {% for image in line %}
     {% if image.type == "video" %}
-    {% set caption = image.text %}
     {% set video = Video(image) %}
+    {% set format = settings.ffmpeg.extension %}
     {{ video.copy() }}
     {% else %}
-    {% set caption = image.text %}
     {% set image = Image(image) %}
     {{ image.copy() }}
     {% endif %}
+    {% set caption = image.text %}
     <div class="image">
         {% if video %}
-        <video id="video" poster="{{ pathstatic }}/{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
-          <source src="{{ pathstatic }}/{{ video }}" type="video/webm" data-source="{{ pathstatic }}/{{ video }}" data-format="vp8" data-extension="webm">
+        <video class="responsive-video" id="video" poster="{{ pathstatic }}/{{ video.generate_thumbnail("800") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
+          <source src="{{ pathstatic }}/{{ video }}.{{ format }}" type="video/{{ format }}">
         </video>
         {% set video = "" %}
         {% else %}

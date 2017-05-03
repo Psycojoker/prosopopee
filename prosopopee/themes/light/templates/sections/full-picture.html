@@ -5,6 +5,7 @@
 {% endif %}
 {% if section.image.type == "video" %}
 {% set video = Video(section.image) %}
+{% set format = settings.ffmpeg.extension %}
 {{ video.copy() }}
 {% else %}
 {% set image = Image(section.image) %}
@@ -13,8 +14,8 @@
 <div class="full-picture">
     <div class="image">
         {% if video %}
-        <video autoplay loop muted class="fillWidth">
-          <source src="{{ pathstatic }}/{{ video }}" type="video/webm" data-source="{{ pathstatic }}/{{ video }}" data-format="vp8" data-extension="webm">
+        <video autoplay loop muted class="fillWidth responsive-video">
+          <source src="{{ pathstatic }}/{{ video }}.{{ format }}" type="video/{{ format}}">
         </video>
         {% else %}
         <img  src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
