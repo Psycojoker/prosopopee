@@ -4,6 +4,7 @@ Changelog
 0.5 (unreleased)
 
  * Add audio HTML5 player
+ * Update Material theme
 
 0.4 (2016-12-11)
 
