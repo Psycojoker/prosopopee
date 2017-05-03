@@ -5,6 +5,7 @@ Changelog
 
  * Add audio HTML5 player
  * Update Material theme
+ * Add youtube section
 
 0.4 (2016-12-11)
 

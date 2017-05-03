@@ -139,9 +139,7 @@ This section is for add audio file with HTML5 player.::
 
   - type: audio
     title: Title of song 
-    image:
-      name: song.ogg
-      type: audio
+    image: song.ogg
 
 
 Author
@@ -156,6 +154,17 @@ This section is for describe the author of the story::
     twitter: beudbeud (Optional)
     facebook: beudbeud (Optional)
     website: plop.fr (Optional)
+
+Youtube
+-------
+
+This section make your embeds youtube video responsive::
+
+  - type: youtube
+    video_id: nshFXWEKxs4
+
+You can get the id from the url of the video https://www.youtube.com/watch?v=nshFXWEKxs4
+
 
 Advanced options
 ________________
