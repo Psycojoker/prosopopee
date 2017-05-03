@@ -2,72 +2,48 @@
 
 {% block css %}
 <link rel="stylesheet" href="static/css/materialize.css">
-<link rel="stylesheet" href="static/css/styles.css">
+<link rel="stylesheet" href="static/css/style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="static/css/font-awesome.css">
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        {% for galleries_line in galleries|reverse|batch(1)|reverse %}
-        {% for gallery in galleries_line|reverse %}
-        <div class="col s12 m12 l8 push-l2">
-            <a href="{{ gallery.link }}">    
-                <div class="card hoverable blue-grey lighten-5">
-                    <div class="card-image">
-                        {% if gallery.cover_type == "video" %}
-                        {% set video = Video(gallery.cover) %}
-                        {{ video.copy() }}
-                        {% else %}
-                        {% set cover = Image(gallery.cover) %}
-                        {{ cover.copy() }}
-                        {% endif %}
-                        {% if video %}
-                        <img class="responsive-img" src="{{ video.generate_thumbnail("900") }}">
-                        <video autoplay loop muted class="fillWidth">
-                            <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
-                        </video>
-                        {% set video = "" %}
-                        {% else %}
-                        <img src="{{ cover.generate_thumbnail("x900") }}">
-                        {% endif %}
-
-                        <span class="card-title truncate">{{ gallery.title }}
-                            {% if gallery.sub_title %} : {{ gallery.sub_title }}{% endif %}
-                        </span>
-                    </div>
-                    <div class="card-action">
-                        <div class="left">
-                            <a href="{{ gallery.link }}">Read more..</a>
-                        </div>
-                        {% if gallery.tags or gallery.date %}
-                        <div class="right">
-                            {% if gallery.tags %}{% for tag in gallery.tags -%}
-                            <div class="chip">
-                                <div class="image">
-                                    <img class="grey">
-                                    <div class="tag white-text">
-                                        {{ tag[0].capitalize() }}
-                                    </div>
-                                    </img>
-                                    {{ tag }}
-                                </div>
-                            </div>
-                            {% endfor -%}
-                            {% endif %}
-                            {% if gallery.date %}
-                            <div class="chip">
-                                {{ gallery.date.strftime("%d %B %Y") }}
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </a>    
-        </div>
-        {% endfor %}
-        {% endfor %}
+<!-- Gallery -->
+<div id="portfolio" class="cx gray">
+  <div class="b e">
+    {% for galleries_line in galleries|reverse|batch(1)|reverse %}
+    {% for gallery in galleries_line|reverse %}
+    <div class="d hx hf gu gallery-item gallery-expand ce polygon">
+      <div class="gallery-curve-wrapper">
+        <a href="{{ gallery.link }}" class="gallery-cover gray">
+          {% if gallery.cover_type == "video" %}
+          {% set video = Video(gallery.cover) %}
+          {{ video.copy() }}
+          {% else %}
+          {% set cover = Image(gallery.cover) %}
+          {{ cover.copy() }}
+          {% endif %}
+          <div class="gallery-title">
+            <h2>{{ gallery.title }}</h2>
+            {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
+            {% if settings.show_date and gallery.date %}<div class="gallery-datetime">{{ gallery.date.strftime("%d %B %Y") }}</div>{% endif %}
+            {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span> {{ tag }}</span> {% endfor -%}</div>{% endif %}
+          </div>
+        {% if video %}
+        <img class="responsive-img" src="{{ video.generate_thumbnail("400") }}">
+        <video autoplay loop muted class="fillWidth">
+          <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+        </video>
+        {% set video = "" %}
+        {% else %}
+        <img class="responsive-img" src="{{ cover.generate_thumbnail("x400") }}" alt="placeholder" crossOrigin="anonymous">
+        {% endif %}
+        </a>
+      </div>
     </div>
+    {% endfor %}
+    {% endfor %}
+  </div>
 </div>
 
 <script type="text/javascript" src="static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
@@ -76,7 +52,7 @@
 $('.button-collapse').sideNav();
 
 $(document).ready(function(){
-    $('.scrollspy').scrollSpy();
+  $('.scrollspy').scrollSpy();
 });
 </script>
 {% endblock %}

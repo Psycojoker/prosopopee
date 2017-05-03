@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        {% block css %}
-        {% endblock %}
-        {% if settings.rss -%}
-        <link rel="alternate" type="application/rss+xml" title="{{ settings.title }}" href="{{ settings.url }}/feed.xml" />
+  <head>
+    <meta charset="UTF-8">
+    {% block css %}
+    {% endblock %}
+    {% if settings.rss -%}
+    <link rel="alternate" type="application/rss+xml" title="{{ settings.title }}" href="{{ settings.url }}/feed.xml" />
+    {% endif -%}
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ settings.title }}</title>
+  </head>
+
+  <body>
+
+    <!-- Navbar and Header -->
+    <nav class="nav-extended nav-full-header z-depth-0 blue-grey darken-3">
+      <div class="nav-background">
+        {% if settings.cover %}
+        {% set image = Image(settings.cover) %}
+        {{ image.copy() }}
+        <div class="ea k" style="background-image: url('{{ image.generate_thumbnail("x1080") }}');"></div>
+        {% else %}
+        <div class="ea k"></div>
+        {% endif %}
+      </div>
+      <div class="nav-wrapper db">
+        <a href="#" class="brand-logo"><i class="fa fa-camera" aria-hidden="true"></i><p>{{ settings.title }}</p></a>
+        {% if settings.menu -%}
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         {% endif -%}
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>{{ settings.title }}</title>
-    </head>
+      </div>
 
-    <body>
-        <main>
-        <nav class="blue-grey darken-1">
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo right">{{ settings.title }}</a>
-                {% if settings.menu -%}
-                {% include 'menu.html' %}
-                {% endif -%}
-            </div>
-        </nav>
+      <div class="nav-header valign-wrapper">
+        <div class="de">
+          <h1>{{ settings.sub_title }}</h1>
+        </div>
+      </div>
+    </nav>
 
+    {% if settings.menu -%}
+    {% include 'menu.html' %}
+    {% endif -%}
+    {% block content %}
+    {% endblock %}
 
-        {% block content %}
-        {% endblock %}
-
-        </main>
-        {% include 'footer.html' %}
-    </body>
+    {% include 'footer.html' %}
+  </body>
 </html>
