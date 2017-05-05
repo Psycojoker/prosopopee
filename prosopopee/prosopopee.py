@@ -1,8 +1,26 @@
 #!/usr/bin/env python
 
+"""Prosopopee. Static site generator for your story.
+Usage:
+  prosopopee.py
+  prosopopee.py preview
+  prosopopee.py deploy
+  prosopopee.py (-h | --help)
+  prosopopee.py --version
+Options:
+  -h --help                 Show this screen.
+  --version                 Show version.
+"""
+
 import os
 import yaml
 import shutil
+from docopt import docopt
+
+import SocketServer
+import SimpleHTTPServer
+
+import subprocess
 
 from path import Path
 
@@ -500,6 +518,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
+    arguments = docopt(__doc__, version='0.5')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -510,8 +529,36 @@ def main():
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
 
-    Path("build").makedirs_p()
+    if arguments['preview']:
+        error(Path("build").exists(), "Please build the website before launch preview")
 
+        os.chdir('build')
+
+        Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+        httpd = SocketServer.TCPServer(("", 9000), Handler)
+
+        print "Start server on http://localhost:9000"
+        # gracefully handle interrupt here
+        httpd.serve_forever()
+
+    if arguments['deploy']:
+        error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
+          "please install the 'rsync' package.\n")
+        error(Path("build").exists(), "Please build the website before launch deployment")
+        r_username = settings["settings"]["deploy"]["username"]
+        r_hostname = settings["settings"]["deploy"]["hostname"]
+        r_dest = settings["settings"]["deploy"]["dest"]
+        if settings["settings"]["deploy"]["others"]:
+            r_others = settings["settings"]["deploy"]["others"]
+        else:
+            r_others = ''
+        r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
+        print r_cmd
+        error(os.system(r_cmd) == 0, "deployment failed")
+        #proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, preexec_fn=os.setsid)
+        return
+
+    Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
     templates = get_gallery_templates(theme)
     templates.add_extension('jinja2.ext.with_')

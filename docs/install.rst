@@ -20,6 +20,10 @@ or::
 
     apt-get install libav-tools
 
+The deployment need rsync::
+  
+    apt-get install rsync
+
 Installation in virtualenv
 --------------------------
 

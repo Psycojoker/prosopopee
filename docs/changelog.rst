@@ -6,6 +6,7 @@ Changelog
  * Add audio HTML5 player
  * Update Material theme
  * Add youtube section
+ * Add deploy and preview option
 
 0.4 (2016-12-11)
 

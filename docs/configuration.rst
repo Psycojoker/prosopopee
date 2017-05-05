@@ -188,6 +188,19 @@ Optionnal: You need use description and lang key in settings gallery.
 
 for more informations about Open Graph http://ogp.me/
 
+Deployment
+~~~~~~~~~~
+
+If you wanna configure the deployement of your website by rsync::
+
+    settings:
+      deploy:
+        username: beudbeud (optional need for ssh)
+        hostname: beudibox.fr (optional need for ssh)
+        dest: /var/www/surleschemins/build/
+        others: --delete-afte (optional)
+
+
 Gallery settings.yaml
 ---------------------
 
