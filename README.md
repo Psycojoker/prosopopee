@@ -8,6 +8,7 @@ Prosopopee. Static site generator for your story.
 
 ```
 Usage:
+
 prosopopee
 prosopopee preview
 prosopopee deploy
