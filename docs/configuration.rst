@@ -195,6 +195,7 @@ If you wanna configure the deployement of your website by rsync::
 
     settings:
       deploy:
+        ssh: true (optional need for ssh)
         username: beudbeud (optional need for ssh)
         hostname: beudibox.fr (optional need for ssh)
         dest: /var/www/surleschemins/build/

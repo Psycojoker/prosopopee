@@ -545,17 +545,19 @@ def main():
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
           "please install the 'rsync' package.\n")
         error(Path("build").exists(), "Please build the website before launch deployment")
-        r_username = settings["settings"]["deploy"]["username"]
-        r_hostname = settings["settings"]["deploy"]["hostname"]
+        
         r_dest = settings["settings"]["deploy"]["dest"]
         if settings["settings"]["deploy"]["others"]:
             r_others = settings["settings"]["deploy"]["others"]
         else:
             r_others = ''
-        r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
-        print r_cmd
+        if settings["settings"]["deploy"]["ssh"]:
+            r_username = settings["settings"]["deploy"]["username"]
+            r_hostname = settings["settings"]["deploy"]["hostname"]
+            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
+        else:
+            r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
         error(os.system(r_cmd) == 0, "deployment failed")
-        #proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, preexec_fn=os.setsid)
         return
 
     Path("build").makedirs_p()
