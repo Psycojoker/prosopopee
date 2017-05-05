@@ -6,12 +6,14 @@ story with your pictures.
 
 Prosopopee. Static site generator for your story.
 
+```
 Usage:
 prosopopee
 prosopopee preview
 prosopopee deploy
 prosopopee (-h | --help)
 prosopopee.py --version
+```
 
 ## Licence 
 
