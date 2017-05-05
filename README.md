@@ -19,6 +19,12 @@ prosopopee.py --version
 
 GLPv3
 
+## Documentation
+
+  http://prosopopee.readthedocs.org/en/latest/
+
+## Exemple
+
 You can find example usages here:
 
 * http://surleschemins.fr
@@ -28,6 +34,3 @@ You can find example usages here:
 * http://such.life
 
 
-## Documentation
-
-  http://prosopopee.readthedocs.org/en/latest/
