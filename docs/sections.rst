@@ -156,7 +156,7 @@ This section is for describe the author of the story::
     website: plop.fr (Optional)
 
 Youtube
--------
+_______
 
 This section make your embeds youtube video responsive::
 
