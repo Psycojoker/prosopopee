@@ -139,15 +139,6 @@ To specify the theme, add the "theme" key in your "settings" key or your
     settings:
       theme: material
 
-Light mode
-~~~~~~~~~~
-
-Prosopopée has a support light mode, for all gallery you need add /light on the url.
-When this mode is enable Prosopopée build the gallery with light theme (no Js and pics size is 800px)::
-
-    settings:
-      light_mode: true    
-
 
 Licence
 ~~~~~~~

@@ -3,10 +3,10 @@ Changelog
 
 0.5 (unreleased)
 
- * Add audio HTML5 player
- * Update Material theme
- * Add youtube section
- * Add deploy and preview option
+ * Add audio HTML5 player https://prosopopee.readthedocs.org/en/latest/sections.html#audio by beudbeud
+ * Update Material theme by beudbeud
+ * Add youtube section https://prosopopee.readthedocs.org/en/latest/sections.html#youtube by beudbeud
+ * Add deploy and preview option https://prosopopee.readthedocs.io/en/latest/build.html#preview by beudbeud
 
 0.4 (2016-12-11)
 
