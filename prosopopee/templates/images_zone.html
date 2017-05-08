@@ -1,0 +1,4 @@
+{% for image in images %}
+<img src="/from_gallery/{{ path }}/{{ image.name }}" title="{{ image.name }}" alt="{{ image.name }}">
+<p class="{% if not image.used %}unused{% endif %}">{{ image.name }}</p>
+{% endfor %}
