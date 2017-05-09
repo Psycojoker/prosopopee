@@ -165,6 +165,13 @@ This section make your embeds youtube video responsive::
 
 You can get the id from the url of the video https://www.youtube.com/watch?v=nshFXWEKxs4
 
+Quote
+_____
+
+For use quoteblock easily::
+
+  - type: quote
+    text: This is a quote
 
 Advanced options
 ________________
