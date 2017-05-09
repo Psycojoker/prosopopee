@@ -1,0 +1,11 @@
+{% if section.background or section.color %}
+<div class="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+  {% endif %}
+  <section class="text">
+    <blockquote>
+      {{ section.text }}
+    </blockquote>
+  </section>
+  {% if section.background or section.color %}
+</div>
+{% endif %}
