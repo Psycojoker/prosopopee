@@ -8,6 +8,7 @@ Changelog
  * Add youtube section https://prosopopee.readthedocs.org/en/latest/sections.html#youtube by beudbeud
  * Add quotes section https://prosopopee.readthedocs.org/en/latest/sections.html#quote by beudbeud
  * Add deploy and preview option https://prosopopee.readthedocs.io/en/latest/build.html#preview by beudbeud
+ * Load only css and jss if the section is used by beudbeud
 
 0.4 (2016-12-11)
 

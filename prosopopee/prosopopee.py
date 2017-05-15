@@ -444,6 +444,10 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     Audio.base_dir = Path(".").joinpath(gallery_path)
     Audio.target_dir = Path(".").joinpath("build", gallery_path)
 
+    for x in gallery_settings['sections']:
+        if x['type'] not in gallery_settings:
+            gallery_settings[x['type'] + '_enabled'] = True
+
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
     html = template_to_render.render(
