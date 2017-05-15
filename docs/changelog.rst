@@ -5,7 +5,7 @@ Changelog
 
  * Add audio HTML5 player https://prosopopee.readthedocs.org/en/latest/sections.html#audio by beudbeud
  * Update Material theme by beudbeud
- * Add youtube section https://prosopopee.readthedocs.org/en/latest/sections.html#youtube by beudbeud
+ * Add iframe section https://prosopopee.readthedocs.org/en/latest/sections.html#iframe by beudbeud
  * Add quotes section https://prosopopee.readthedocs.org/en/latest/sections.html#quote by beudbeud
  * Add deploy and preview option https://prosopopee.readthedocs.io/en/latest/build.html#preview by beudbeud
  * Load only css and jss if the section is used by beudbeud

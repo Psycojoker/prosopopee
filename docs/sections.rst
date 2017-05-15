@@ -155,15 +155,13 @@ This section is for describe the author of the story::
     facebook: beudbeud (Optional)
     website: plop.fr (Optional)
 
-Youtube
-_______
+Iframe
+______
 
-This section make your embeds youtube video responsive::
+This section make your embeds iframe responsive::
 
-  - type: youtube
-    video_id: nshFXWEKxs4
-
-You can get the id from the url of the video https://www.youtube.com/watch?v=nshFXWEKxs4
+  - type: iframe
+    name: <iframe width="560" height="315" src="https://www.youtube.com/embed/nshFXWEKxs4" frameborder="0" allowfullscreen></iframe>
 
 Quote
 _____
