@@ -11,6 +11,10 @@ def remove_superficial_options(options):
         del cleaned_options["text"]
     if "type" in cleaned_options:
         del cleaned_options["type"]
+    if "size" in cleaned_options:
+        del cleaned_options["size"]
+    if "float" in cleaned_options:
+        del cleaned_options["float"]
     return cleaned_options
 
 
