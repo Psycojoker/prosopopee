@@ -497,3 +497,23 @@ video.responsive-video {
   margin-left: 11.5%;
   margin-right: 11.5%;
 }
+
+span.left {
+  float: left;
+  padding: 0 1.5em 1em 0;
+  top: 0.25em;
+}
+
+span.right {
+  float: right;
+  padding: 0 0 1em 1.5em;
+  top: 0.25em;
+}
+
+span.left img, span.right img {
+  width: 100%;
+}
+
+.clear {
+  clear: both;
+}

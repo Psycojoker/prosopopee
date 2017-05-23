@@ -1,6 +1,26 @@
+{% if settings.settings.light_mode %}
+{% set pathstatic = ".." %}
+{% else %}
+{% set pathstatic = "." %}
+{% endif %}
 <section class="paragraph">
   {% if section.title %}
-    <h3>{{ section.title }}</h3>
+  <h3>{{ section.title }}</h3>
   {% endif %}
-  <p>{{ section.text }}</p>
+  <p>
+  {% if section.image %}
+  {% set image = Image(section.image) %}
+  {% if section.image.float %}
+  {% set float = section.image.float %}
+  {% else %}
+  {% set float = 'left' %}
+  {% endif %}
+  {{ image.copy() }}
+  <span class="{{ float }}">
+    <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x150") }}" alt=""/>
+  </span>
+  {% endif %}
+  {{ section.text }}
+  </p>
+  <div class="clear"></div>
 </section>

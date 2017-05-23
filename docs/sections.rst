@@ -111,6 +111,17 @@ How to use it::
     title: the title
     text: Some text, HTML <b>is allowed</b>.
 
+Since 0.5 you can add a floating image in paragraph::
+
+  - type: paragraph
+    title: the title
+    text: Some text, HTML <b>is allowed</b>.
+    image: image.jpg
+      float: right 
+      size: 150px
+
+By default if you don't set float and size the image will be on left with a size of 250px
+
 HTML
 ____
 

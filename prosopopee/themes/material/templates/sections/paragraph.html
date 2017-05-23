@@ -1,19 +1,46 @@
 {% if section.background or section.color %}
-    <div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
-{% endif %}
+<div id="bg-section" style="{% if section.background -%}background: {{ section.background }};{% endif %}{% if section.color -%}color: {{ section.color }};{% endif %}">
+  {% endif %}
 
-<div class="container">
+  <div class="container">
     {% if section.title %}
-        <div id="{{ section.title }}" class="scrollspy">
-        <h2>{{ section.title }}</h2>
-    {% else %}
-        <div class="separator"></div>
-    {% endif %}
+    <div id="{{ section.title }}">
+      <h2>{{ section.title }}</h2>
+      {% else %}
+      <div class="separator"></div>
+      {% endif %}
 
-    <p class="flow-text">{{ section.text }}</p>
-    </div>
+      <p class="flow-text">
+      {% if section.image %}
+      {% set image = Image(section.image) %}
+      {% if section.image.float %}
+      {% set float = section.image.float %}
+      {% else %}
+      {% set float = 'left' %}
+      {% endif %}
+      {% if section.image.size %}
+      {% set image_resize = section.image.size %}
+      {% else %}
+      {% set image_resize = '250px' %}
+      {% endif %}
+			{{ image.copy() }}
+			<span class="{{ float }} baguette">
+				<a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
+			 		data-at-450="{{ image.generate_thumbnail("x450") }}"
+					data-at-800="{{ image.generate_thumbnail("x800") }}"
+					data-at-1366="{{ image.generate_thumbnail("x1366") }}"
+ 					data-at-1920="{{ image.generate_thumbnail("x1920") }}"
+ 				>
+					<img class="lazy" style="width: {{ image_resize }};" src="" data-original="{{ image.generate_thumbnail("x450") }}" alt=""/>
+				</a>
+			</span>
+			{% endif %}
+			{{ section.text }}
+			</p>
+      <div class="clear"></div>
+		</div>
+	</div>
+
+	{% if section.background or section.color %}
 </div>
-
-{% if section.background or section.color %}
-    </div>
 {% endif %}
