@@ -9,7 +9,7 @@
     {% if gallery.panorama_enabled %}
     <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
     {% endif %}
-    {% if gallery.panorama_audio %}
+    {% if gallery.audio_enabled %}
     <link type="text/css" rel="stylesheet" href="../static/css/mediaelementplayer.css"  media="screen,projection"/>
     {% endif %}
     <link rel="stylesheet" href="../static/css/font-awesome.css">
@@ -54,7 +54,7 @@
     <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
     {% endif %}
     <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
-    {% if gallery.panorama_audio %}
+    {% if gallery.audio_enabled %}
     <script type="text/javascript" src="../static/js/mediaelement-and-player.min.js" charset="utf-8"></script>
     {% endif %}
     <script type="text/javascript" charset="utf-8">
@@ -75,7 +75,7 @@ video.on('click', function(e){
   }
 });
 
-{% if gallery.panorama_audio %}
+{% if gallery.audio_enabled %}
 $('audio').mediaelementplayer({
   alwaysShowControls: true,
   features: ['playpause','progress','volume'],
