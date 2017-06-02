@@ -110,7 +110,7 @@ a {
 .paragraph {
     text-align: left;
     font-family: 'crimson', serif;
-    font-size: 1em;
+    font-size: 2vmin;
     margin-left: 21%;
     margin-right: 21%;
 }
@@ -118,7 +118,7 @@ a {
 .paragraph h2 {
     font-family: 'montserrat', sans-serif;
     font-weight: normal;
-    font-size: 2.5em;
+    font-size: 3.0vh;
     text-transform: uppercase;
     line-height: 1.4em;
 }
