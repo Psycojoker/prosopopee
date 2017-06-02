@@ -4,6 +4,9 @@ Installation
 Requirements
 -------------
 
+Ubuntu/Debian
+~~~~~~~~~~~~~
+
 Installation needs Python, pip and virtualenv::
 
     apt-get install python-pip python-virtualenv
@@ -23,6 +26,28 @@ or::
 The deployment need rsync::
   
     apt-get install rsync
+
+Mac
+~~~
+
+Installation needs Brew::
+
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+
+Gallery building needs graphicsmagick library::
+
+  brew install graphicsmagick 
+  
+
+An video convertor like ffmpeg::  
+  
+  brew install ffmpeg
+
+The deployment need rsync::
+
+  brew install rsync
+
 
 Installation in virtualenv
 --------------------------
