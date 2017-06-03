@@ -441,10 +441,10 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
     Audio.base_dir = Path(".").joinpath(gallery_path)
     Audio.target_dir = Path(".").joinpath("build", gallery_path)
-
-    for x in gallery_settings['sections']:
-        if x['type'] not in gallery_settings:
-            gallery_settings[x['type'] + '_enabled'] = True
+    if gallery_settings.get("sections"):
+        for x in gallery_settings['sections']:
+            if x['type'] not in gallery_settings:
+                gallery_settings[x['type'] + '_enabled'] = True
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
@@ -547,7 +547,7 @@ def main():
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
           "please install the 'rsync' package.\n")
         error(Path("build").exists(), "Please build the website before launch deployment")
-        
+
         r_dest = settings["settings"]["deploy"]["dest"]
         if settings["settings"]["deploy"]["others"]:
             r_others = settings["settings"]["deploy"]["others"]
