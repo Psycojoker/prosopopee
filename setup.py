@@ -12,7 +12,7 @@ except ImportError:
 
 
 setup(name='prosopopee',
-      version='0.4',
+      version='0.5',
       description='exposure.co clone in a static web generating tool',
       author='Laurent Peuch',
       long_description=read_md('README.md') + "\n\n\n" + open('docs/changelog.rst').read(),
