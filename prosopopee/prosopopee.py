@@ -357,7 +357,14 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     else:
         gallery_path = gallery_name
 
-    gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
+    try:
+        gallery_settings = yaml.load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
+    except yaml.YAMLError, exc:
+        if hasattr(exc, 'problem_mark'):
+            mark = exc.problem_mark
+            error(False, "There are something wrong in %s/settings.yaml line %s" % (gallery_path, mark.line+1))
+        else:
+            erro(False, "There are omething wrong in %s/settings.yaml" % (gallery_path))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
