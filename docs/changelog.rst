@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5 (2017-06-02)
+0.5 (2017-06-04)
 
  * Add audio HTML5 player https://prosopopee.readthedocs.org/en/latest/sections.html#audio by beudbeud
  * Update Material theme by beudbeud
