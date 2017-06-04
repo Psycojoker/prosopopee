@@ -12,7 +12,7 @@
   <div class="bordered-picture baguette caption">
     {% if video %}
     <img class="responsive-img lazy z-depth-2" data-original="{{ video.generate_thumbnail("2000") }}" alt="">
-    <video class="lazy responsive-video" poster="{{ video.generate_thumbnail("2000") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted="">
+    <video class="lazy responsive-video" id="{{ video }}" onclick="goFullscreen('{{ video }}');" poster="{{ video.generate_thumbnail("2000") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
       <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
     </video>
     {% else %}
