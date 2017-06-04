@@ -273,7 +273,14 @@ def get_settings():
     error(Path("settings.yaml").exists(), "I can't find a "
           "settings.yaml in the current working directory")
 
-    settings = yaml.safe_load(open("settings.yaml", "r"))
+    try:
+        settings = yaml.safe_load(open("settings.yaml", "r"))
+    except yaml.YAMLError, exc:
+        if hasattr(exc, 'problem_mark'):
+            mark = exc.problem_mark
+            error(False, "There are something wrong in settings.yaml line %s" % (mark.line+1))
+        else:
+            erro(False, "There are omething wrong in settings.yaml")
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
@@ -358,7 +365,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
         gallery_path = gallery_name
 
     try:
-        gallery_settings = yaml.load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
+        gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
     except yaml.YAMLError, exc:
         if hasattr(exc, 'problem_mark'):
             mark = exc.problem_mark
