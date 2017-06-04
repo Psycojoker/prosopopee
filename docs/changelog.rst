@@ -10,6 +10,7 @@ Changelog
  * Add deploy and preview option https://prosopopee.readthedocs.io/en/latest/build.html#preview by beudbeud
  * Load only css and jss if the section is used by beudbeud
  * Possibility to add floating image in paragraph by beudbeud https://prosopopee.readthedocs.org/en/latest/sections.html#paragraph
+ * fix some bugs
 
 0.4 (2016-12-11)
 
