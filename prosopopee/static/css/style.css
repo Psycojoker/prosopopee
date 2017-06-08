@@ -15,7 +15,7 @@ body {
 }
 
 #editZone {
-    width: 35%;
+    width: 100%;
     resize: horizontal;
     overflow: hidden;
     margin: 0;
@@ -100,7 +100,7 @@ body {
 
 #imagesZone p {
     padding: 5px;
-    background-color: #333;
+    background-color: #282a36;
     color: white;
     margin: 0;
     margin-bottom: 3px;

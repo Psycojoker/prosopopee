@@ -2,133 +2,160 @@
 
 <head>
 <link rel="stylesheet" href="/static/css/codemirror.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
 <link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/dracula.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <script src="/static/js/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="></script>
 <script src="/static/js/jquery.form.min.js"></script>
 <script src="/static/js/jquery.hotkeys.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
 <script src="/static/js/codemirror.js"></script>
 <script src="/static/js/mode/yaml/yaml.js"></script>
 
 </head>
 <body>
-<div class="content">
-    <div id="editZone">
-        <form id="saveForm">
-            <button type="button" class="button" id="newGallery">new gallery</button>
-            <button class="button" id="save">save</button>
-            <textarea name="settings" id="editor"></textarea>
-        </form>
-    </div>
+  <main>
 
-    <div id="imagesZone">
+  <div class="fixed-action-btn toolbar" style="top: 10px; right: 24px;">
+    <a href="#" data-activates="slide-out" class="btn-floating btn-large red"><i class="material-icons">edit</i></a>
+    </a>
+  </div>
+
+  <ul id="slide-out" class="side-nav">
+    <div class="content">
+      <div id="editZone">
+        <form id="saveForm">
+          <button type="button" class="waves-effect waves-light btn" id="newGallery">
+            <i class="material-icons right">library_add</i>new gallery
+          </button>
+          <button class="waves-effect waves-light btn" type="submit" name="action" id="save">
+            <i class="material-icons right">send</i>save
+          </button>
+          <textarea name="settings" id="editor"></textarea>
+        </form>
+      </div>
+
+      <div id="imagesZone">
         <form id="uploadImagesForm" enctype="multipart/form-data" method="post" name="uploadImagesForm" action="/upload_images/">
-            <input id="uploadImagesInput" type="file" name="images" multiple style="display: none">
-            <input id="uploadImagesPath" name="path" type="hidden">
-            <button id="uploadImagesButton" type="button" class="button button-green">add more images</button>
+          <button id="uploadImagesButton" type="button" class="btn waves-effect waves-light" style="width: 100%;">add more images
+            <i class="material-icons right">perm_media</i>
+          </button>
+          <input id="uploadImagesInput" type="file" name="images" multiple style="display: none">
+          <input id="uploadImagesPath" name="path" type="hidden">
         </form>
         <div id="currentGalleryImages">
         </div>
+      </div>
     </div>
+  </ul>
 
-    <div id="prosopopeeHtml">
-        <iframe id="buildIframe" src="build/" onLoad="iframeSrcChanged(this);">
-        </iframe>
-    </div>
-</div>
-
-<script>
+  <div id="prosopopeeHtml">
+    <iframe id="buildIframe" src="build/" onLoad='iframeSrcChanged(this);'>
+    </iframe>
+  </div>
+  <script>
 var context = {
-    "current_gallery": "/build/",
-    "current_images": "",
-    "CodeMirror": null
+  "current_gallery": "/build/",
+  "current_images": "",
+  "CodeMirror": null
 }
 
 $(function() {
-    // init
-    var _theframe = document.getElementById("buildIframe");
-    _theframe.contentWindow.location.href = _theframe.src;
+  // init
+  var _theframe = document.getElementById("buildIframe");
+  _theframe.contentWindow.location.href = _theframe.src;
 
-    // url changed in frame
-    iframeSrcChanged = function(iframe) {
-        console.log("-> " + context["current_gallery"]);
-        context["current_gallery"] = iframe.contentWindow.location.pathname
-        $.get("/settings" + context["current_gallery"] + "?_=" + (new Date).getTime()).done(function(data) {
-            if (context.CodeMirror === null) {
-                context.CodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {mode: "yaml"})
-            }
-            context.CodeMirror.setValue(data);
-        })
-
-        if (context["current_gallery"] != "/build/") {
-            $("#imagesZone").addClass("active");
-            updateGalleryImages(context["current_gallery"]);
-        } else {
-            $("#imagesZone").removeClass("active");
+  // url changed in frame
+  iframeSrcChanged = function(iframe) {
+    console.log("-> " + context["current_gallery"]);
+    context["current_gallery"] = iframe.contentWindow.location.pathname
+      $.get("/settings" + context["current_gallery"] + "?_=" + (new Date).getTime()).done(function(data) {
+        if (context.CodeMirror === null) {
+          context.CodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {mode: "yaml", theme: "dracula"})
         }
-    }
+        context.CodeMirror.setValue(data);
+      })
 
-    var updateGalleryImages = function(path) {
-        $("#currentGalleryImages").html('<div class="loader"></div>').addClass("loading");
-        $.get("/images" + path).done(function(data) {
-            $("#currentGalleryImages").html(data).removeClass("loading");
-            if (data != context["current_images"]) {
-                context["current_images"] = data;
-            }
+    if (context["current_gallery"] != "/build/") {
+      $("#imagesZone").addClass("active");
+      updateGalleryImages(context["current_gallery"]);
+    } else {
+      $("#imagesZone").removeClass("active");
+    }
+  }
+
+  var updateGalleryImages = function(path) {
+    $("#currentGalleryImages").html('<div class="loader"></div>').addClass("loading");
+    $.get("/images" + path).done(function(data) {
+      $("#currentGalleryImages").html(data).removeClass("loading");
+      if (data != context["current_images"]) {
+        context["current_images"] = data;
+      }
+    })
+  }
+
+  // update settings
+  var save = function(event) {
+    event.preventDefault();
+    $("#save").addClass("loading").html("saving...");
+    $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
+      .done(function() {
+        $("#save").removeClass("loading").html("save");
+        document.getElementById('buildIframe').contentWindow.location.reload();
+      });
+    updateGalleryImages(context["current_gallery"]);
+  }
+
+  $("#saveForm").submit(save);
+  $("#editor").on('keydown', null, 'ctrl+s', save);
+
+
+  $("#newGallery").click(function() {
+    var folder_name = prompt("Folder name");
+    if (folder_name === null) return;
+    var title = prompt("Title");
+    if (title === null) return;
+    var date = prompt("Date");
+    if (date === null) return;
+
+    if (confirm("Are those correct?\nFolder name: " + folder_name + "\nTitle : " + title + "\nDAte : " + date)) {
+      $("#new_gallery").addClass("loading");
+      $.post("/new_gallery/", {folder_name: folder_name, title: title, date: date})
+        .done(function(data) {
+          // TODO doesn't support sub_galleries
+          _theframe.contentWindow.location.href = _theframe.baseURI + "build/" + folder_name + "/";
+          context["current_gallery"] = iframe.contentWindow.location.pathname
+
+            $("#new_gallery").removeClass("loading");
         })
     }
+  })
 
-    // update settings
-    var save = function(event) {
-        event.preventDefault();
-        $("#save").addClass("loading").html("saving...");
-        $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
-            .done(function() {
-                $("#save").removeClass("loading").html("save");
-                document.getElementById('buildIframe').contentWindow.location.reload();
-            });
-        updateGalleryImages(context["current_gallery"]);
-    }
+  $("#uploadImagesButton").click(function() {
+    $("#uploadImagesPath").val(context["current_gallery"]);
+    $("#uploadImagesInput").click();
+    // console.log($("#uploadImagesForm").serialize());
+    // $.post("/upload_images" + context["current_gallery"], $("#uploadImagesForm").serialize());
+  })
 
-    $("#saveForm").submit(save);
-    $("#editor").on('keydown', null, 'ctrl+s', save);
-
-
-    $("#newGallery").click(function() {
-        var folder_name = prompt("Folder name");
-        if (folder_name === null) return;
-        var title = prompt("Title");
-        if (title === null) return;
-        var date = prompt("Date");
-        if (date === null) return;
-
-        if (confirm("Are those correct?\nFolder name: " + folder_name + "\nTitle : " + title + "\nDAte : " + date)) {
-            $("#new_gallery").addClass("loading");
-            $.post("/new_gallery/", {folder_name: folder_name, title: title, date: date})
-                .done(function(data) {
-                    // TODO doesn't support sub_galleries
-                    _theframe.contentWindow.location.href = _theframe.baseURI + "build/" + folder_name + "/";
-                    context["current_gallery"] = iframe.contentWindow.location.pathname
-
-                    $("#new_gallery").removeClass("loading");
-                })
-        }
-    })
-
-    $("#uploadImagesButton").click(function() {
-        $("#uploadImagesPath").val(context["current_gallery"]);
-        $("#uploadImagesInput").click();
-        // console.log($("#uploadImagesForm").serialize());
-        // $.post("/upload_images" + context["current_gallery"], $("#uploadImagesForm").serialize());
-    })
-
-    $("#uploadImagesInput").on("change", function() {
-        console.log("prout");
-        $("#uploadImagesForm").ajaxForm().submit();
-        updateGalleryImages(context["current_gallery"]);
-    })
+  $("#uploadImagesInput").on("change", function() {
+    console.log("prout");
+    $("#uploadImagesForm").ajaxForm().submit();
+    updateGalleryImages(context["current_gallery"]);
+  })
 
 })
-</script>
+
+$('.btn-floating').sideNav({
+  menuWidth: '70%',
+  edge: 'left',
+  closeOnClick: true,
+}
+);
+
+
+  </script>
+  </main>
 </body>
