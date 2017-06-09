@@ -142,13 +142,16 @@ def save_base_settings():
 def save_settings(path):
     # TODO error in yaml
 
-    assert request.form["settings"]
-    newdata = request.form["settings"].encode('utf-8')
-    open(os.path.join(path, "settings.yaml"), "w").write(newdata)
+    # dirty hack for save data
+    if request.form["settings"] == "":
+        return "ok"
+    else:
+        newdata = request.form["settings"].encode('utf-8')
+        open(os.path.join(path, "settings.yaml"), "w").write(newdata)
 
-    build_everything()
+        build_everything()
 
-    return "ok"
+        return "ok"
 
 
 @app.route("/new_gallery/", methods=["POST"])

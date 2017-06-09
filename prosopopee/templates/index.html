@@ -103,6 +103,8 @@ $(function() {
     $("#save").addClass("loading").html("saving...");
     $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
       .done(function() {
+        // dirty hack for save data
+        $.post("/save_settings" + context["current_gallery"], $("#saveForm").serialize())
         $("#save").removeClass("loading").html("save");
         document.getElementById('buildIframe').contentWindow.location.reload();
       });
