@@ -18,18 +18,17 @@
 <body>
   <main>
 
-  <div class="fixed-action-btn" style="top: 10px; right: 24px;">
-    <a href="#" data-activates="slide-out" class="btn-floating btn-large red"><i class="material-icons">edit</i></a>
-    </a>
+  <div class="fixed-action-btn horizontal" style="top: 10px; right: 24px;">
+    <a class="btn-floating btn-large red"><i class="material-icons">launch</i></a>
+    <ul>
+      <li><a href="#" data-activates="slide-out" class="btn-floating red btn-sidebar tooltipped" data-position="bottom" data-delay="50" data-tooltip="Edit gallery"><i class="material-icons">edit</i></a></li>
+      <li><a class="btn-floating yellow darken-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="New gallery" href="#modal1"><i class="material-icons">library_add</i></a></li>
   </div>
 
   <ul id="slide-out" class="side-nav">
     <div class="content" style="background-color: #282a36;">
       <div id="editZone">
         <form id="saveForm">
-          <a class="waves-effect waves-light btn" href="#modal1">
-            <i class="material-icons right">library_add</i>new gallery
-          </a>
           <textarea class="materialize-textarea" name="settings" id="editor"></textarea>
           <button class="waves-effect waves-light btn" type="submit" name="action" id="save">
             <i class="material-icons right">send</i>save
@@ -71,7 +70,7 @@
         </div>
         <div class="file-field input-field">
           <div class="btn">
-            <span>File</span>
+            <span>Cover</span>
             <input id="cover" type="file">
           </div>
           <div class="file-path-wrapper">

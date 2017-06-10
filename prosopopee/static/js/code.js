@@ -95,7 +95,7 @@ $(function() {
 
 })
 
-$('.btn-floating').sideNav({
+$('.btn-sidebar').sideNav({
   menuWidth: '70%',
   edge: 'left',
   closeOnClick: true,
