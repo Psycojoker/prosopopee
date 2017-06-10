@@ -16,3 +16,11 @@ You can find example usages here:
 ## Documentation
 
 http://prosopopee.readthedocs.org/en/latest/
+
+
+## TODO
+
+* upload cover from modal form
+* manage sub_index
+* migrate new gallery button on FAB
+* more robust
