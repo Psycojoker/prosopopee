@@ -159,18 +159,22 @@ def new_gallery():
     if not os.path.exists(request.form["folder_name"]):
         os.makedirs(request.form["folder_name"])
 
-    settings = yaml.dump({
-        "title": request.form["title"].encode("Utf-8"),
-        "date": request.form["date"].encode("Utf-8"),
-        "sections": [{
-            "type": "full-picture",
-            "image": "example.png",
-            "text": {
-                "title": request.form["title"].encode("Utf-8"),
-                "date": request.form["date"].encode("Utf-8"),
-            }
-        }]
-    }, default_flow_style=False)
+    title = request.form["title"].encode("Utf-8")
+    date = request.form["date"].encode("Utf-8")
+    cover = request.form["cover"].encode("Utf-8")
+
+    settings = """title: %s
+date: %s
+cover: %s
+sections:
+  - type: full-picture
+    image: %s
+    text:
+      title: %s
+      date: %s
+""" % (title, date, cover, cover, title, date)
+
+    print settings
 
     open(os.path.join(request.form["folder_name"], "settings.yaml"), "w").write(settings)
 
