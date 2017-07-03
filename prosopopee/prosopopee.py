@@ -13,14 +13,13 @@ Options:
 """
 
 import os
-import yaml
 import shutil
+import socketserver
+import http.server
+
+import ruamel.yaml as yaml
+#import yaml
 from docopt import docopt
-
-import SocketServer
-import SimpleHTTPServer
-
-import subprocess
 
 from path import Path
 
@@ -94,18 +93,18 @@ class Video(object):
             return
 
         ffmpeg_switches = {
-           "source": source,
-           "target": target,
-           "loglevel": "-loglevel %s" % options["loglevel"],
-           "resolution": "-s %s" % options["resolution"],
-           "resize": "-vf scale=-1:%s" % options.get("resize"),
-           "vbitrate": "-b:v %s" % options["vbitrate"],
-           "abitrate": "-b:v %s" % options["abitrate"],
-           "format": "-f %s" % options["format"],
-           "binary": "%s" % options["binary"],
-           "video": "-c:v %s" % options["video"],
-           "audio": "-c:a %s" % options["audio"],
-           "other": "%s" % options["other"]
+            "source": source,
+            "target": target,
+            "loglevel": "-loglevel %s" % options["loglevel"],
+            "resolution": "-s %s" % options["resolution"],
+            "resize": "-vf scale=-1:%s" % options.get("resize"),
+            "vbitrate": "-b:v %s" % options["vbitrate"],
+            "abitrate": "-b:v %s" % options["abitrate"],
+            "format": "-f %s" % options["format"],
+            "binary": "%s" % options["binary"],
+            "video": "-c:v %s" % options["video"],
+            "audio": "-c:a %s" % options["audio"],
+            "other": "%s" % options["other"]
         }
 
         warning("Generation", source)
@@ -168,11 +167,11 @@ class Audio(object):
             return
 
         ffmpeg_switches = {
-           "source": source,
-           "target": target,
-           "binary": "%s" % options["binary"],
-           "loglevel": "-loglevel %s" % options["loglevel"],
-           "audio": "-c:a %s" % options["audio"]
+            "source": source,
+            "target": target,
+            "binary": "%s" % options["binary"],
+            "loglevel": "-loglevel %s" % options["loglevel"],
+            "audio": "-c:a %s" % options["audio"]
         }
 
         warning("Generation", source)
@@ -215,13 +214,13 @@ class Image(object):
             return
 
         gm_switches = {
-           "source": source,
-           "target": target,
-           "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-           "strip": "-strip" if options["strip"] else "",
-           "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-           "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
-           "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
+            "source": source,
+            "target": target,
+            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
+            "strip": "-strip" if options["strip"] else "",
+            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
+            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
+            "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
 
         command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
@@ -244,7 +243,7 @@ class Image(object):
 
         if not options["auto-orient"] and not options["strip"]:
             shutil.copyfile(source, target)
-            print("%s%s%s" % (source, "->", target))
+            print(("%s%s%s" % (source, "->", target)))
         else:
             # Do not consider quality settings here, since we aim to copy the input image
             # better to preserve input encoding setting
@@ -275,20 +274,20 @@ def get_settings():
 
     try:
         settings = yaml.safe_load(open("settings.yaml", "r"))
-    except yaml.YAMLError, exc:
+    except yaml.YAMLError as exc:
         if hasattr(exc, 'problem_mark'):
             mark = exc.problem_mark
-            error(False, "There are something wrong in settings.yaml line %s" % (mark.line+1))
+            error(False, "There are something wrong in settings.yaml line %s" % (mark.line))
         else:
-            erro(False, "There are omething wrong in settings.yaml")
+            error(False, "There are omething wrong in settings.yaml")
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
-    for key, value in DEFAULTS.items():
+    for key, value in list(DEFAULTS.items()):
         if key not in settings:
             settings[key] = value
 
-    for key, value in SETTINGS.items():
+    for key, value in list(SETTINGS.items()):
         if key not in settings:
             settings[key] = value
 
@@ -366,12 +365,12 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
     try:
         gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
-    except yaml.YAMLError, exc:
+    except yaml.YAMLError as exc:
         if hasattr(exc, 'problem_mark'):
             mark = exc.problem_mark
-            error(False, "There are something wrong in %s/settings.yaml line %s" % (gallery_path, mark.line+1))
+            error(False, "There are something wrong in %s/settings.yaml line %s" % (gallery_path, mark.line))
         else:
-            erro(False, "There are omething wrong in %s/settings.yaml" % (gallery_path))
+            error(False, "There are something wrong in %s/settings.yaml" % (gallery_path))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
@@ -472,7 +471,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         name=gallery_path.split('/', 1)[-1]
     ).encode("Utf-8")
 
-    open(Path("build").joinpath(gallery_path, "index.html"), "w").write(html)
+    open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
@@ -507,13 +506,13 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
             name=gallery_path.split('/', 1)[-1]
         ).encode("Utf-8")
 
-        open(Path("build").joinpath(gallery_light_path, "index.html"), "w").write(html)
+        open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False):
     index_template = templates.get_template("index.html")
 
-    galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
+    galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
@@ -530,7 +529,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
         Video=Video
     ).encode("Utf-8")
 
-    open(Path("build").joinpath(gallery_path, "index.html"), "w").write(html)
+    open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
 def main():
@@ -549,11 +548,10 @@ def main():
         error(Path("build").exists(), "Please build the website before launch preview")
 
         os.chdir('build')
+        handler = http.server.SimpleHTTPRequestHandler
+        httpd = socketserver.TCPServer(("", 9000), handler)
 
-        Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-        httpd = SocketServer.TCPServer(("", 9000), Handler)
-
-        print "Start server on http://localhost:9000"
+        print('Start server on http://localhost:9000')
         # gracefully handle interrupt here
         httpd.serve_forever()
 
@@ -561,7 +559,7 @@ def main():
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
           "please install the 'rsync' package.\n")
         error(Path("build").exists(), "Please build the website before launch deployment")
-        
+
         r_dest = settings["settings"]["deploy"]["dest"]
         if settings["settings"]["deploy"]["others"]:
             r_others = settings["settings"]["deploy"]["others"]
@@ -581,6 +579,14 @@ def main():
     templates = get_gallery_templates(theme)
     templates.add_extension('jinja2.ext.with_')
 
+    if Path("custom.js").exists():
+        shutil.copy(Path("custom.js"), Path(".").joinpath("build", "", "static", "js"))
+        settings["custom_js"] = True
+
+    if Path("custom.css").exists():
+        shutil.copy(Path("custom.css"), Path(".").joinpath("build", "", "static", "css"))
+        settings["custom_css"] = True
+
     for gallery in galleries_dirs:
         front_page_galleries_cover.append(process_directory(gallery, settings, templates))
 
@@ -589,10 +595,10 @@ def main():
 
         xml = feed_template.render(
             settings=settings,
-            galleries=reversed(sorted(filter(lambda x: x != {}, front_page_galleries_cover), key=lambda x: x["date"]))
+            galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
         ).encode("Utf-8")
 
-        open(Path("build").joinpath("feed.xml"), "w").write(xml)
+        open(Path("build").joinpath("feed.xml"), "wb").write(xml)
 
     build_index(settings, front_page_galleries_cover, templates)
 
