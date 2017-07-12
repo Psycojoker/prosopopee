@@ -601,6 +601,7 @@ def main():
         open(Path("build").joinpath("feed.xml"), "wb").write(xml)
 
     build_index(settings, front_page_galleries_cover, templates)
+    CACHE.cache_dump()
 
 
 if __name__ == '__main__':

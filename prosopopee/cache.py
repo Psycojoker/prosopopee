@@ -53,8 +53,7 @@ class Cache(object):
     def cache_picture(self, source, target, options):
         self.cache[target] = {"size": os.path.getsize(source), "options": remove_superficial_options(options)}
 
-    def __del__(self):
-        self.json.dump(self.cache, open(self.cache_file_path, "wb"))
-
+    def cache_dump(self):
+        self.json.dump(self.cache, open(self.cache_file_path, "w"))
 
 CACHE = Cache(json=json)
