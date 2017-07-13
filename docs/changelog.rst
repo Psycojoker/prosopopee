@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6
+ 
+ * Compatibility python 2 and 3
+ * Possibility to add custom css and js 
+
 0.5 (2017-06-04)
 
  * Add audio HTML5 player https://prosopopee.readthedocs.org/en/latest/sections.html#audio by beudbeud
