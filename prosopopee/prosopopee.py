@@ -514,9 +514,9 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
     reverse = gallery_settings.get('reverse', settings.get('reverse', True))
     if reverse:
-        galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
+        galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
     else:
-        galleries_cover = sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"])
+        galleries_cover = sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"])
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
