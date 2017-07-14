@@ -1,10 +1,10 @@
 Changelog
 =========
 
-0.6
+0.6 (2017-07-14)
  
  * Compatibility python 2 and 3
- * Possibility to add custom css and js 
+ * Possibility to add custom css and js https://prosopopee.readthedocs.org/en/latest/
 
 0.5 (2017-06-04)
 
