@@ -12,7 +12,7 @@
         {% set format = settings.ffmpeg.extension %}
         {{ video.copy() }}
         <img class="lazy" data-original="{{ video.generate_thumbnail("600") }}" src="" alt="">
-        <video class="lazy responsive-video" id="video" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
+        <video class="lazy responsive-video" id="{{ video }}" onclick="goFullscreen('{{ video }}');" poster="{{ video.generate_thumbnail("600") }}" alt="" autoplay="autoplay" loop="loop" preload="auto" muted>
           <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
         </video>
         {% if caption %}

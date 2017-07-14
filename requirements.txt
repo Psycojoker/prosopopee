@@ -1,4 +1,5 @@
 jinja2
-pyyaml
 path.py
 docopt
+ruamel.yaml
+future

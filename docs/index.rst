@@ -46,5 +46,6 @@ Documentation
    sections
    example
    build
+   theming
    authors
    changelog

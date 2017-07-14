@@ -12,6 +12,9 @@
     {% if gallery.audio_enabled %}
     <link type="text/css" rel="stylesheet" href="../static/css/mediaelementplayer.css"  media="screen,projection"/>
     {% endif %}
+    {% if settings.custom_css %}
+    <link type="text/css" rel="stylesheet" href="../static/css/custom.css"  media="screen,projection"/>
+    {% endif %}
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% if gallery.description %}
@@ -79,18 +82,16 @@ $('audio').mediaelementplayer({
 });
 {% endif %}
 
-var video = $("video");
-video.on('click', function(e){
-  var vid = video[0];
-  vid.play();
-  if (vid.requestFullscreen) {
-    vid.requestFullscreen();
-  } else if (vid.mozRequestFullScreen) {
-    vid.mozRequestFullScreen();
-  } else if (vid.webkitRequestFullscreen) {
-    vid.webkitRequestFullscreen();
-  }
-});
+function goFullscreen(id) {
+  var element = document.getElementById(id);
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  }  
+}
 
 $(function() {
   $("img.lazy").lazyload({

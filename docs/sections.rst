@@ -151,6 +151,7 @@ This section is for add audio file with HTML5 player.::
   - type: audio
     title: Title of song 
     image: song.ogg
+    color: "#000" (optional)
 
 
 Author

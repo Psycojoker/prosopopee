@@ -12,8 +12,8 @@ except ImportError:
 
 
 setup(name='prosopopee',
-      version='0.4',
-      description='exposure.co clone in a static web generating tool',
+      version='0.6',
+      description='A static website generator that allows you to tell a story with your pictures',
       author='Laurent Peuch',
       long_description=read_md('README.md') + "\n\n\n" + open('docs/changelog.rst').read(),
       author_email='cortex@worlddomination.be',

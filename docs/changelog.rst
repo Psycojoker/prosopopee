@@ -1,7 +1,12 @@
 Changelog
 =========
 
-0.5 (2017-06-02)
+0.6 (2017-07-14)
+ 
+ * Compatibility python 2 and 3
+ * Possibility to add custom css and js http://prosopopee.readthedocs.io/en/latest/theming.html
+
+0.5 (2017-06-04)
 
  * Add audio HTML5 player https://prosopopee.readthedocs.org/en/latest/sections.html#audio by beudbeud
  * Update Material theme by beudbeud
@@ -10,6 +15,7 @@ Changelog
  * Add deploy and preview option https://prosopopee.readthedocs.io/en/latest/build.html#preview by beudbeud
  * Load only css and jss if the section is used by beudbeud
  * Possibility to add floating image in paragraph by beudbeud https://prosopopee.readthedocs.org/en/latest/sections.html#paragraph
+ * fix some bugs
 
 0.4 (2016-12-11)
 
