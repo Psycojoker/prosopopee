@@ -557,7 +557,12 @@ def main():
 
         print('Start server on http://localhost:9000')
         # gracefully handle interrupt here
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        except (KeyboardInterrupt, SystemExit):
+            print('shutdown')
+            httpd.socket.close()
+            raise
 
     if arguments['deploy']:
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
