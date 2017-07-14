@@ -404,7 +404,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
                     process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
                 )
 
-            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True)
+            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True, gallery_settings=gallery_settings)
             gallery_cover['sub_gallery'] = sub_page_galleries_cover
 
     return gallery_cover
@@ -454,10 +454,10 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
     Audio.base_dir = Path(".").joinpath(gallery_path)
     Audio.target_dir = Path(".").joinpath("build", gallery_path)
-
-    for x in gallery_settings['sections']:
-        if x['type'] not in gallery_settings:
-            gallery_settings[x['type'] + '_enabled'] = True
+    if gallery_settings.get("sections"):
+        for x in gallery_settings['sections']:
+            if x['type'] not in gallery_settings:
+                gallery_settings[x['type'] + '_enabled'] = True
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
@@ -509,10 +509,14 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 
-def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False):
+def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):
     index_template = templates.get_template("index.html")
 
-    galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
+    reverse = gallery_settings.get('reverse', settings.get('reverse', True))
+    if reverse:
+        galleries_cover = reversed(sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"]))
+    else:
+        galleries_cover = sorted(filter(lambda x: x != {}, galleries_cover), key=lambda x: x["date"])
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
