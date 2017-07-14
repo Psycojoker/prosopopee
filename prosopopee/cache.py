@@ -33,7 +33,7 @@ class Cache(object):
             self.cache = {"version": CACHE_VERSION}
 
         if "version" not in self.cache or self.cache["version"] != CACHE_VERSION:
-            print "info: cache format as changed, prune cache"
+            print("info: cache format as changed, prune cache")
             self.cache = {"version": CACHE_VERSION}
 
     def needs_to_be_generated(self, source, target, options):
@@ -53,8 +53,7 @@ class Cache(object):
     def cache_picture(self, source, target, options):
         self.cache[target] = {"size": os.path.getsize(source), "options": remove_superficial_options(options)}
 
-    def __del__(self):
+    def cache_dump(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))
-
 
 CACHE = Cache(json=json)

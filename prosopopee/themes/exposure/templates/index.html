@@ -3,6 +3,9 @@
 {% block css %}
 <link type="text/css" rel="stylesheet" href="static/css/fonts.css"  media="screen,projection"/>
 <link type="text/css" rel="stylesheet" href="static/css/style.css"  media="screen,projection"/>
+{% if settings.custom_css %}
+<link type="text/css" rel="stylesheet" href="static/css/custom.css"  media="screen,projection"/>
+{% endif %}
 {% endblock %}
 
 {% block logo %}
