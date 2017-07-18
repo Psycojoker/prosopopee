@@ -5,7 +5,7 @@ Changelog
  
  * Compatibility python 2 and 3
  * Possibility to add custom css and js http://prosopopee.readthedocs.io/en/latest/theming.html
- * Add reverse opion by titoko https://prosopopee.readthedocs.io/en/latest/configuration.html#reverse
+ * Add reverse option by titoko https://prosopopee.readthedocs.io/en/latest/configuration.html#reverse
 
 0.5 (2017-06-04)
 
