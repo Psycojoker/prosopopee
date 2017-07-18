@@ -267,6 +267,8 @@ class Image(object):
     def __repr__(self):
         return self.name
 
+class TCPServerV4(socketserver.TCPServer):
+    allow_reuse_address = True
 
 def get_settings():
     error(Path("settings.yaml").exists(), "I can't find a "
@@ -476,9 +478,9 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
-                settings["settings"].get("light_mode", False) and
-                gallery_settings.get("light_mode") is None
-            ):
+            settings["settings"].get("light_mode", False) and
+            gallery_settings.get("light_mode") is None
+        ):
 
         # Prepare light mode
         Path("build").joinpath(gallery_path, "light").makedirs_p()
@@ -512,11 +514,11 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):
     index_template = templates.get_template("index.html")
 
-    reverse = gallery_settings.get('reverse', settings.get('reverse', True))
+    reverse = gallery_settings.get('reverse', settings["settings"].get('reverse', False))
     if reverse:
-        galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
-    else:
         galleries_cover = sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"])
+    else:
+        galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
@@ -537,7 +539,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
-    arguments = docopt(__doc__, version='0.5')
+    arguments = docopt(__doc__, version='0.6')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -553,20 +555,18 @@ def main():
 
         os.chdir('build')
         handler = http.server.SimpleHTTPRequestHandler
-        httpd = socketserver.TCPServer(("", 9000), handler)
-
+        httpd = TCPServerV4(("", 9000), handler)
         print('Start server on http://localhost:9000')
-        # gracefully handle interrupt here
         try:
             httpd.serve_forever()
         except (KeyboardInterrupt, SystemExit):
-            print('shutdown')
-            httpd.socket.close()
+            print('\nShutdown server')
+            httpd.shutdown()
             raise
 
     if arguments['deploy']:
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
-          "please install the 'rsync' package.\n")
+             "please install the 'rsync' package.\n")
         error(Path("build").exists(), "Please build the website before launch deployment")
 
         r_dest = settings["settings"]["deploy"]["dest"]
@@ -605,7 +605,7 @@ def main():
         xml = feed_template.render(
             settings=settings,
             galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
-        ).encode("Utf-8")
+            ).encode("Utf-8")
 
         open(Path("build").joinpath("feed.xml"), "wb").write(xml)
 

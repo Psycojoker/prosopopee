@@ -25,6 +25,7 @@ ____
 
 It is possible to add a menu to your homepage that links to static pages. To do so, add a `menu` key to your `settings.yaml`, for example::
 
+    title: "About"
     menu:
       - about: "About"
       - first_gallery: "My first gallery"
@@ -58,13 +59,14 @@ GM
 
 Currently a `gm` settings key allows to customize the default GraphicsMagick's behavior. It looks like ::
 
-    settings:
-      gm:
-        quality: 75
-        auto-orient: True
-        strip: True
-        resize: 50%
-        progressive: True
+  title: Gallery
+  settings:
+    gm:
+      quality: 75
+      auto-orient: True
+      strip: True
+      resize: 50%
+      progressive: True
 
 The meaning of the currently supported GraphicsMagick's settings is as follows:
 
@@ -81,17 +83,18 @@ Video convertor
 
 Prosopopée can use ffmpeg or libav and if you want you can customize the settings::
 
-    settings:
-      ffmpeg:
-        binary: "ffmpeg",
-        loglevel: "error",
-        format: "webm",
-        resolution: "1280x720",
-        vbitrate: "3900k",
-        abitrate: "100k",
-        audio: "libvorbis",
-        video: "libvpx",
-        other: "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
+  title: Gallery
+  settings:
+    ffmpeg:
+      binary: "ffmpeg"
+      loglevel: "error"
+      format: "webm"
+      resolution: "1280x720"
+      vbitrate: "3900k"
+      abitrate: "100k"
+      audio: "libvorbis"
+      video: "libvpx"
+      other: "-qmin 10 -qmax 42 -maxrate 500k -bufsize 1500k"
 
 The meaning of the currently supported FFMEG or LIBAV's settings is as follows :
 
@@ -103,14 +106,28 @@ The meaning of the currently supported FFMEG or LIBAV's settings is as follows :
  * `abitrate` Set audio bitrate
  * `audio` Set the audio codec
  * `video` Set the video codec
+ * `extension` Set the extension of output file
  * `other` Set different options if you need more
 
+example for MP4::
+
+  title: Gallery
+  settings:
+    ffmpeg:
+      binary: "ffmpeg"
+      format: "mp4"
+      audio: "acc"
+      video: "libx264"
+      extension: mp4
+
+  
 
 Light Mode
 ~~~~~~~~~~
 
 For enabled the light mode::
 
+  title: Gallery
   settings:
     light_mode: true
 
@@ -134,10 +151,10 @@ Prosopopée has a support for various themes. As for now, only 3 themes are avai
 To specify the theme, add the "theme" key in your "settings" key or your
 **root** settings.yaml. For example::
 
-    title: My exploration of the outside world
-    sub_title: it's a scary place, don't go there
-    settings:
-      theme: material
+  title: My exploration of the outside world
+  sub_title: it's a scary place, don't go there
+  settings:
+    theme: material
 
 
 Licence
@@ -145,10 +162,11 @@ Licence
 
 By default Prosopopée use CC-BY-SA for all the content, if you want use a another licence
 you need add key in **root** settings.yaml. For example::
-
-    licence:
-       name: WTFPL
-       url: "http://www.wtfpl.net/txt/copying/"
+ 
+  title: Gallery
+  licence:
+    name: WTFPL
+    url: "http://www.wtfpl.net/txt/copying/"
 
 Share
 ~~~~~
@@ -156,16 +174,18 @@ Share
 If you want enable the share content on social network, add key in **root** settings.yaml. For example:
 By defaut you can share on facebook, twitter, pinterest, google+::
 
-    share: true
-    url: "http://prosopopee.com"
+  title: Gallery
+  share: true
+  url: "http://prosopopee.com"
 
 RSS
 ~~~
 
 For activate the RSS you need add this key in **root** settings.yaml::
 
-    rss: true
-    url: "http://prosopopee.com"
+  title: Gallery
+  rss: true
+  url: "http://prosopopee.com"
 
 
 Open Graph Meta
@@ -173,6 +193,8 @@ Open Graph Meta
 
 For activate the Open Graph Meta  you need add this key in **root** settings.yaml::
 
+  title: Sur les chemins
+  settings:
     og: true
 
 Optionnal: You need use description and lang key in settings gallery.
@@ -184,13 +206,27 @@ Deployment
 
 If you wanna configure the deployement of your website by rsync::
 
+  title: Gallery
+  settings:
+    deploy:
+      ssh: true (optional need for ssh)
+      username: username (optional need for ssh)
+      hostname: server.com (optional need for ssh)
+      dest: /var/www/website/build/
+      others: --delete-afte (optional)
+
+Reverse
+~~~~~~~
+
+Normally Prosopopee build the gallery index in Anti-chronological, if you wanna reverse it::
+
     settings:
-      deploy:
-        ssh: true (optional need for ssh)
-        username: beudbeud (optional need for ssh)
-        hostname: beudibox.fr (optional need for ssh)
-        dest: /var/www/surleschemins/build/
-        others: --delete-afte (optional)
+      reverse: true
+
+Is option can be use too in gallery settings if you use multi level gallery::
+
+  title: Multi level gallery
+  reverse: true
 
 
 Gallery settings.yaml
