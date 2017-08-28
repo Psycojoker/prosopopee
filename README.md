@@ -34,4 +34,7 @@ You can find example usages here:
 * http://outside.browny.pink
 * http://such.life
 
+## IRC 
+
+channel : #prosopopee
 
