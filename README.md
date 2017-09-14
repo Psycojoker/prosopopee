@@ -24,7 +24,7 @@ GLPv3
 
   http://prosopopee.readthedocs.org/en/latest/
 
-## Exemple
+## Examples
 
 You can find example usages here:
 
