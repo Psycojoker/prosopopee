@@ -36,5 +36,5 @@ You can find example usages here:
 
 ## IRC 
 
-channel : #prosopopee
+channel : irc.freenode.net#prosopopee
 
