@@ -28,9 +28,9 @@ Credit
 
 ::
 
-    > 16:57 &lt;meornithorynque> et tu as besoin d'un nom ?<br>
-    > 16:57 &lt;meornithorynque> genre n'importe quoi ?<br>
-    > 16:57 &lt;meornithorynque> je propose "Prosopopée"
+    16:57 <meornithorynque> et tu as besoin d'un nom ?
+    16:57 <meornithorynque> genre n'importe quoi ?
+    16:57 <meornithorynque> je propose "Prosopopée"
 
 
 
