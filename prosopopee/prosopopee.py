@@ -17,8 +17,9 @@ import shutil
 import socketserver
 import http.server
 
+from subprocess import check_output
+
 import ruamel.yaml as yaml
-#import yaml
 from docopt import docopt
 
 from path import Path
@@ -63,7 +64,6 @@ SETTINGS = {
         "extension": "mp3"
     }
 }
-
 
 class Video(object):
     base_dir = Path()
@@ -446,6 +446,7 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
 def build_gallery(settings, gallery_settings, gallery_path, template):
     gallery_index_template = template.get_template("gallery-index.html")
     page_template = template.get_template("page.html")
+    encrypted_template = template.get_template("encrypted.html")
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
@@ -472,8 +473,19 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         link=gallery_path,
         name=gallery_path.split('/', 1)[-1]
     ).encode("Utf-8")
-
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
+
+    if gallery_settings.get("password"):
+        template_to_render = encrypted_template
+        password = gallery_settings.get("password")
+        index_plain = Path("build").joinpath(gallery_path, "index.html")
+        encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
+        html = template_to_render.render(
+            settings=settings,
+            gallery=gallery_settings,
+            ciphertext=str(encrypted, 'utf-8'),
+        ).encode("Utf-8")
+        open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
