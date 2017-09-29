@@ -473,6 +473,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         link=gallery_path,
         name=gallery_path.split('/', 1)[-1]
     ).encode("Utf-8")
+
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     if gallery_settings.get("password"):
@@ -485,6 +486,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
             gallery=gallery_settings,
             ciphertext=str(encrypted, 'utf-8'),
         ).encode("Utf-8")
+
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     # XXX shouldn't this be a call to build_gallery?
@@ -521,6 +523,20 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         ).encode("Utf-8")
 
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
+
+        if gallery_settings.get("password"):
+            light_template_to_render = light_templates.get_template("encrypted.html")
+            template_to_render = encrypted_template
+            password = gallery_settings.get("password")
+            index_plain = Path("build").joinpath(gallery_light_path, "index.html")
+            encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
+            html = light_template_to_render.render(
+                settings=settings,
+                gallery=gallery_settings,
+                ciphertext=str(encrypted, 'utf-8'),
+            ).encode("Utf-8")
+
+            open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):

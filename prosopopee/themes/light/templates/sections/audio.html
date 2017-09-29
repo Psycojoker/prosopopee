@@ -8,6 +8,7 @@
 {% set pathstatic = ".." %}
 {% else %}
 {% set pathstatic = "." %}
+{% set audio = Audio(section.image) %}
 {{ audio.copy() }}
 {% endif %}
 {% set audio = Audio(section.image) %}
