@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.7 (unreleased)
+
+ * Add password access (based on https://robinmoisson.github.io/staticrypt/)
+
 0.6 (2017-07-14)
  
  * Compatibility python 2 and 3

@@ -309,3 +309,14 @@ by::
       quality: 90
       strip: False
       auto-orient: False
+
+Password access
+_______________
+
+You can protect access of gallery with password::
+
+    title: Gallery title
+    sub_title: Gallery sub-title
+    password: my_super_password
+
+
