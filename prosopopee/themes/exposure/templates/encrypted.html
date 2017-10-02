@@ -12,54 +12,40 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
     <meta http-equiv="pragma" content="no-cache"/>
     <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
+
   </head>
+  <script type="text/javascript" src="../static/js/crypto-js.min.js" charset="utf-8"></script>
+  <script>
+var form = '{{ form }}';
+var encryptedMsg = '{{ ciphertext }}';
 
-  <body class="staticrypt-body">
-    <div class="staticrypt-page">
-      <div class="staticrypt-form">
-        <div class="staticrypt-instructions">
-          <img id="logo" src="./../static/img/logo.svg">
-          <p class="staticrypt-title">{{ gallery.title }}</p>
-        </div>
+if (sessionStorage.getItem("password")) {
+  var passphrase = sessionStorage.getItem("password");
+  var plainHTML = CryptoJS.AES.decrypt(encryptedMsg, passphrase).toString(CryptoJS.enc.Utf8);
+  document.write(plainHTML);
+  document.close();
+} else {
+  var plainHTML = CryptoJS.enc.Base64.parse(form).toString(CryptoJS.enc.Utf8);
+  document.write(plainHTML);
+  document.close();
+}
 
-        <hr class="staticrypt-hr">
-
-        <form id="staticrypt-form" action="#" method="post">
-          <div id="error" style="color: red; padding-bottom: 10px; height: 20px;"></div>
-          <input id="staticrypt-password"
-                 type="password"
-                 name="password"
-                 placeholder="passphrase"
-                 autofocus/>
-
-          <input type="submit" class="staticrypt-decrypt-button" value="ENTER"/>
-        </form>
-      </div>
-
-    </div>
-     <footer style="position: absolute;">
-      <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
-    </footer>
-    <script type="text/javascript" src="../static/js/crypto-js.min.js" charset="utf-8"></script>
-
-    <script>
 document.getElementById('staticrypt-form').addEventListener('submit', function(e) {
   e.preventDefault();
 
-  var passphrase = document.getElementById('staticrypt-password').value,
-  encryptedMsg = '{{ ciphertext }}';
+  var passphrase = document.getElementById('staticrypt-password').value;
 
   try{
     var plainHTML = CryptoJS.AES.decrypt(encryptedMsg, passphrase).toString(CryptoJS.enc.Utf8);
   }
   catch(err) {
-    document.getElementById("error").innerHTML = "Wrong keyword entry."
+    document.getElementById("error").innerHTML = "Wrong keyword entry.";
     return;
   }
 
   document.write(plainHTML);
   document.close();
 });
-    </script>
+  </script>
   </body>
 </html>

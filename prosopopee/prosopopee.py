@@ -22,6 +22,8 @@ from subprocess import check_output
 import ruamel.yaml as yaml
 from docopt import docopt
 
+import base64
+
 from path import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -447,6 +449,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     gallery_index_template = template.get_template("gallery-index.html")
     page_template = template.get_template("page.html")
     encrypted_template = template.get_template("encrypted.html")
+    from_template = template.get_template("form.html")
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
@@ -476,14 +479,15 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
-    if gallery_settings.get("password"):
-        template_to_render = encrypted_template
-        password = gallery_settings.get("password")
+    if gallery_settings.get("password") or settings.get("password"):
+        password = gallery_settings.get("password", settings.get("password"))
         index_plain = Path("build").joinpath(gallery_path, "index.html")
+        form = base64.b64encode(from_template.render(gallery=gallery_settings).encode("Utf-8"))
         encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
-        html = template_to_render.render(
+        html = encrypted_template.render(
             settings=settings,
             gallery=gallery_settings,
+            form=str(form, 'utf-8'),
             ciphertext=str(encrypted, 'utf-8'),
         ).encode("Utf-8")
 
@@ -524,15 +528,18 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
-        if gallery_settings.get("password"):
+        if gallery_settings.get("password") or settings.get("password"):
             light_template_to_render = light_templates.get_template("encrypted.html")
+            from_template = light_templates.get_template("form.html")
+            form = base64.b64encode(from_template.render(gallery=gallery_settings).encode("Utf-8"))
             template_to_render = encrypted_template
-            password = gallery_settings.get("password")
+            password = gallery_settings.get("password", settings.get("password"))
             index_plain = Path("build").joinpath(gallery_light_path, "index.html")
             encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
             html = light_template_to_render.render(
                 settings=settings,
                 gallery=gallery_settings,
+                form=str(form, 'utf-8'),
                 ciphertext=str(encrypted, 'utf-8'),
             ).encode("Utf-8")
 
@@ -564,6 +571,18 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
     ).encode("Utf-8")
 
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
+
+    if settings.get("password"):
+        index_template_to_render = templates.get_template("index-encrypted.html")
+        password = settings.get("password")
+        index_plain = Path("build").joinpath(gallery_path, "index.html")
+        encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
+        html = index_template_to_render.render(
+            settings=settings,
+            ciphertext=str(encrypted, 'utf-8')
+        ).encode("Utf-8")
+    
+        open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
 def main():
