@@ -3,7 +3,7 @@
     <div class="staticrypt-form">
       <div class="staticrypt-instructions">
         <img id="logo" src="./../static/img/logo.svg">
-        <p class="staticrypt-title">{{ gallery.title }}</p>
+        <p class="staticrypt-title">{% if gallery %}{{ gallery.title }}{% else %}{{ settings.title }}{% endif %}</p>
       </div>
       <hr class="staticrypt-hr">
       <form id="staticrypt-form" action="#" method="post">

@@ -480,9 +480,9 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     if gallery_settings.get("password") or settings.get("password"):
+        form = base64.b64encode(from_template.render(gallery=gallery_settings, settings=settings).encode("Utf-8"))
         password = gallery_settings.get("password", settings.get("password"))
         index_plain = Path("build").joinpath(gallery_path, "index.html")
-        form = base64.b64encode(from_template.render(gallery=gallery_settings).encode("Utf-8"))
         encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
         html = encrypted_template.render(
             settings=settings,
@@ -531,7 +531,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         if gallery_settings.get("password") or settings.get("password"):
             light_template_to_render = light_templates.get_template("encrypted.html")
             from_template = light_templates.get_template("form.html")
-            form = base64.b64encode(from_template.render(gallery=gallery_settings).encode("Utf-8"))
+            form = base64.b64encode(from_template.render(gallery=gallery_settings, settings=settings).encode("Utf-8"))
             template_to_render = encrypted_template
             password = gallery_settings.get("password", settings.get("password"))
             index_plain = Path("build").joinpath(gallery_light_path, "index.html")
@@ -548,6 +548,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):
     index_template = templates.get_template("index.html")
+    form_template = templates.get_template("form.html")
 
     reverse = gallery_settings.get('reverse', settings["settings"].get('reverse', False))
     if reverse:
@@ -573,12 +574,14 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
     open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
     if settings.get("password"):
-        index_template_to_render = templates.get_template("index-encrypted.html")
+        form = base64.b64encode(form_template.render(settings=settings).encode("Utf-8"))
+        index_template_to_render = templates.get_template("encrypted.html")
         password = settings.get("password")
         index_plain = Path("build").joinpath(gallery_path, "index.html")
         encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
         html = index_template_to_render.render(
             settings=settings,
+            form=str(form, 'utf-8'),
             ciphertext=str(encrypted, 'utf-8')
         ).encode("Utf-8")
     
