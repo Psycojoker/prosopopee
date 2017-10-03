@@ -1,4 +1,11 @@
 import sys
+import base64
+
+from subprocess import check_output
+
+from path import Path
+
+from jinja2 import Environment, FileSystemLoader
 
 
 class bcolors:
@@ -25,3 +32,20 @@ def warning(logging, warning_message):
 def okgreen(logging, ok_message):
     sys.stderr.write("%s%s: %s%s" % (bcolors.OKGREEN, logging, bcolors.ENDC, ok_message))
     sys.stderr.write("\n")
+
+def makeform(template, settings, *gallery_settings):
+    from_template = template.get_template("form.html")
+    form = base64.b64encode(from_template.render(settings=settings, gallery=gallery_settings).encode("Utf-8"))
+    return str(form, 'utf-8')
+
+def encrypt(password, template, gallery_path, settings, *gallery_settings):
+    encrypted_template = template.get_template("encrypted.html")
+    index_plain = Path("build").joinpath(gallery_path, "index.html")
+    encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
+    html = encrypted_template.render(
+        settings=settings,
+        form=makeform(template, settings, gallery_settings),
+        ciphertext=str(encrypted, 'utf-8'),
+        gallery=gallery_settings,
+    ).encode("Utf-8")
+    return html
