@@ -49,6 +49,7 @@ entry like any other gallery.
 **NOTE**: expect the "static: " option to disappear quite soon for a more
 generic approach to "choose your page style".
 
+
 Global settings
 _______________
 
@@ -228,6 +229,14 @@ Is option can be use too in gallery settings if you use multi level gallery::
   title: Multi level gallery
   reverse: true
 
+
+Password access
+~~~~~~~~~~~~~~~
+
+If you wanna protect all the website by password::
+
+  title: Gallery
+  password: my_super_password
 
 Gallery settings.yaml
 ---------------------

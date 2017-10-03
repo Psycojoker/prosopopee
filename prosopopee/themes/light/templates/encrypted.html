@@ -7,7 +7,7 @@
 <html class="staticrypt-html">
   <head>
     <meta charset="utf-8">
-    <title>{{ gallery.title }} · {{ settings.title }}</title>
+    <title>{% if gallery %}{{ gallery.title }} · {% endif %}{{ settings.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- do not cache this page -->
@@ -18,52 +18,40 @@
     <meta http-equiv="pragma" content="no-cache"/>
     <link type="text/css" rel="stylesheet" href="{{ pathstatic }}/static/css/style-page.css"  media="screen,projection"/>
   </head>
-
   <body class="staticrypt-body">
-    <div class="staticrypt-page">
-      <div class="staticrypt-form">
-        <div class="staticrypt-instructions">
-          <p class="staticrypt-title">{{ gallery.title }}</p>
-        </div>
+  <script type="text/javascript" src="{{ pathstatic }}/static/js/crypto-js.min.js" charset="utf-8"></script>
+  <script>
+var form = '{{ form }}';
+var encryptedMsg = '{{ ciphertext }}';
 
-        <hr class="staticrypt-hr">
+if (sessionStorage.getItem("password")) {
+  var passphrase = sessionStorage.getItem("password");
+  var plainHTML = CryptoJS.AES.decrypt(encryptedMsg, passphrase).toString(CryptoJS.enc.Utf8);
+  document.write(plainHTML);
+  document.close();
+} else {
+  var plainHTML = CryptoJS.enc.Base64.parse(form).toString(CryptoJS.enc.Utf8);
+  document.write(plainHTML);
+  document.close();
+}
 
-        <form id="staticrypt-form" action="#" method="post">
-          <div id="error" style="color: red; padding-bottom: 10px; height: 20px;"></div>
-          <input id="staticrypt-password"
-                 type="password"
-                 name="password"
-                 placeholder="passphrase"
-                 autofocus/>
-
-          <input type="submit" class="staticrypt-decrypt-button" value="ENTER"/>
-        </form>
-      </div>
-
-    </div>
-     <footer>
-      <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
-    </footer>
-    <script type="text/javascript" src="{{ pathstatic }}/static/js/crypto-js.min.js" charset="utf-8"></script>
-
-    <script>
 document.getElementById('staticrypt-form').addEventListener('submit', function(e) {
   e.preventDefault();
 
-  var passphrase = document.getElementById('staticrypt-password').value,
-  encryptedMsg = '{{ ciphertext }}';
+  var passphrase = document.getElementById('staticrypt-password').value;
 
   try{
     var plainHTML = CryptoJS.AES.decrypt(encryptedMsg, passphrase).toString(CryptoJS.enc.Utf8);
   }
   catch(err) {
-    document.getElementById("error").innerHTML = "Wrong keyword entry."
+    document.getElementById("error").innerHTML = "Wrong keyword entry.";
     return;
   }
 
+  sessionStorage.setItem("password", passphrase);
   document.write(plainHTML);
   document.close();
 });
-    </script>
+  </script>
   </body>
 </html>

@@ -1,0 +1,24 @@
+<div class="staticrypt-page">
+  <div class="staticrypt-form">
+    <div class="staticrypt-instructions">
+      <p class="staticrypt-title">{% if gallery %}{{ gallery.title }}{% else %}{{ settings.title }}{% endif %}</p>
+    </div>
+
+    <hr class="staticrypt-hr">
+
+    <form id="staticrypt-form" action="#" method="post">
+      <div id="error" style="color: red; padding-bottom: 10px; height: 20px;"></div>
+      <input id="staticrypt-password"
+             type="password"
+             name="password"
+             placeholder="passphrase"
+             autofocus/>
+
+      <input type="submit" class="staticrypt-decrypt-button" value="ENTER"/>
+    </form>
+  </div>
+
+</div>
+<footer>
+  <p>Generated using <a href="https://github.com/psycojoker/prosopopee">Prosopopée</a> · content under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a> · atom logo by <a href="https://thenounproject.com/jjjon/">Jonathan Li</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a></p>
+</footer>
