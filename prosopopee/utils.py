@@ -7,6 +7,7 @@ from path import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+from builtins import str
 
 class bcolors:
     OKGREEN = '\033[92m'
