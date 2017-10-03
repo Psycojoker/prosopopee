@@ -1,0 +1,72 @@
+.staticrypt-hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+.staticrypt-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.staticrypt-form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.staticrypt-form input {
+  outline: 0;
+  background: #292525;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.staticrypt-form .staticrypt-decrypt-button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #91C25F;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.staticrypt-html {
+  height: 100%;
+}
+
+.staticrypt-body {
+  background: #37474f; /* fallback for old browsers */
+  font-family: "Arial", sans-serif;
+}
+
+.staticrypt-instructions {
+  margin-top: -1em;
+  margin-bottom: 1em;
+}
+
+.staticrypt-title {
+  font-size: 1.5em;
+}
+
+#footer-enc {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

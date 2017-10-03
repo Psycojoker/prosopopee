@@ -22,7 +22,7 @@
 
 {% block content %}
 <div class="galleries-grid">
-  {% for galleries_line in galleries|reverse|batch(3)|reverse %}
+  {% for galleries_line in galleries|reverse|batch(1)|reverse %}
   <div class="galleries-line covers-{{ galleries_line|length }}">
     {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
     --><div class="gallery-square">
