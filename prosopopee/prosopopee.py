@@ -17,9 +17,6 @@ import shutil
 import socketserver
 import http.server
 
-import base64
-from subprocess import check_output
-
 import ruamel.yaml as yaml
 from docopt import docopt
 
