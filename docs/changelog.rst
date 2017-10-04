@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.7 (unreleased)
+0.7 (2017-10-04)
 
  * Add password access (based on https://robinmoisson.github.io/staticrypt/)
 
