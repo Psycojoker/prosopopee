@@ -6,9 +6,17 @@ story with your pictures.
 
 Prosopopee. Static site generator for your story.
 
-```
-Usage:
+## Features
 
+ * Thumbnails & multiple resolutions for fast previews.
+ * Videos support
+ * Mobile friendly.
+ * Multi level gallery.
+ * Support themes.
+ * Password access.
+ 
+## Usage
+```
 prosopopee
 prosopopee preview
 prosopopee deploy
