@@ -25,6 +25,7 @@ Installation needs Python, pip and virtualenv
 
 Gallery building needs graphicsmagick library
 
+    graphicsmagick need to have a version of gcc-5-base in 5.3.1
     apt-get install graphicsmagick
 
 ## Installation
