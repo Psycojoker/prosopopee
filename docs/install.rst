@@ -69,6 +69,7 @@ Get the Docker image::
     docker pull beudbeud/prosopopee
     
 Run::
+
     docker run --rm -v $(pwd):/site prosopopee
     
     
