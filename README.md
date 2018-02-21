@@ -16,6 +16,11 @@ Prosopopee. Static site generator for your story.
  * Password access.
  * Image lazy loading
  
+ ## TODO
+ 
+ * Night Mode
+ * More sections
+ 
  
 ## Usage
 ```
