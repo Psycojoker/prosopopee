@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8 (unreleased)
+
+ * Add night mode https://prosopopee.readthedocs.io/en/latest/configuration.html#night_mode
+ * fix some bugs
+
 0.7 (2017-10-04)
 
  * Add password access (based on https://robinmoisson.github.io/staticrypt/)
