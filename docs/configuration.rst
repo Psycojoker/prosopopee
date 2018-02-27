@@ -139,6 +139,16 @@ For access to this light gallery, add /light in the url of the gallery.
 
 If you want only light theme you can see below.
 
+Night Mode
+~~~~~~~~~~
+
+For enabled the night mode::
+
+  title: Gallery
+  settings:
+    night_mode: true
+
+After that you will can choose dark theme or light theme during visiting the website.
 
 Themes
 ~~~~~~
