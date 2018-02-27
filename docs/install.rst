@@ -60,3 +60,17 @@ Installation in virtualenv
 2. Download and install Prosopopee::
 
     pip install prosopopee
+   
+Docker
+------
+
+Get the Docker image::
+
+    docker pull beudbeud/prosopopee
+    
+Run::
+
+    docker run --rm -v $(pwd):/site prosopopee
+    
+    
+More informations https://hub.docker.com/r/beudbeud/prosopopee/

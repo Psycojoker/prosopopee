@@ -1,6 +1,6 @@
 # Prosopopee
 
-More or less a small clone of exposure.co in form of a static generator. For
+More or less a small clone of exposure.co or Medium in form of a static generator. For
 those of you who don't know what exposure.co is, this allows you to tell a
 story with your pictures.
 
@@ -16,6 +16,11 @@ Prosopopee. Static site generator for your story.
  * Password access.
  * Image lazy loading
  
+ ## TODO
+ 
+ * Night Mode
+ * More sections
+ 
  
 ## Usage
 ```
@@ -25,6 +30,10 @@ prosopopee deploy
 prosopopee (-h | --help)
 prosopopee.py --version
 ```
+
+## Docker
+
+https://hub.docker.com/r/beudbeud/prosopopee/
 
 ## Licence 
 
