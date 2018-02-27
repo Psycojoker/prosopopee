@@ -215,3 +215,100 @@ span.right {
 .clear {
   clear: both;
 }
+
+body.night {
+  background-color: #37474f;
+  color: #d3d4d4;
+}
+
+body.night .audio-player {
+  background: #546e7a;
+}
+
+body.night .author a {
+  color: #039be5 !important;
+}
+
+blockquote {
+  font-size: 22px;
+  font-style: italic;
+  color: #8a8989;
+}
+
+.btn-xlarge {
+  width: 150px;
+  height: 150px;
+}
+
+.btn-xlarge i {
+  font-size: 9.6rem;
+  line-height: 150px;
+}
+
+.home {
+  padding-bottom: 50px;
+}
+
+.floating-menu {
+  font-family: sans-serif;
+  padding: 0px;
+  width: 45px;
+  z-index: 556;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+}
+
+.switch-btn {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.switch-btn input {display:none;}
+
+.slider-btn {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider-btn:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+}
+
+input:checked + .slider-btn {
+  background-color: #2196F3;
+}
+
+input:focus + .slider-btn {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider-btn:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider-btn.round {
+  border-radius: 34px;
+}
+
+.slider-btn.round:before {
+  border-radius: 50%;
+}

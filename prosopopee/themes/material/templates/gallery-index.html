@@ -32,6 +32,15 @@
   <body>
     <main>
 
+    {% if settings.settings.night_mode %}
+    <div class="floating-menu">
+      <label class="switch-btn">
+        <input type="checkbox" id="toggle-box-checkbox">
+        <span class="slider-btn round"></span>
+      </label>
+    </div>
+    {% endif %}
+
     {% for section in gallery.sections %}
     {% include "sections/" + section.type + ".html" %}
     {% endfor %}
@@ -39,13 +48,12 @@
 
     {% if settings.share %}
     {% include 'share.html' -%}
-    {% else -%}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a href="../" class="btn-floating btn-large red">
+    {% endif %}
+    <div class="container home center-align">
+      <a href="../" class="btn-floating btn-xlarge blue-grey darken-1">
         <i class="fa fa-home"></i>
       </a>
     </div>
-    {% endif %}
 
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../static/js/materialize.min.js" charset="utf-8"></script>
@@ -58,6 +66,23 @@
     <script type="text/javascript" src="../static/js/mediaelement-and-player.min.js" charset="utf-8"></script>
     {% endif %}
     <script type="text/javascript" charset="utf-8">
+{% if settings.settings.night_mode %}
+if (localStorage.getItem("mode_night") == "true") {
+  $('body').addClass('night');
+  document.getElementById("toggle-box-checkbox").checked = true;
+}
+
+$('#toggle-box-checkbox').on('change', function(){
+  if(this.checked){
+    $('body').addClass('night');
+    localStorage.setItem("mode_night", true);
+  }else{
+    $('body').removeClass('night');
+    localStorage.setItem("mode_night", false);
+  }
+});
+{% endif %}
+
 $(document).ready(function(){
   $('.parallax').parallax();
 });    
