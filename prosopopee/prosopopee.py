@@ -3,6 +3,7 @@
 """Prosopopee. Static site generator for your story.
 Usage:
   prosopopee.py
+  prosopopee.py test
   prosopopee.py preview
   prosopopee.py deploy
   prosopopee.py (-h | --help)
@@ -33,6 +34,7 @@ DEFAULTS = {
     "share": False,
     "settings": {},
     "show_date": True,
+    "test": False,
 }
 
 SETTINGS = {
@@ -119,20 +121,21 @@ class Video(object):
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
-        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
-        options = self.options.copy()
-        self.ffmpeg(source, target, options)
+        if not DEFAULTS['test']:
+            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
+            options = self.options.copy()
+            self.ffmpeg(source, target, options)
         return ""
 
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.jpg" % gm_geometry
+        if not DEFAULTS['test']:
+            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
 
-        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
+            options = self.options.copy()
+            options.update({"resize": gm_geometry})
 
-        options = self.options.copy()
-        options.update({"resize": gm_geometry})
-
-        self.ffmpeg(source, target, options)
+            self.ffmpeg(source, target, options)
 
         return thumbnail_name
 
@@ -181,9 +184,10 @@ class Audio(object):
         CACHE.cache_picture(source, target, options)
 
     def copy(self):
-        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
-        options = self.options.copy()
-        self.ffmpeg(source, target, options)
+        if not DEFAULTS['test']:
+            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
+            options = self.options.copy()
+            self.ffmpeg(source, target, options)
         return ""
 
     def __repr__(self):
@@ -220,14 +224,14 @@ class Image(object):
             "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
             "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
+        if not DEFAULTS['test']:
+            command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
+            warning("Generation", source)
 
-        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-        warning("Generation", source)
+            print(command)
+            error(os.system(command) == 0, "gm command failed")
 
-        print(command)
-        error(os.system(command) == 0, "gm command failed")
-
-        CACHE.cache_picture(source, target, options)
+            CACHE.cache_picture(source, target, options)
 
     def copy(self):
         source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
@@ -236,29 +240,29 @@ class Image(object):
         # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
         # print "Skipped %s since the file hasn't been modified based on file size" % source
         # return ""
+        if not DEFAULTS['test']:
+            options = self.options.copy()
 
-        options = self.options.copy()
-
-        if not options["auto-orient"] and not options["strip"]:
-            shutil.copyfile(source, target)
-            print(("%s%s%s" % (source, "->", target)))
-        else:
-            # Do not consider quality settings here, since we aim to copy the input image
-            # better to preserve input encoding setting
-            del options["quality"]
-            self.gm(source, target, options)
+            if not options["auto-orient"] and not options["strip"]:
+                shutil.copyfile(source, target)
+                print(("%s%s%s" % (source, "->", target)))
+            else:
+                # Do not consider quality settings here, since we aim to copy the input image
+                # better to preserve input encoding setting
+                del options["quality"]
+                self.gm(source, target, options)
 
         return ""
 
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-" + gm_geometry + "." + self.name.split(".")[-1]
+        if not DEFAULTS['test']:
+            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
 
-        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
+            options = self.options.copy()
+            options.update({"resize": gm_geometry})
 
-        options = self.options.copy()
-        options.update({"resize": gm_geometry})
-
-        self.gm(source, target, options)
+            self.gm(source, target, options)
 
         return thumbnail_name
 
@@ -565,6 +569,8 @@ def main():
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
+    if arguments['test']:
+        DEFAULTS['test'] = True
 
     if arguments['preview']:
         error(Path("build").exists(), "Please build the website before launch preview")
@@ -628,6 +634,8 @@ def main():
     build_index(settings, front_page_galleries_cover, templates)
     CACHE.cache_dump()
 
+    if DEFAULTS['test'] == True:
+        okgreen("Succes", "HTML file building without error")
 
 if __name__ == '__main__':
     main()
