@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.8 (unreleased)
+0.8 (2018-02-28)
 
  * Add night mode https://prosopopee.readthedocs.io/en/latest/configuration.html#night_mode
+ * Add a test command to build html without generating media files
  * fix some bugs
 
 0.7 (2017-10-04)
