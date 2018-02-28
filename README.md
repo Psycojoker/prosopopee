@@ -28,6 +28,7 @@ Prosopopee. Static site generator for your story.
 prosopopee
 prosopopee preview
 prosopopee deploy
+prosopopee test
 prosopopee (-h | --help)
 prosopopee.py --version
 ```
