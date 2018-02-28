@@ -12,6 +12,14 @@
     <title>{{ settings.title }}</title>
   </head>
   <body>
+    {% if settings.settings.night_mode %}
+    <div class="floating-menu">
+      <label class="switch">
+        <input type="checkbox" id="toggle-box-checkbox">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    {% endif %}
     <div class="gallery-header">
       {% block logo %}
       {% endblock %}

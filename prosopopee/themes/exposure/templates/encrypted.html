@@ -20,7 +20,16 @@
 
   </head>
   <body id="encrypt-body" class="staticrypt-body">
-    <script type="text/javascript" src="{{ pathstatic }}/static/js/crypto-js.min.js" charset="utf-8"></script>
+    {% if settings.settings.night_mode %}
+    <div class="floating-menu">
+      <label class="switch">
+        <input type="checkbox" id="toggle-box-checkbox">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    {% endif %}
+    <script type="text/javascript" src="{{ pathstatic }}/static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ pathstatic }}/static/js/password.min.js" charset="utf-8"></script>
     <script>
 var form = '{{ form }}';
 var encryptedMsg = '{{ ciphertext }}';
@@ -56,6 +65,24 @@ if (sessionStorage.getItem("password")) {
     document.close();
   });
 }
+
+{% if settings.settings.night_mode %}
+if (localStorage.getItem("mode_night") == "true") {
+  $('body').addClass('night');
+  document.getElementById("toggle-box-checkbox").checked = true;
+}
+
+$('#toggle-box-checkbox').on('change', function(){
+  if(this.checked){
+    $('body').addClass('night');
+    localStorage.setItem("mode_night", true);
+  }else{
+    $('body').removeClass('night');
+    localStorage.setItem("mode_night", false);
+  }
+});
+{% endif %}
+
     </script>
   </body>
 </html>
