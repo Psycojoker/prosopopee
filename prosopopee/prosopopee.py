@@ -634,6 +634,8 @@ def main():
     build_index(settings, front_page_galleries_cover, templates)
     CACHE.cache_dump()
 
+    if DEFAULTS['test'] == True:
+        okgreen("Succes", "HTML file building without error")
 
 if __name__ == '__main__':
     main()
