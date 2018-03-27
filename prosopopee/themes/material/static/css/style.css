@@ -606,3 +606,11 @@ nav .nav-header {
     background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
     padding: 20% 0 10px 0;
 }
+
+@media only screen and (max-device-width: 700px) {
+.gallery-square {
+  width: 100% !important;
+  margin-bottom: -7px !important;
+  padding-bottom: 70% !important; 
+  }
+}

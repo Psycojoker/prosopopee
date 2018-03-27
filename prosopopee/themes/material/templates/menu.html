@@ -1,3 +1,17 @@
+<ul id="dropdown1" class="dropdown-content">
+  {% for line in settings.menu %}
+  {% set rowloop = loop %}
+  {% for file_name, menu_name in line.items() %}
+  {% if file_name.startswith('http') %}
+  {% set file_name = file_name %}
+  {% else %}
+  {% set file_name = "../"+file_name %}
+  {% endif %}
+  <li><a href={{ file_name }}>{{ menu_name  }}</a></li>
+  {% endfor %}
+  {% endfor %}
+</ul>
+
 <ul class="bt hide-on-med-and-down" style="float: right !important;">
   {% for line in settings.menu %}
   {% set rowloop = loop %}
@@ -10,4 +24,7 @@
   <li><a href={{ file_name }}>{{ menu_name  }}</a></li>
   {% endfor %}
   {% endfor %}
+</ul>
+<ul class="bt show-on-med-and-down" style="float: right !important;">
+  <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
 </ul>

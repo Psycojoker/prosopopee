@@ -418,3 +418,12 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+@media only screen and (max-device-width: 700px) {
+  .gallery-square {
+    width: 100% !important;
+    margin-bottom: -7px !important;
+    padding-bottom: 70% !important;
+  }
+}
+
