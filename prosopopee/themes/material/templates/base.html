@@ -28,7 +28,7 @@
       <div class="nav-wrapper db">
         <a href="#" class="brand-logo"><i class="fa fa-camera" aria-hidden="true"></i><p>{{ settings.title }}</p></a>
         {% if settings.menu -%}
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        {% include 'menu.html' %}
         {% endif -%}
       </div>
 
@@ -39,9 +39,6 @@
       </div>
     </nav>
 
-    {% if settings.menu -%}
-    {% include 'menu.html' %}
-    {% endif -%}
     {% block content %}
     {% endblock %}
 
