@@ -425,5 +425,9 @@ input:checked + .slider:before {
     margin-bottom: -7px !important;
     padding-bottom: 70% !important;
   }
+
+  .gallery-title > h2 {
+    font-size: 3.7vw;
+  }
 }
 

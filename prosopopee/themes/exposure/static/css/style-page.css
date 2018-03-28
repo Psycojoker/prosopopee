@@ -655,3 +655,14 @@ input:checked + .slider:before {
 	-webkit-animation-name: fadeInUp;
 }
 
+@media only screen and (max-device-width: 700px) {
+  .paragraph {
+    font-size: 3.7vmin !important;
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+  }
+  .full-picture h2 {
+    font-size: 3.2vw !important;
+  }
+}
+

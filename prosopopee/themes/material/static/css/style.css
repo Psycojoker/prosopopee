@@ -608,9 +608,20 @@ nav .nav-header {
 }
 
 @media only screen and (max-device-width: 700px) {
-.gallery-square {
-  width: 100% !important;
-  margin-bottom: -7px !important;
-  padding-bottom: 70% !important; 
+  .gallery-square {
+    width: 100% !important;
+    margin-bottom: -7px !important;
+    padding-bottom: 70% !important; 
+  }
+
+  h2 {
+    font-size: 2.56rem !important;
+  }
+
+  .gallery-title > h2 {
+    font-size: 3.7vw !important;
+  }
+  .parallax-container h2 {
+    font-size: 4.2vw !important;
   }
 }

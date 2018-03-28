@@ -312,3 +312,22 @@ input:checked + .slider-btn:before {
 .slider-btn.round:before {
   border-radius: 50%;
 }
+
+@media only screen and (max-device-width: 700px) {
+  h2 {
+    font-size: 2.56rem !important;
+  }
+  .parallax img {
+    min-width: 200% !important;
+  }
+  .gallery-title > h2 {
+    font-size: 3.7vw !important;
+  }
+  .parallax-container h2 {
+    font-size: 4.2vw !important;
+  }
+  .audio-player h2 {
+    font-size: 14px !important;
+  }
+}
+
