@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8.1 (2018-03-28)
+ * Fix some css error
+ * Update Material theme
+ * Add fadeInUp effect in exposure theme
+
 0.8 (2018-02-28)
 
  * Add night mode https://prosopopee.readthedocs.io/en/latest/configuration.html#night_mode
