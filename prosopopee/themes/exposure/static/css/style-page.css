@@ -614,3 +614,55 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+@keyframes fadeInUp {
+	from {
+		transform: translate3d(0,80px,0)
+	}
+
+	to {
+		transform: translate3d(0,0,0);
+		opacity: 1
+	}
+}
+
+@-webkit-keyframes fadeInUp {
+	from {
+		transform: translate3d(0,80px,0)
+	}
+
+	to {
+		transform: translate3d(0,0,0);
+		opacity: 1
+	}
+}
+
+.animated {
+	animation-delay: 0.5s;
+	animation-duration: 1s;
+	animation-fill-mode: both;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+	opacity: 0
+}
+
+.fadeInUp {
+	opacity: 0;
+	animation-name: fadeInUp;
+	-webkit-animation-name: fadeInUp;
+}
+
+@media only screen and (max-device-width: 700px) {
+  .paragraph {
+    font-size: 3.7vmin !important;
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+  }
+  .full-picture h2 {
+    font-size: 3.2vw !important;
+  }
+}
+

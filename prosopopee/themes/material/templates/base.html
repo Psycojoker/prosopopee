@@ -17,18 +17,12 @@
     <!-- Navbar and Header -->
     <nav class="nav-extended nav-full-header z-depth-0 blue-grey darken-3">
       <div class="nav-background">
-        {% if settings.cover %}
-        {% set image = Image(settings.cover) %}
-        {{ image.copy() }}
-        <div class="ea k" style="background-image: url('{{ image.generate_thumbnail("x1080") }}');"></div>
-        {% else %}
         <div class="ea k"></div>
-        {% endif %}
       </div>
       <div class="nav-wrapper db">
         <a href="#" class="brand-logo"><i class="fa fa-camera" aria-hidden="true"></i><p>{{ settings.title }}</p></a>
         {% if settings.menu -%}
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        {% include 'menu.html' %}
         {% endif -%}
       </div>
 
@@ -39,9 +33,6 @@
       </div>
     </nav>
 
-    {% if settings.menu -%}
-    {% include 'menu.html' %}
-    {% endif -%}
     {% block content %}
     {% endblock %}
 

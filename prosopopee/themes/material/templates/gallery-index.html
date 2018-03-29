@@ -29,22 +29,12 @@
     <title>{{ gallery.title }} · {{ settings.title }}</title>
   </head>
 
-  <body>
+  <body class="night">
     <main>
-
-    {% if settings.settings.night_mode %}
-    <div class="floating-menu">
-      <label class="switch-btn">
-        <input type="checkbox" id="toggle-box-checkbox">
-        <span class="slider-btn round"></span>
-      </label>
-    </div>
-    {% endif %}
 
     {% for section in gallery.sections %}
     {% include "sections/" + section.type + ".html" %}
     {% endfor %}
-
 
     {% if settings.share %}
     {% include 'share.html' -%}
@@ -66,23 +56,6 @@
     <script type="text/javascript" src="../static/js/mediaelement-and-player.min.js" charset="utf-8"></script>
     {% endif %}
     <script type="text/javascript" charset="utf-8">
-{% if settings.settings.night_mode %}
-if (localStorage.getItem("mode_night") == "true") {
-  $('body').addClass('night');
-  document.getElementById("toggle-box-checkbox").checked = true;
-}
-
-$('#toggle-box-checkbox').on('change', function(){
-  if(this.checked){
-    $('body').addClass('night');
-    localStorage.setItem("mode_night", true);
-  }else{
-    $('body').removeClass('night');
-    localStorage.setItem("mode_night", false);
-  }
-});
-{% endif %}
-
 $(document).ready(function(){
   $('.parallax').parallax();
 });    

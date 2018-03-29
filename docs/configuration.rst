@@ -142,7 +142,7 @@ If you want only light theme you can see below.
 Night Mode
 ~~~~~~~~~~
 
-For enabled the night mode::
+For enabled the night mode only available for exposure theme (default theme)::
 
   title: Gallery
   settings:

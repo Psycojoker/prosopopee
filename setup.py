@@ -12,7 +12,7 @@ except ImportError:
 
 
 setup(name='prosopopee',
-      version='0.8',
+      version='0.8.1',
       description='A static website generator that allows you to tell a story with your pictures',
       author='Laurent Peuch',
       long_description=read_md('README.md') + "\n\n\n" + open('docs/changelog.rst').read(),

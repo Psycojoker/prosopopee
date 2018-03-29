@@ -376,7 +376,6 @@ html,body {
 	height:100%
 }
 body {
-	background-color:#37474f;
 	font-family:"Lato", sans-serif
 }
 ul {
@@ -440,21 +439,22 @@ nav .nav-background .ea {
 	bottom:0;
 	-webkit-transform:none;
 	transform:none;
-	background-repeat:repeat
+	background-repeat:repeat;
 }
 nav .nav-header {
 	clear:both;
-	padding:40px 0
+	padding:40px 0;
 }
 nav .nav-header h1 {
 	font-size:56px;
-	font-weight:300
+	font-weight:300;
+  text-transform: uppercase;
 }
 .b {
 	position:relative
 }
 .b .d {
-	padding:0;
+  margin-top: 20px;
 }
 .b .gallery-expand .gallery-curve-wrapper {
 	cursor:pointer;
@@ -531,4 +531,97 @@ nav .nav-header {
 
 .brand-logo p {
   margin-top: 7px;
+}
+
+.img {
+  position: relative;
+  float: left;
+  width:  100px;
+  height: 100px;
+  background-position: 50% 50%;
+  background-repeat:   no-repeat;
+  background-size:     cover;
+}
+
+.galleries-line {
+    width: 100%;
+    height: 100%;
+    margin-bottom: -7px; /* YOLO */
+}
+
+.covers-1 .gallery-square {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding-bottom: 47%;
+    position: relative;
+}
+
+.covers-2 .gallery-square {
+    width: 50%;
+    height: 100%;
+    margin: 0 0 0;
+    padding-bottom: 47%;
+    position: relative;
+    display: inline-block;
+}
+
+.covers-3 .gallery-square {
+    width: 33.333333333%;
+    height: 100%;
+    margin: 0;
+    padding-bottom: 30%;
+    position: relative;
+    display: inline-block;
+}
+
+.gallery-square > a {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 555;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-cover {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.gallery-title {
+    color: white;
+    width: 100%;
+    position: absolute;
+    top: initial;
+    bottom: 0px;
+    text-align: center;
+    z-index: 3;
+    background: transparent linear-gradient(rgba(255, 255, 255, 0) 0%, transparent 1%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0.5) 71%, rgba(0, 0, 0, 0.7) 100%) repeat scroll 0% 0%;
+    padding: 20% 0 10px 0;
+}
+
+@media only screen and (max-device-width: 700px) {
+  .gallery-square {
+    width: 100% !important;
+    margin-bottom: -7px !important;
+    padding-bottom: 70% !important; 
+  }
+
+  h2 {
+    font-size: 2.56rem !important;
+  }
+
+  .gallery-title > h2 {
+    font-size: 3.7vw !important;
+  }
+  .parallax-container h2 {
+    font-size: 4.2vw !important;
+  }
 }

@@ -183,6 +183,10 @@ nav {
   line-height: 56px;
 }
 
+body.night nav {
+  background-color: #061F2F;;
+}
+
 nav .nav-wrapper {
   position: relative;
   height: 100%;
@@ -231,7 +235,7 @@ nav ul li > a.item-menu::before {
     margin-right: 22px;
     font-size: 18px;
     line-height: 1;
-    color: #ebebeb;
+    color: #cfcfcf;
 }
 
 .gallery-tag {
@@ -414,3 +418,16 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+@media only screen and (max-device-width: 700px) {
+  .gallery-square {
+    width: 100% !important;
+    margin-bottom: -7px !important;
+    padding-bottom: 70% !important;
+  }
+
+  .gallery-title > h2 {
+    font-size: 3.7vw;
+  }
+}
+
