@@ -1,3 +1,5 @@
+![logo.png](logo.png)
+
 # Prosopopee
 
 Prosopopee. Static site generator for your story.
