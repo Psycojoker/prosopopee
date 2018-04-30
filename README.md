@@ -1,4 +1,6 @@
-![logo.png](logo.png)
+<p align="center">
+<img src="logo.png">
+</p>
 
 # Prosopopee
 
