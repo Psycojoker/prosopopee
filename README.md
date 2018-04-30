@@ -4,30 +4,6 @@ Prosopopee. Static site generator for your story.
 
 Make beautiful customizable pictures galleries that tell a story using a static website generator written in Python. You don't need care about css, code and presentation, manage your contents in YAML file and Prosopopee will take care about the rest.
 
-```yaml
-title: Azerbaïdjan
-date: 2015-12-18
-cover: P1070043-01-01.jpeg
-sections:
-  - type: full-picture
-    image: P1060979-01-01.jpeg
-    fixed: true
-    text:
-      title: Azerbaïdjan
-      sub_title: En décembre 2015 j'ai eu la chance de partir en Azerbaïdjan pour une mission professionnel pendant 10 jours.
-      date: 2015-12-18
-  - type: paragraph
-    title: Baku
-    text: Je n'ai pas eu beaucoup de temps pour visiter, mais j'ai quand même eu le temps de faire une visite de Baku et de rencontrer quelques habitants.<br>Baku est une ville très agréable, la vie est paisible. Par contre la ville n'est pas du tout prévu pour se déplacer à pied, ce qui ne m'a pas empêcher de me promener dans les rues de la vieille ville
-  - type: pictures-group
-    images:
-      -
-        - P1060938-01-01.jpeg
-        - P1060946-01-01.jpeg
-        - P1060947-01-01.jpeg
-        - P1060948-01-01.jpeg
-```
-
 Prosopopee is sections oriented, make it very flexible, many kinds of section already available:
 
 * Parallax
@@ -36,6 +12,8 @@ Prosopopee is sections oriented, make it very flexible, many kinds of section al
 * Iframe (Youtube, Maps, etc..)
 * Quote
 * [And more](http://prosopopee.readthedocs.io/en/latest/sections.html)
+
+## Screenshots
 
 ## Features
 
@@ -54,7 +32,7 @@ Prosopopee currently supports:
  * Completely static output is easy to host anywhere
  * Hackable
  
- ## Examples
+  ## Examples
  
 You can find example usages here:
 
@@ -65,10 +43,31 @@ You can find example usages here:
 * http://such.life
 * http://www.street-art.me
  
-## TODO
- 
- * More sections
- 
+ ## Code example
+
+```yaml
+title: Title
+date: 2015-12-18
+cover: P1070043-01-01.jpeg
+sections:
+  - type: full-picture
+    image: P1060979-01-01.jpeg
+    fixed: true
+    text:
+      title: My Story
+      sub_title: some subtitle
+      date: 2015-12-18
+  - type: paragraph
+    title: Beautiful Title
+    text: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor
+  - type: pictures-group
+    images:
+      -
+        - P1060938-01-01.jpeg
+        - P1060946-01-01.jpeg
+        - P1060947-01-01.jpeg
+        - P1060948-01-01.jpeg
+```
  
 ## Usage
 ```bash
