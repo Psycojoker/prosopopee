@@ -26,6 +26,9 @@
 {% block content %}
 <div class="galleries-grid">
   {% for galleries_line in galleries|reverse|batch(3)|reverse %}
+  {% if loop.index is divisibleby 3 or loop.index is divisibleby 2 %}
+  {% set no_big_gallery_cover = true %}
+  {% endif %}
   <div class="galleries-line covers-{{ galleries_line|length }}">
     {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
     --><div class="gallery-square">
@@ -49,7 +52,11 @@
       {% else %}
       {% set cover = Image(gallery.cover) %}
       {{ cover.copy() }}
+      {% if no_big_gallery_cover %}
       <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}'), url('{{ cover.generate_thumbnail("x150") }}');"></div>
+      {% else %}
+      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x1366") }}'), url('{{ cover.generate_thumbnail("x900") }}');"></div>
+      {% endif %}
       {% endif %}
     </div><!-- comment tricks against space between inline-block
     -->{% endfor %}
