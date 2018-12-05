@@ -6,7 +6,7 @@
 
 Prosopopee. Static site generator for your story.
 
-Make beautiful customizable pictures galleries that tell a story using a static website generator written in Python. You don't need care about css, code and presentation, manage your contents in YAML file and Prosopopee will take care about the rest.
+Make beautiful customizable pictures galleries that tell a story using a static website generator written in Python. You don't need to care about css, code and presentation, manage your contents in YAML file and Prosopopee will take care about the rest.
 
 Prosopopee is sections oriented, make it very flexible, many kinds of section already available:
 
