@@ -1,7 +1,7 @@
 {% if section.background %}
 <div class="bg-section" style="background: {{ section.background }};">
   {% endif %}
-  <section class="pictures-group baguette">
+  <section class="pictures-group baguette" {% if section.css %}style="{{ section.css }}"{% endif %} >
     {% for line in section.images %}
     <div class="pictures-line">
       {% for image in line %}
