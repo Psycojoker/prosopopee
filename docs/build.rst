@@ -20,12 +20,12 @@ In a root folder launch this command::
 
   prosopopee preview
 
-After you can check your website on http://localhost:9000
+Then, you can check your website at http://localhost:9000
 
 Deployment
 ----------
 
-Prosopopee can upload your website with rsync, for do it run::
+Prosopopee can upload your website with rsync, to do so, run::
 
   prosopopee deploy
 
