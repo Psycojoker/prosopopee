@@ -3,7 +3,8 @@
     <ul>
       {% for line in settings.menu %}
       {% set file_name, menu_name = line.items()[0] %}
-      {% if file_name.startswith('http') %}
+      {# We test if it's a URI reference or not #}
+      {% if ':' in file_name and not file_name.startswith('./') %}
         {% set file_name = file_name %}
       {% elif gallery %}
         {% set file_name = "../"+file_name %}
