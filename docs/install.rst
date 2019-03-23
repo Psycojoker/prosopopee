@@ -7,16 +7,16 @@ Requirements
 Ubuntu/Debian
 ~~~~~~~~~~~~~
 
-Installation needs Python, pip and virtualenv::
+We need Python, pip and virtualenv::
 
     apt-get install python-pip python-virtualenv
 
-Gallery building needs graphicsmagick library::
+and graphicsmagick library for building the gallery::
 
-    # graphicsmagick need to have a version of gcc-5-base in 5.3.1
+    # graphicsmagick requires to have the 5.3.1 version of gcc-5-base
     apt-get install graphicsmagick
 
-An video convertor like ffmpeg::
+A video converter like ffmpeg::
 
     apt-get install ffmpeg
 
@@ -24,31 +24,28 @@ or::
 
     apt-get install libav-tools
 
-The deployment need rsync::
+For deployment, we need rsync::
   
     apt-get install rsync
 
 Mac
 ~~~
 
-Installation needs Brew::
+We need Brew::
 
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-
-Gallery building needs graphicsmagick library::
+and graphicsmagick library for building the gallery::
 
   brew install graphicsmagick 
   
-
-An video convertor like ffmpeg::  
+A video converter like ffmpeg::  
   
   brew install ffmpeg
 
-The deployment need rsync::
+For deployment, we need rsync::
 
   brew install rsync
-
 
 Installation in virtualenv
 --------------------------
@@ -72,6 +69,5 @@ Get the Docker image::
 Run::
 
     docker run --rm -v $(pwd):/site prosopopee
-    
     
 More informations https://hub.docker.com/r/beudbeud/prosopopee/
