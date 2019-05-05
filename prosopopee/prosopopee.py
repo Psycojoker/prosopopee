@@ -140,6 +140,17 @@ class Video(object):
 
         return thumbnail_name
 
+    @property
+    def ratio(self):
+        if self.options["binary"] == "ffmpeg":
+            binary = "ffprobe"
+        else:
+            binary = "avprobe"
+        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 " + self.base_dir.joinpath(self.name)
+        out = subprocess.check_output(command.split())
+        width,height = out.split(',')
+        return float(width) / int(height)
+
     def __repr__(self):
         return self.name
 
