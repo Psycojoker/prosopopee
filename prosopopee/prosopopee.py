@@ -16,6 +16,7 @@ Options:
 import os
 import shutil
 import socketserver
+import subprocess
 import http.server
 
 import ruamel.yaml as yaml
@@ -265,6 +266,13 @@ class Image(object):
             self.gm(source, target, options)
 
         return thumbnail_name
+
+    @property
+    def ratio(self):
+        command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
+        out = subprocess.check_output(command.split())
+        width,height = out.split(',')
+        return float(width) / int(height)
 
     def __repr__(self):
         return self.name
