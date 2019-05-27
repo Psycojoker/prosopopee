@@ -4,7 +4,8 @@
       {% for line in settings.menu %}
       {% set rowloop = loop %}
       {% for file_name, menu_name in line.items() %}
-      {% if file_name.startswith('http') %}
+      {# We test if it's a URI reference or not #}
+      {% if ':' in file_name and not file_name.startswith('./') %}
       {% set file_name = file_name %}
       {% else %}
       {% set file_name = "../"+file_name %}
