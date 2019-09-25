@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.2 (2019-09-25)
+ * Fix encryption page
+ * Fix URI local (Thanks QShulz)
+
 0.8.1 (2018-03-28)
  * Fix some css error
  * Update Material theme
