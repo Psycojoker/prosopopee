@@ -42,7 +42,7 @@ def makeform(template, settings, gallery_settings):
 def encrypt(password, template, gallery_path, settings, gallery_settings):
     encrypted_template = template.get_template("encrypted.html")
     index_plain = Path("build").joinpath(gallery_path, "index.html")
-    encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -pass pass:"%s"' % (index_plain, password), shell=True)
+    encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -md md5 -pass pass:"%s"' % (index_plain, password), shell=True)
     html = encrypted_template.render(
         settings=settings,
         form=makeform(template, settings, gallery_settings),
