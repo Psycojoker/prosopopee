@@ -16,6 +16,7 @@ Options:
 import os
 import shutil
 import socketserver
+import subprocess
 import http.server
 
 import ruamel.yaml as yaml
@@ -138,6 +139,17 @@ class Video(object):
             self.ffmpeg(source, target, options)
 
         return thumbnail_name
+
+    @property
+    def ratio(self):
+        if self.options["binary"] == "ffmpeg":
+            binary = "ffprobe"
+        else:
+            binary = "avprobe"
+        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 " + self.base_dir.joinpath(self.name)
+        out = subprocess.check_output(command.split())
+        width,height = out.decode("utf-8").split(',')
+        return float(width) / int(height)
 
     def __repr__(self):
         return self.name
@@ -265,6 +277,13 @@ class Image(object):
             self.gm(source, target, options)
 
         return thumbnail_name
+
+    @property
+    def ratio(self):
+        command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
+        out = subprocess.check_output(command.split())
+        width,height = out.decode("utf-8").split(',')
+        return float(width) / int(height)
 
     def __repr__(self):
         return self.name
@@ -521,7 +540,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         if gallery_settings.get("password") or settings.get("password"):
             from_template = light_templates.get_template("form.html")
             html = encrypt(password, light_templates, gallery_light_path, settings, gallery_settings)
-            
+
             open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 

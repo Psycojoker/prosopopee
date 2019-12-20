@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 language: python
 install:
   - sudo apt-get install graphicsmagick libav-tools -y
