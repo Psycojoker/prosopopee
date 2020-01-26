@@ -638,7 +638,7 @@ def main():
         settings["custom_css"] = True
 
     for gallery in galleries_dirs:
-        front_page_galleries_cover.append(process_directory(gallery, settings, templates))
+        front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
