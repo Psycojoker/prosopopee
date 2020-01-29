@@ -7,6 +7,9 @@ from path import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+from email.utils import formatdate
+from datetime import datetime
+
 from builtins import str
 
 class bcolors:
@@ -50,3 +53,7 @@ def encrypt(password, template, gallery_path, settings, gallery_settings):
         gallery=gallery_settings,
     ).encode("Utf-8")
     return html
+
+def rfc822(dt):
+    epoch = datetime.utcfromtimestamp(0).date()
+    return formatdate((dt - epoch).total_seconds())

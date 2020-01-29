@@ -27,7 +27,7 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, makeform, encrypt
+from .utils import error, warning, okgreen, makeform, encrypt, rfc822
 
 
 DEFAULTS = {
@@ -365,6 +365,7 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
         templates_dir.append(Path(__file__).parent.joinpath("themes", "exposure", "templates"))
 
     subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
+    subgallery_templates.filters['rfc822'] = rfc822
 
     Path(".").joinpath("build", gallery_path, "static").rmtree_p()
 
