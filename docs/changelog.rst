@@ -1,6 +1,9 @@
 Changelog
 =========
 
+0.8.3 (2020-02-24)
+ * Fix pip package
+
 0.8.2 (2019-09-25)
  * Fix encryption page
  * Fix URI local (Thanks QShulz)
