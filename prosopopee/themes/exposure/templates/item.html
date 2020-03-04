@@ -2,11 +2,11 @@
 <item>
 <title>{{ gallery.title }}</title>
 <link>{{ absolute_url }}</link>
-<guid>{{ gallery.link }}</guid>
+<guid>{{ absolute_url }}</guid>
 {% if gallery.sub_title %}
 <description>{{ gallery.sub_title }}</description>
 {% endif -%}
-<pubDate>{{ gallery.date }}</pubDate>
+<pubDate>{{ gallery.date|rfc822 }}</pubDate>
 </item>
 {% for sub_gallery in gallery.sub_gallery %}
 {% with gallery=sub_gallery %}
