@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.9.1
+ * update pypi package
+ * Recommanded to use python 3
+
 0.9.0
  * Fix audio player on mobile
  * Update JS lib

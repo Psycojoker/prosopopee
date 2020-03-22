@@ -579,7 +579,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
-    arguments = docopt(__doc__, version='0.9.0')
+    arguments = docopt(__doc__, version='0.9.1')
     settings = get_settings()
 
     front_page_galleries_cover = []

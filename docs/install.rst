@@ -9,7 +9,7 @@ Ubuntu/Debian
 
 We need Python, pip and virtualenv::
 
-    apt-get install python-pip python-virtualenv
+    apt-get install python3-pip python3-virtualenv
 
 and graphicsmagick library for building the gallery::
 
@@ -57,7 +57,7 @@ Installation in virtualenv
 
 2. Download and install Prosopopee::
 
-    pip install prosopopee
+    pip3 install prosopopee
    
 Docker
 ------
