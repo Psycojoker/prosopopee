@@ -276,6 +276,14 @@ And for full-picture::
       date: 2016-03-11
       date_end: 2016-03-25
 
+If you want enable the controls::
+
+  - type: bordered-picture
+    image:
+      name: video.mp4
+      type: video
+      controls: true
+
 You can also use a video as a gallery cover::
 
   title: pouet
