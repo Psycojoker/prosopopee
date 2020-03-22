@@ -21,13 +21,13 @@
     <video autoplay loop muted class="fillWidth">
       <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
     </video>
-    <img class="lazy full-picture responsive-video" src="{{ video.generate_thumbnail("2000") }}">
+    <img class="lazy full-picture responsive-video" src="{{ video.generate_thumbnail("x1366") }}" data-src="{{ video.generate_thumbnail("2000") }}">
   </div>
 </section>
 {% else %}
 {% set image = Image(section.image) %}
 {{ image.copy() }}
-<section class="full-picture" style="background: url('{{ image.generate_thumbnail("x2000") }}') no-repeat {% if section.fixed %} fixed {% else %} scroll {% endif %} center top / cover, url('{{ image.generate_thumbnail("x450") }}') no-repeat {% if section.fixed %} fixed {% else %} scroll {% endif %} center top / cover transparent;">
+<section class="lazy full-picture" data-bg="url({{ image.generate_thumbnail("x2000") }})" style="background-position: 50% 50%; background-repeat: no-repeat; background-attachment: {% if section.fixed %} fixed {% else %} scroll {% endif %};background-size: cover;">
   {% if section.text %}
   <div class="picture-text">
     <div class="picture-text-column animated animatedFadeInUp fadeInUp">

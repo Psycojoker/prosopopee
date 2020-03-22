@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='prosopopee',
-      version='0.8.3',
+      version='0.8.4',
       description='A static website generator that allows you to tell a story with your pictures',
       author='Laurent Peuch',
       long_description=long_description,
@@ -15,7 +15,6 @@ setup(name='prosopopee',
       author_email='cortex@worlddomination.be',
       url='https://github.com/Psycojoker/prosopopee',
       install_requires=open("./requirements.txt", "r").read().split(),
-      packages=['prosopopee'],
       py_modules=[],
       license= 'GPLv3+',
       scripts=[],
@@ -24,5 +23,9 @@ setup(name='prosopopee',
       },
       keywords='',
       include_package_data=True,
-      package_data={'prosopopee': ['themes/*']},
-     )
+      packages=['prosopopee'],
+      package_dir={'prosopopee': 'prosopopee'},
+      package_data={
+            'prosopopee': ['themes/*/*/*/*', 'themes/*/templates/*.html', 'themes/*/templates/feed.xml', 'themes/*/templates/section/*.html'],
+      },
+)

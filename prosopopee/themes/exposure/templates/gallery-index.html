@@ -3,19 +3,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="../static/css/fonts.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
-    {% if gallery.panorama_enabled %}
-    <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
-    {% endif %}
-    {% if gallery.audio_enabled %}
-    <link type="text/css" rel="stylesheet" href="../static/css/mediaelementplayer.css"  media="screen,projection"/>
-    {% endif %}
-    {% if settings.custom_css %}
-    <link type="text/css" rel="stylesheet" href="../static/css/custom.css"  media="screen,projection"/>
-    {% endif %}
     <!--Let browser know website is optimized for mobile-->
+    <link type="text/css" rel="stylesheet" href="../static/css/style-page.css"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% if gallery.description %}
     <meta name="description" content="{{ gallery.description }}" />
@@ -51,14 +40,23 @@
         </div>
       </a>
     </div>
+    <link type="text/css" rel="stylesheet" href="../static/css/fonts.css"  media="screen,projection"/>
+    {% if settings.custom_css %}
+    <link type="text/css" rel="stylesheet" href="../static/css/custom.css"  media="screen,projection"/>
+    {% endif %}
+    {% if gallery.panorama_enabled or gallery.audio_enabled %}
     <script type="text/javascript" src="../static/js/jquery-2.1.4.min.js" charset="utf-8"></script>
+    {% endif %}
+    <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
     <script type="text/javascript" src="../static/js/baguetteBox.min.js" charset="utf-8"></script>
     {% if gallery.panorama_enabled %}
+    <link type="text/css" rel="stylesheet" href="../static/css/panorama_viewer.css"  media="screen,projection"/>
     <script type="text/javascript" src="../static/js/jquery.panorama_viewer.min.js" charset="utf-8"></script>
     {% endif %}
-    <script type="text/javascript" src="../static/js/jquery.lazyload.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/lazyload.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="../static/js/picturefill.min.js" charset="utf-8"></script>
     {% if gallery.audio_enabled %}
+    <link type="text/css" rel="stylesheet" href="../static/css/mediaelementplayer.css"  media="screen,projection"/>
     <script type="text/javascript" src="../static/js/mediaelement-and-player.min.js" charset="utf-8"></script>
     {% endif %}
     <script type="text/javascript">
@@ -78,8 +76,7 @@ $('#toggle-box-checkbox').on('change', function(){
   }
 });
 {% endif %}
-$(function() {
-  baguetteBox.run(".baguette", {});
+  baguetteBox.run(".baguette");
 
   {% if gallery.panorama_enabled %}
   $(".panorama").panorama_viewer({
@@ -90,7 +87,6 @@ $(function() {
     overlay: true
   });
   {% endif %}
-});
 
 {% if gallery.audio_enabled %}
 $('audio').mediaelementplayer({
@@ -116,19 +112,8 @@ function goFullscreen(id) {
   }  
 }
 
-$(function() {
-  $("img.lazy").lazyload({
-    threshold : 400,
-    effect : "fadeIn"
-  });
-  $("video.lazy").lazyload({
-    threshold : 400,
-    effect : "fadeIn"
-  });
-  $("section.lazy").lazyload({
-    threshold : 400,
-    effect : "fadeIn"
-  });
+var lazyLoadInstance = new LazyLoad({
+    elements_selector: ".lazy"
 });
 
 {% if settings.settings.light_mode %}

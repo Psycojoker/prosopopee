@@ -1,7 +1,7 @@
 {% set image = Image(section.image) %}
 {{ image.copy() }}
 <div class="author-meta">
-  <img src={{ image.generate_thumbnail("80x80") }} alt="" class="circle">
+  <img data-src={{ image.generate_thumbnail("400x400") }} alt="" class="circle lazy">
   <div>
     <span class=author-info>Story by
       <h4>{{ section.name }}</h4>

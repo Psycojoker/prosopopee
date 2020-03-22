@@ -1,4 +1,0 @@
-recursive-include themes *
-include requirements.txt
-include README.md
-include docs/changelog.rst

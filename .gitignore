@@ -1,1 +1,5 @@
 *.pyc
+build
+dist
+prosopopee.egg-info
+prosopopee/prosopopee.egg-info
