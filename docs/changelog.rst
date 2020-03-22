@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.9.0
+ * Fix audio player on mobile
+ * Update JS lib
+ * Change lazyload lib
+ * Possibility the add controls on video
+ * Update exposure theme
+ * fix some issue
+
 0.8.3 (2020-02-24)
  * Fix pip package
 
