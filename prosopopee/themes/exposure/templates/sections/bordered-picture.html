@@ -9,7 +9,7 @@
   <section class="bordered-picture baguette" style="position: relative;">
     <div class="caption">
       <img class="lazy" data-src="{{ video.generate_thumbnail("2000") }}" src="./../static/img/11-14.svg" alt="">
-      <video class="lazy" id="{{ video }}" onclick="goFullscreen('{{ video }}');" data-poster="{{ video.generate_thumbnail("2000") }}" alt="" autoplay="autoplay" loop="loop" preload="none" muted {% if image.controls %}controls="true"{% endif %}>
+      <video class="lazy" id="{{ video }}" onclick="goFullscreen('{{ video }}');" data-poster="{{ video.generate_thumbnail("2000") }}" alt="" autoplay="autoplay" loop="loop" preload="none" muted {% if section.image.controls %}controls="true"{% endif %}>
         <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
       </video>
       {% if caption %}
