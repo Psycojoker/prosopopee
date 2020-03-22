@@ -8,7 +8,7 @@ install:
   - avconv -version
   - avconv -help
 python:
-  - "2.7"
+  - "3.6"
 script:
   - gm -version
   - cd example && prosopopee
