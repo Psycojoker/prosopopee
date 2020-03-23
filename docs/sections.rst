@@ -115,7 +115,8 @@ Since version 0.5 you can add a floating image in the paragraph::
   - type: paragraph
     title: the title
     text: Some text, HTML <b>is allowed</b>.
-    image: image.jpg
+    image: 
+      name: image.jpg
       float: right 
       size: 150px
 
