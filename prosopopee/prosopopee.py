@@ -29,6 +29,7 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import error, warning, okgreen, makeform, encrypt, rfc822
 
+import datetime
 
 DEFAULTS = {
     "rss": True,
@@ -302,7 +303,7 @@ def get_settings():
             mark = exc.problem_mark
             error(False, "There are something wrong in settings.yaml line %s" % (mark.line))
         else:
-            error(False, "There are omething wrong in settings.yaml")
+            error(False, "There are something wrong in settings.yaml")
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
@@ -395,6 +396,14 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
             error(False, "There are something wrong in %s/settings.yaml line %s" % (gallery_path, mark.line))
         else:
             error(False, "There are something wrong in %s/settings.yaml" % (gallery_path))
+    except ValueError as s:
+        error(False, "There are something wrong in %s/settings.yaml: %s" % (gallery_path, s))
+    else:
+        if gallery_settings.get("date"):
+            try:
+                datetime.datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
+            except ValueError:
+                error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % (gallery_path))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
