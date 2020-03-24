@@ -1,6 +1,9 @@
 Changelog
 =========
 
+0.9.2
+ * Catch traceback when date format is in incorrect format
+
 0.9.1
  * update pypi package
  * Recommanded to use python 3
