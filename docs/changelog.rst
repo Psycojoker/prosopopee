@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.0.0 (2020-04-14)
+ * Add automatic generation gallery
+
 0.9.2
  * Catch traceback when date format is in incorrect format
 
