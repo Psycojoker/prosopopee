@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 
 """Prosopopee. Static site generator for your story.
+
 Usage:
   prosopopee.py
   prosopopee.py test
   prosopopee.py preview
   prosopopee.py deploy
+  prosopopee.py autogen <folder>
   prosopopee.py (-h | --help)
   prosopopee.py --version
+
 Options:
-  -h --help                 Show this screen.
-  --version                 Show version.
+  test          Verify all your yaml data
+  preview       Start preview webserver on port 8000
+  deploy        Deploy your website
+  autogen       Generate gallery automaticaly
+  -h, --help    Show this screen.
+  --version     Show version.
 """
 
 import os
@@ -28,6 +35,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
 from .utils import error, warning, okgreen, makeform, encrypt, rfc822
+from .autogen import autogen
 
 import datetime
 
@@ -632,6 +640,10 @@ def main():
         else:
             r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
         error(os.system(r_cmd) == 0, "deployment failed")
+        return
+
+    if arguments['autogen']:
+        autogen(arguments['<folder>'])
         return
 
     Path("build").makedirs_p()
