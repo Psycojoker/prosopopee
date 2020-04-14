@@ -77,12 +77,21 @@ sections:
  
 ## Usage
 ```bash
-prosopopee
-prosopopee preview
-prosopopee deploy
-prosopopee test
-prosopopee (-h | --help)
-prosopopee.py --version
+  prosopopee.py                                                                 
+  prosopopee.py test                                                            
+  prosopopee.py preview                                                         
+  prosopopee.py deploy                                                          
+  prosopopee.py autogen <folder>                                                
+  prosopopee.py (-h | --help)                                                   
+  prosopopee.py --version                                                       
+                                                                                
+Options:                                                                        
+  test          Verify all your yaml data                                       
+  preview       Start preview webserver on port 8000                            
+  deploy        Deploy your website                                             
+  autogen       Generate gallery automaticaly                                   
+  -h, --help    Show this screen.                                               
+  --version     Show version.
 ```
 
 ## Docker

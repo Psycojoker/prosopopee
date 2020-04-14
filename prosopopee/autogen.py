@@ -4,7 +4,7 @@ from glob import glob
 from jinja2 import Template
 import ruamel.yaml as yaml
 from path import Path
-
+from .utils import error
 
 data = '''sections:
   - type: pictures-group
@@ -28,7 +28,10 @@ data = '''sections:
 '''
 
 def autogen(folder):
-    gallery_settings = yaml.safe_load(open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r"))
+    try:
+        gallery_settings = yaml.safe_load(open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r"))
+    except:
+        error(False, "You need configure first, the tittle, date and cover in settings.yaml for use autogen")
 
     types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg')
     files_grabbed = []
