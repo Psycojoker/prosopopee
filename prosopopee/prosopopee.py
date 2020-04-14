@@ -13,7 +13,7 @@ Usage:
 
 Options:
   test          Verify all your yaml data
-  preview       Start preview webserver on port 8000
+  preview       Start preview webserver on port 9000
   deploy        Deploy your website
   autogen       Generate gallery automaticaly
   -h, --help    Show this screen.
