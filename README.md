@@ -81,7 +81,7 @@ sections:
   prosopopee.py test                                                            
   prosopopee.py preview                                                         
   prosopopee.py deploy                                                          
-  prosopopee.py autogen <folder>                                                
+  prosopopee.py autogen (-d <folder> | --all ) [--force]                                                
   prosopopee.py (-h | --help)                                                   
   prosopopee.py --version                                                       
                                                                                 

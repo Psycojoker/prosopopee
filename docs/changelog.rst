@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.0 (2020-04-14)
+1.0.0 the covid release (2020-04-28)
  * Add automatic generation gallery
 
 0.9.2

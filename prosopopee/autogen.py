@@ -1,7 +1,11 @@
+import os
+from time import gmtime, strftime
 from glob import glob
 from jinja2 import Template
 from path import Path
 from .utils import error, warning, okgreen, load_settings
+from PIL import Image
+from PIL.ExifTags import TAGS
 
 data = '''title: {{ title }}
 date: {{ date }}
@@ -30,6 +34,20 @@ sections:
 types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg', '*.png', '*.PNG')
 
 
+def get_exif(filename):
+    exif_data = {}
+    exif = Image.open(filename)._getexif()
+    if exif is not None:
+        for (tag, value) in exif.items():
+            decoded = TAGS.get(tag, tag)
+            exif_data[decoded] = value
+        if 'DateTime' in exif_data:
+            datetime = exif_data['DateTime']
+    else:
+        datetime = strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
+    return datetime
+
+
 def gen_section(folder, force):
     files_grabbed = []
     gallery_settings = load_settings(folder)
@@ -41,10 +59,14 @@ def gen_section(folder, force):
                 for files in types:
                     files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
                 tm = Template(data, trim_blocks=True)
-                msg = tm.render(title=gallery_settings['title'], date=gallery_settings['date'], cover=gallery_settings['cover'], files=files_grabbed)
+                msg = tm.render(title=gallery_settings['title'],
+                                date=gallery_settings['date'],
+                                cover=gallery_settings['cover'],
+                                files=sorted(files_grabbed, key=get_exif)
+                                )
                 f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
                 f.write(msg)
-                okgreen("Autogen", "%s gallery was generated" % folder)
+                okgreen("Generation", "%s gallery" % folder)
         else:
             error(False, "You need configure first, the title, date and cover in %s/settings.yaml for use autogen" % folder)
     else:
