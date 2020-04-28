@@ -18,7 +18,11 @@
       {% endif %}
       <div class="picture caption" style="flex-grow: {{ ratio }}">
         {% if image.type == "video" %}
-	<img class="lazy" data-src="{{ video.generate_thumbnail("600") }}" src="./../static/img/11-14.svg" alt="">
+        {% if loop.length == 1 %}
+        <img class="lazy" data-src="{{ video.generate_thumbnail("1366") }}" src="./../static/img/11-14.svg" alt="">
+        {% else %}
+        <img class="lazy" data-src="{{ video.generate_thumbnail("600") }}" src="./../static/img/11-14.svg" alt="">
+        {% endif %}
         <video class="lazy" id="{{ video }}" onclick="goFullscreen('{{ video }}');" data-poster="{{ video.generate_thumbnail("600") }}" alt="" loop="loop" preload="none" autoplay muted {% if image.controls %}controls="true"{% endif %}>
           <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
         </video>
@@ -34,7 +38,11 @@
            data-at-1366="{{ image.generate_thumbnail("x1366") }}"
            data-at-1920="{{ image.generate_thumbnail("x1920") }}"
            >
-	   <img class="lazy" src="{% if caption %}./../static/img/11-14.svg{% endif %}" data-src="{{ image.generate_thumbnail("x600") }}" alt="">
+	{% if loop.length == 1 %}
+           <img class="lazy" src="{% if caption %}./../static/img/11-14.svg{% endif %}" data-src="{{ image.generate_thumbnail("x1366") }}" alt="">
+	{% else %}
+           <img class="lazy" src="{% if caption %}./../static/img/11-14.svg{% endif %}" data-src="{{ image.generate_thumbnail("x600") }}" alt="">
+	{% endif %}
            {% if caption %}
            <div class="caption__overlay">
              <h5 class="caption__overlay__title">{{ caption }}</h5>

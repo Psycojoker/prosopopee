@@ -1,12 +1,12 @@
-import sys
-import base64
 from glob import glob
 from jinja2 import Template
-import ruamel.yaml as yaml
 from path import Path
-from .utils import error
+from .utils import error, warning, okgreen, load_settings
 
-data = '''sections:
+data = '''title: {{ title }}
+date: {{ date }}
+cover: {{ cover }}
+sections:
   - type: pictures-group
     images:
       -
@@ -27,19 +27,36 @@ data = '''sections:
 {% endfor %}
 '''
 
-def autogen(folder):
-    try:
-        gallery_settings = yaml.safe_load(open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r"))
-    except:
-        error(False, "You need configure first, the tittle, date and cover in settings.yaml for use autogen")
+types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg', '*.png', '*.PNG')
 
-    types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg')
+
+def gen_section(folder, force):
     files_grabbed = []
-    for files in types:
-        files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
-    tm = Template(data, trim_blocks=True)
-    msg = tm.render(title=gallery_settings['title'], date=gallery_settings['date'], cover=gallery_settings['cover'], files=files_grabbed)
-    print(msg)
-    f=open(Path(".").joinpath(folder, "settings.yaml").abspath(), "a")
-    f.write(msg)
+    gallery_settings = load_settings(folder)
+    if 'static' not in gallery_settings:
+        if 'title' and 'date' and 'cover' in gallery_settings:
+            if 'sections' in gallery_settings and force is not True:
+                warning("Skipped", "%s gallery is already generated" % folder)
+            else:
+                for files in types:
+                    files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
+                tm = Template(data, trim_blocks=True)
+                msg = tm.render(title=gallery_settings['title'], date=gallery_settings['date'], cover=gallery_settings['cover'], files=files_grabbed)
+                f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
+                f.write(msg)
+                okgreen("Autogen", "%s gallery was generated" % folder)
+        else:
+            error(False, "You need configure first, the title, date and cover in %s/settings.yaml for use autogen" % folder)
+    else:
+        warning("Skipped", "Nothing to do in %s gallery" % folder)
+
+
+def autogen(folder=None, force=False):
+    if folder:
+        gen_section(folder, force)
+    else:
+        for x in glob("./*/**/settings.yaml", recursive=True):
+            folder = x.rsplit('/', 1)[0]
+            if not glob(folder + "/**/settings.yaml"):
+                gen_section(folder, force)
     return
