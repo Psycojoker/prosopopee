@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.0 the covid release (2020-04-29)
+ * Add automatic generation gallery
+
+0.9.2
+ * Catch traceback when date format is in incorrect format
+
 0.9.1
  * update pypi package
  * Recommanded to use python 3

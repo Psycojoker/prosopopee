@@ -3,3 +3,4 @@ path.py
 docopt
 ruamel.yaml
 future
+pillow

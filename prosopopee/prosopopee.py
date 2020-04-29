@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 
 """Prosopopee. Static site generator for your story.
+
 Usage:
   prosopopee.py
   prosopopee.py test
   prosopopee.py preview
   prosopopee.py deploy
+  prosopopee.py autogen (-d <folder> | --all ) [--force]
   prosopopee.py (-h | --help)
   prosopopee.py --version
+
 Options:
-  -h --help                 Show this screen.
-  --version                 Show version.
+  test          Verify all your yaml data
+  preview       Start preview webserver on port 9000
+  deploy        Deploy your website
+  autogen       Generate gallery automaticaly
+  -h, --help    Show this screen.
+  --version     Show version.
 """
 
 import os
@@ -19,7 +26,6 @@ import socketserver
 import subprocess
 import http.server
 
-import ruamel.yaml as yaml
 from docopt import docopt
 
 from path import Path
@@ -27,7 +33,8 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, makeform, encrypt, rfc822
+from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
+from .autogen import autogen
 
 import datetime
 
@@ -66,6 +73,7 @@ SETTINGS = {
         "extension": "mp3"
     }
 }
+
 
 class Video(object):
     base_dir = Path()
@@ -149,7 +157,7 @@ class Video(object):
             binary = "avprobe"
         command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 " + self.base_dir.joinpath(self.name)
         out = subprocess.check_output(command.split())
-        width,height = out.decode("utf-8").split(',')
+        width, height = out.decode("utf-8").split(',')
         return float(width) / int(height)
 
     def __repr__(self):
@@ -283,27 +291,22 @@ class Image(object):
     def ratio(self):
         command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
         out = subprocess.check_output(command.split())
-        width,height = out.decode("utf-8").split(',')
+        width, height = out.decode("utf-8").split(',')
         return float(width) / int(height)
 
     def __repr__(self):
         return self.name
 
+
 class TCPServerV4(socketserver.TCPServer):
     allow_reuse_address = True
+
 
 def get_settings():
     error(Path("settings.yaml").exists(), "I can't find a "
           "settings.yaml in the current working directory")
 
-    try:
-        settings = yaml.safe_load(open("settings.yaml", "r"))
-    except yaml.YAMLError as exc:
-        if hasattr(exc, 'problem_mark'):
-            mark = exc.problem_mark
-            error(False, "There are something wrong in settings.yaml line %s" % (mark.line))
-        else:
-            error(False, "There are something wrong in settings.yaml")
+    settings = load_settings(".")
 
     error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
@@ -388,22 +391,12 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
     else:
         gallery_path = gallery_name
 
-    try:
-        gallery_settings = yaml.safe_load(open(Path(".").joinpath(gallery_path, "settings.yaml").abspath(), "r"))
-    except yaml.YAMLError as exc:
-        if hasattr(exc, 'problem_mark'):
-            mark = exc.problem_mark
-            error(False, "There are something wrong in %s/settings.yaml line %s" % (gallery_path, mark.line))
-        else:
-            error(False, "There are something wrong in %s/settings.yaml" % (gallery_path))
-    except ValueError as s:
-        error(False, "There are something wrong in %s/settings.yaml: %s" % (gallery_path, s))
-    else:
-        if gallery_settings.get("date"):
-            try:
-                datetime.datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
-            except ValueError:
-                error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % (gallery_path))
+    gallery_settings = load_settings(gallery_path)
+    if gallery_settings.get("date"):
+        try:
+            datetime.datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
+        except ValueError:
+            error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % (gallery_path))
 
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
@@ -548,7 +541,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
         if gallery_settings.get("password") or settings.get("password"):
-            from_template = light_templates.get_template("form.html")
+            light_templates.get_template("form.html")
             html = encrypt(password, light_templates, gallery_light_path, settings, gallery_settings)
 
             open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
@@ -588,7 +581,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
-    arguments = docopt(__doc__, version='0.9.1')
+    arguments = docopt(__doc__, version='1.0.0')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -634,6 +627,10 @@ def main():
         error(os.system(r_cmd) == 0, "deployment failed")
         return
 
+    if arguments['autogen']:
+        autogen(arguments['<folder>'], arguments['--force'])
+        return
+
     Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
     templates = get_gallery_templates(theme)
@@ -663,8 +660,9 @@ def main():
     build_index(settings, front_page_galleries_cover, templates)
     CACHE.cache_dump()
 
-    if DEFAULTS['test'] == True:
+    if DEFAULTS['test'] is True:
         okgreen("Succes", "HTML file building without error")
+
 
 if __name__ == '__main__':
     main()

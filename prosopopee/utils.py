@@ -12,6 +12,8 @@ from datetime import datetime
 
 from builtins import str
 
+import ruamel.yaml as yaml
+
 class bcolors:
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
@@ -57,3 +59,17 @@ def encrypt(password, template, gallery_path, settings, gallery_settings):
 def rfc822(dt):
     epoch = datetime.utcfromtimestamp(0).date()
     return formatdate((dt - epoch).total_seconds())
+
+def load_settings(folder):
+    try:
+        gallery_settings = yaml.safe_load(open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r"))
+    except yaml.YAMLError as exc:
+        if hasattr(exc, 'problem_mark'):
+            mark = exc.problem_mark
+            error(False, "There are something wrong in %s/settings.yaml line %s" % (folder ,mark.line))
+        else:
+          error(False, "There are something wrong in %s/settings.yaml" % folder)
+    if gallery_settings is None:
+        error(False, "The %s/settings.yaml file is empty" % folder)
+    else:
+        return gallery_settings
