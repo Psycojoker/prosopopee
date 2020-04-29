@@ -2,16 +2,20 @@ Changelog
 =========
 
 1.0.0 the covid release (2020-04-29)
+
  * Add automatic generation gallery
 
 0.9.2
+
  * Catch traceback when date format is in incorrect format
 
 0.9.1
+
  * update pypi package
  * Recommanded to use python 3
 
 0.9.0
+
  * Fix audio player on mobile
  * Update JS lib
  * Change lazyload lib
@@ -20,13 +24,16 @@ Changelog
  * fix some issue
 
 0.8.3 (2020-02-24)
+
  * Fix pip package
 
 0.8.2 (2019-09-25)
+
  * Fix encryption page
  * Fix URI local (Thanks QShulz)
 
 0.8.1 (2018-03-28)
+
  * Fix some css error
  * Update Material theme
  * Add fadeInUp effect in exposure theme
