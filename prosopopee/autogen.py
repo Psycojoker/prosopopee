@@ -48,7 +48,7 @@ def get_exif(filename):
     return datetime
 
 
-def gen_section(folder, force):
+def build_template(folder, force):
     files_grabbed = []
     gallery_settings = load_settings(folder)
     if 'static' not in gallery_settings:
@@ -75,10 +75,10 @@ def gen_section(folder, force):
 
 def autogen(folder=None, force=False):
     if folder:
-        gen_section(folder, force)
+        build_template(folder, force)
     else:
         for x in glob("./*/**/settings.yaml", recursive=True):
             folder = x.rsplit('/', 1)[0]
             if not glob(folder + "/**/settings.yaml"):
-                gen_section(folder, force)
+                build_template(folder, force)
     return

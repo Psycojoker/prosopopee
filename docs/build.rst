@@ -1,6 +1,25 @@
 Build the website
 =================
 
+For build your website there are two way:
+
+* Auto generation
+* Self made
+
+If you want do all by your self and make custom gallery and use many section, 
+you need follow https://prosopopee.readthedocs.io/en/latest/configuration.html#gallery-settings-yaml
+
+But if is just for make gallery with only picture you can generate it automatically.
+
+You need 
+
+1. Create a folder
+2. Put all pics you want
+3. Create settings.yaml file in the folder
+4. Add title, date and cover key in folder/settings.yaml
+5. Use `prosopopee autogen -d folder`
+
+
 Generate
 --------
 

@@ -25,6 +25,7 @@ Prosopopee is sections oriented, make it very flexible, many kinds of section al
 
 Prosopopee currently supports:
 
+ * Automatic generation
  * Lightweight
  * Thumbnails & multiple resolutions for fast previews (JPEG progressive)
  * Videos support
