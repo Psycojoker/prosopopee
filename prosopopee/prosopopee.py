@@ -3,13 +3,13 @@
 """Prosopopee. Static site generator for your story.
 
 Usage:
-  prosopopee.py
-  prosopopee.py test
-  prosopopee.py preview
-  prosopopee.py deploy
-  prosopopee.py autogen (-d <folder> | --all ) [--force]
-  prosopopee.py (-h | --help)
-  prosopopee.py --version
+  prosopopee
+  prosopopee test
+  prosopopee preview
+  prosopopee deploy
+  prosopopee autogen (-d <folder> | --all ) [--force]
+  prosopopee (-h | --help)
+  prosopopee --version
 
 Options:
   test          Verify all your yaml data
@@ -36,7 +36,6 @@ from .cache import CACHE
 from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
 from .autogen import autogen
 
-import datetime
 
 DEFAULTS = {
     "rss": True,
@@ -121,12 +120,10 @@ class Video(object):
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
-            print(command)
-            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
         else:
             command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
-            print(command)
-            error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
+        print(command)
+        error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
         CACHE.cache_picture(source, target, options)
 
@@ -392,12 +389,6 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
         gallery_path = gallery_name
 
     gallery_settings = load_settings(gallery_path)
-    if gallery_settings.get("date"):
-        try:
-            datetime.datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
-        except ValueError:
-            error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % (gallery_path))
-
     error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
     error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
 
@@ -453,7 +444,7 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
         cover_image_type = "image"
 
     error(cover_image_path.exists(), "File for %s cover image doesn't exist at "
-                                            "%s" % (gallery_name, cover_image_path))
+          "%s" % (gallery_name, cover_image_path))
 
     gallery_cover = {
         "title": gallery_settings["title"],
@@ -509,8 +500,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     # Build light mode gallery
     if gallery_settings.get("light_mode", False) or (
             settings["settings"].get("light_mode", False) and
-            gallery_settings.get("light_mode") is None
-        ):
+            gallery_settings.get("light_mode") is None):
 
         # Prepare light mode
         Path("build").joinpath(gallery_path, "light").makedirs_p()
@@ -581,7 +571,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
-    arguments = docopt(__doc__, version='1.0.0')
+    arguments = docopt(__doc__, version='1.0.1')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -610,7 +600,7 @@ def main():
 
     if arguments['deploy']:
         error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
-             "please install the 'rsync' package.\n")
+              "please install the 'rsync' package.\n")
         error(Path("build").exists(), "Please build the website before launch deployment")
 
         r_dest = settings["settings"]["deploy"]["dest"]

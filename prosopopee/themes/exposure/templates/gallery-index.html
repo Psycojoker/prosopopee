@@ -103,6 +103,8 @@ $('audio').mediaelementplayer({
 
 function goFullscreen(id) {
   var element = document.getElementById(id);
+  element.setAttribute("controls", true);
+
   if (element.requestFullscreen) {
     element.requestFullscreen();
   } else if (element.mozRequestFullScreen) {

@@ -50,7 +50,10 @@ def get_exif(filename):
 
 def build_template(folder, force):
     files_grabbed = []
-    gallery_settings = load_settings(folder)
+    try:
+        gallery_settings = load_settings(folder)
+    except FileNotFoundError:
+        error(False, "Can't open %s/settings.yaml" % folder)
     if 'static' not in gallery_settings:
         if 'title' and 'date' and 'cover' in gallery_settings:
             if 'sections' in gallery_settings and force is not True:

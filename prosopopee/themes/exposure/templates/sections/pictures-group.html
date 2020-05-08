@@ -23,8 +23,8 @@
         {% else %}
         <img class="lazy" data-src="{{ video.generate_thumbnail("600") }}" src="./../static/img/11-14.svg" alt="">
         {% endif %}
-        <video class="lazy" id="{{ video }}" onclick="goFullscreen('{{ video }}');" data-poster="{{ video.generate_thumbnail("600") }}" alt="" loop="loop" preload="none" autoplay muted {% if image.controls %}controls="true"{% endif %}>
-          <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
+        <video class="lazy" id="{{ video }}.{{ format }}" onclick="goFullscreen('{{ video }}.{{ format }}');" data-src="{{ video }}.{{ format }}" data-poster="{{ video.generate_thumbnail("600") }}" alt="" loop="loop" preload="none" autoplay muted {% if image.controls %}controls="true"{% endif %}>
+          <source data-src="{{ video }}.{{ format }}" type="video/{{ format }}">
         </video>
         {% if caption %}
         <div class="caption__overlay">

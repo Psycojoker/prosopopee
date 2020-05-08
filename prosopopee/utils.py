@@ -2,17 +2,11 @@ import sys
 import base64
 
 from subprocess import check_output
-
 from path import Path
-
-from jinja2 import Environment, FileSystemLoader
-
 from email.utils import formatdate
-from datetime import datetime
-
 from builtins import str
-
 import ruamel.yaml as yaml
+from datetime import datetime
 
 class bcolors:
     OKGREEN = '\033[92m'
@@ -39,10 +33,12 @@ def okgreen(logging, ok_message):
     sys.stderr.write("%s%s: %s%s" % (bcolors.OKGREEN, logging, bcolors.ENDC, ok_message))
     sys.stderr.write("\n")
 
+
 def makeform(template, settings, gallery_settings):
     from_template = template.get_template("form.html")
     form = base64.b64encode(from_template.render(settings=settings, gallery=gallery_settings).encode("Utf-8"))
     return str(form, 'utf-8')
+
 
 def encrypt(password, template, gallery_path, settings, gallery_settings):
     encrypted_template = template.get_template("encrypted.html")
@@ -56,9 +52,11 @@ def encrypt(password, template, gallery_path, settings, gallery_settings):
     ).encode("Utf-8")
     return html
 
+
 def rfc822(dt):
     epoch = datetime.utcfromtimestamp(0).date()
     return formatdate((dt - epoch).total_seconds())
+
 
 def load_settings(folder):
     try:
@@ -66,10 +64,17 @@ def load_settings(folder):
     except yaml.YAMLError as exc:
         if hasattr(exc, 'problem_mark'):
             mark = exc.problem_mark
-            error(False, "There are something wrong in %s/settings.yaml line %s" % (folder ,mark.line))
+            error(False, "There are something wrong in %s/settings.yaml line %s" % (folder, mark.line))
         else:
-          error(False, "There are something wrong in %s/settings.yaml" % folder)
+            error(False, "There are something wrong in %s/settings.yaml" % folder)
+    except ValueError:
+        error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
     if gallery_settings is None:
         error(False, "The %s/settings.yaml file is empty" % folder)
     else:
+        if gallery_settings.get("date"):
+            try:
+                datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
+            except ValueError:
+                error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
         return gallery_settings

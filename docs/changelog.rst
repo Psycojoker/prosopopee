@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.1 (2020-05-08)
+ 
+ * Fix check date format
+ * Fix error datetime
+ * lazyload for video
+ * add controls on fullscreen video
+
 1.0.0 the covid release (2020-04-29)
 
  * Add automatic generation gallery

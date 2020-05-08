@@ -78,13 +78,13 @@ sections:
  
 ## Usage
 ```bash
-  prosopopee.py                                                                 
-  prosopopee.py test                                                            
-  prosopopee.py preview                                                         
-  prosopopee.py deploy                                                          
-  prosopopee.py autogen (-d <folder> | --all ) [--force]                                                
-  prosopopee.py (-h | --help)                                                   
-  prosopopee.py --version                                                       
+  prosopopee
+  prosopopee test
+  prosopopee preview
+  prosopopee deploy
+  prosopopee autogen (-d <folder> | --all ) [--force]
+  prosopopee (-h | --help)
+  prosopopee --version
                                                                                 
 Options:                                                                        
   test          Verify all your yaml data                                       
