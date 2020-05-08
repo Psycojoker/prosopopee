@@ -68,6 +68,6 @@ Get the Docker image::
     
 Run::
 
-    docker run --rm -v $(pwd):/site prosopopee
+    docker run --rm -v $(pwd):/site beudbeud/prosopopee
     
 More informations https://hub.docker.com/r/beudbeud/prosopopee/
