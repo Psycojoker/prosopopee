@@ -33,7 +33,7 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
+from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, check_version
 from .autogen import autogen
 
 
@@ -570,8 +570,43 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
+def server():
+    error(Path("build").exists(), "Please build the website before launch preview")
+
+    os.chdir('build')
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = TCPServerV4(("", 9000), handler)
+    print('Start server on http://localhost:9000')
+    try:
+        httpd.serve_forever()
+    except (KeyboardInterrupt, SystemExit):
+        print('\nShutdown server')
+        httpd.shutdown()
+        raise
+
+
+def deploy(settings):
+    error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
+          "please install the 'rsync' package.\n")
+    error(Path("build").exists(), "Please build the website before launch deployment")
+
+    r_dest = settings["settings"]["deploy"]["dest"]
+    if settings["settings"]["deploy"]["others"]:
+        r_others = settings["settings"]["deploy"]["others"]
+    else:
+        r_others = ''
+    if settings["settings"]["deploy"]["ssh"]:
+        r_username = settings["settings"]["deploy"]["username"]
+        r_hostname = settings["settings"]["deploy"]["hostname"]
+        r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
+    else:
+        r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
+    error(os.system(r_cmd) == 0, "deployment failed")
+    return
+
+
 def main():
-    arguments = docopt(__doc__, version='1.0.1')
+    arguments = docopt(__doc__, version='1.1.0')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -585,37 +620,10 @@ def main():
         DEFAULTS['test'] = True
 
     if arguments['preview']:
-        error(Path("build").exists(), "Please build the website before launch preview")
-
-        os.chdir('build')
-        handler = http.server.SimpleHTTPRequestHandler
-        httpd = TCPServerV4(("", 9000), handler)
-        print('Start server on http://localhost:9000')
-        try:
-            httpd.serve_forever()
-        except (KeyboardInterrupt, SystemExit):
-            print('\nShutdown server')
-            httpd.shutdown()
-            raise
+        server()
 
     if arguments['deploy']:
-        error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
-              "please install the 'rsync' package.\n")
-        error(Path("build").exists(), "Please build the website before launch deployment")
-
-        r_dest = settings["settings"]["deploy"]["dest"]
-        if settings["settings"]["deploy"]["others"]:
-            r_others = settings["settings"]["deploy"]["others"]
-        else:
-            r_others = ''
-        if settings["settings"]["deploy"]["ssh"]:
-            r_username = settings["settings"]["deploy"]["username"]
-            r_hostname = settings["settings"]["deploy"]["hostname"]
-            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
-        else:
-            r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
-        error(os.system(r_cmd) == 0, "deployment failed")
-        return
+        deploy(settings)
 
     if arguments['autogen']:
         autogen(arguments['<folder>'], arguments['--force'])
@@ -653,6 +661,7 @@ def main():
     if DEFAULTS['test'] is True:
         okgreen("Succes", "HTML file building without error")
 
+    check_version()
 
 if __name__ == '__main__':
     main()

@@ -1,12 +1,16 @@
 import sys
 import base64
+import json
+import urllib.request, urllib.error, urllib.parse
+import ruamel.yaml as yaml
 
+from importlib_metadata import version
 from subprocess import check_output
 from path import Path
 from email.utils import formatdate
 from builtins import str
-import ruamel.yaml as yaml
 from datetime import datetime
+
 
 class bcolors:
     OKGREEN = '\033[92m'
@@ -78,3 +82,16 @@ def load_settings(folder):
             except ValueError:
                 error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
         return gallery_settings
+
+
+def check_version():
+    installed_version = version("prosopopee")
+    url = "https://pypi.python.org/pypi/prosopopee/json"
+    try:
+        data = json.load(urllib.request.urlopen(urllib.request.Request(url)))
+    except:
+        return
+    versions = list(data["releases"].keys())
+    latest_version = (versions[-1])
+    if installed_version < latest_version:
+        warning("Update", "The version %s of Prosopopee is available, Think to update it" % latest_version)
