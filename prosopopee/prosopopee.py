@@ -26,14 +26,12 @@ import socketserver
 import subprocess
 import http.server
 
+from PIL import Image as Plop
 from docopt import docopt
-
 from path import Path
-
 from jinja2 import Environment, FileSystemLoader
-
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, check_version
+from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, check_version, rotate_jpeg
 from .autogen import autogen
 
 
@@ -233,21 +231,23 @@ class Image(object):
             okgreen("Skipped", source + " is already generated")
             return
 
-        gm_switches = {
-            "source": source,
-            "target": target,
-            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-            "strip": "-strip" if options["strip"] else "",
-            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
-            "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
-        }
         if not DEFAULTS['test']:
-            command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-            warning("Generation", source)
-
-            print(command)
-            error(os.system(command) == 0, "gm command failed")
+            progressive = True
+            quality = options.get("quality", int("75"))
+            rotate_jpeg(source)
+            try:
+                with Plop.open(source) as im:
+                    if "resize" in options and options["resize"] is not None:
+                        basewidth = int(options.get("resize").strip("x"))
+                        wsize = int((float(basewidth)*float(im.size[0]))/float(im.size[1]))
+                        im = im.resize((wsize, basewidth), Plop.ANTIALIAS)
+                    if "quality" in options:
+                        im.save(target, "JPEG", quality=quality, optimize=True, progressive=progressive)
+                    else:
+                        im.save(target, "JPEG", optimize=True, progressive=progressive)
+                    warning("Generation", target)
+            except OSError:
+                error(True, "cannot create thumbnail for %s" % target)
 
             CACHE.cache_picture(source, target, options)
 
@@ -286,10 +286,9 @@ class Image(object):
 
     @property
     def ratio(self):
-        command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
-        out = subprocess.check_output(command.split())
-        width, height = out.decode("utf-8").split(',')
-        return float(width) / int(height)
+        with Plop.open(self.base_dir.joinpath(self.name)) as im:
+            return float(im.size[0]) / float(im.size[1])
+
 
     def __repr__(self):
         return self.name
@@ -621,9 +620,11 @@ def main():
 
     if arguments['preview']:
         server()
+        return
 
     if arguments['deploy']:
         deploy(settings)
+        return
 
     if arguments['autogen']:
         autogen(arguments['<folder>'], arguments['--force'])
@@ -662,6 +663,7 @@ def main():
         okgreen("Succes", "HTML file building without error")
 
     check_version()
+
 
 if __name__ == '__main__':
     main()
