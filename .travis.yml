@@ -11,6 +11,6 @@ python:
   - "3.6"
 script:
   - gm -version
-  - cd example && prosopopee
+  - cd example && prosopopee build
 notifications:
   irc: "chat.freenode.net#prosopopee"
