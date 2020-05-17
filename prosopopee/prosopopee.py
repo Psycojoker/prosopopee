@@ -3,21 +3,31 @@
 """Prosopopee. Static site generator for your story.
 
 Usage:
-  prosopopee
-  prosopopee test
-  prosopopee preview
+  prosopopee build [-d <directory>] [--test]
+  prosopopee preview [-p <port>]
   prosopopee deploy
-  prosopopee autogen (-d <folder> | --all ) [--force]
+  prosopopee autogen (-d <directory> | --all ) [--force]
   prosopopee (-h | --help)
-  prosopopee --version
+  prosopopee (-v | --version)
 
 Options:
-  test          Verify all your yaml data
-  preview       Start preview webserver on port 9000
-  deploy        Deploy your website
-  autogen       Generate gallery automaticaly
-  -h, --help    Show this screen.
-  --version     Show version.
+  build             Build website or test data
+  preview           Start preview webserver
+  deploy            Deploy your website
+  autogen           Generate gallery automaticaly
+  -d                Generate HTML or YAML data from specific folder
+  -h, --help        Show this screen.
+  -v, --version     Show version.
+
+Build options:
+  --test            Verify all your yaml data
+
+Preview options:
+  -p INT            Set webserver port [default: 9000]
+
+Auto generation options:
+  --all             Generate all YAML data
+  --force           Force generata YAML data
 """
 
 import os
@@ -288,7 +298,6 @@ class Image(object):
     def ratio(self):
         with Plop.open(self.base_dir.joinpath(self.name)) as im:
             return float(im.size[0]) / float(im.size[1])
-
 
     def __repr__(self):
         return self.name
@@ -569,13 +578,13 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
-def server():
+def server(port):
+    print("Start preview")
     error(Path("build").exists(), "Please build the website before launch preview")
-
     os.chdir('build')
     handler = http.server.SimpleHTTPRequestHandler
-    httpd = TCPServerV4(("", 9000), handler)
-    print('Start server on http://localhost:9000')
+    httpd = TCPServerV4(("", port), handler)
+    print('Start server on http://localhost:%s' % port)
     try:
         httpd.serve_forever()
     except (KeyboardInterrupt, SystemExit):
@@ -615,20 +624,6 @@ def main():
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
-    if arguments['test']:
-        DEFAULTS['test'] = True
-
-    if arguments['preview']:
-        server()
-        return
-
-    if arguments['deploy']:
-        deploy(settings)
-        return
-
-    if arguments['autogen']:
-        autogen(arguments['<folder>'], arguments['--force'])
-        return
 
     Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
@@ -643,21 +638,44 @@ def main():
         shutil.copy(Path("custom.css"), Path(".").joinpath("build", "", "static", "css"))
         settings["custom_css"] = True
 
-    for gallery in galleries_dirs:
-        front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+    print(arguments)
 
-    if settings["rss"]:
-        feed_template = templates.get_template("feed.xml")
+    if arguments['preview']:
+        port = int(arguments['-p'])
+        server(port)
 
-        xml = feed_template.render(
-            settings=settings,
-            galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
-            ).encode("Utf-8")
+    if arguments['deploy']:
+        deploy(settings)
+        return
 
-        open(Path("build").joinpath("feed.xml"), "wb").write(xml)
+    if arguments['autogen']:
+        autogen(arguments['<directory>'], arguments['--force'])
+        return
 
-    build_index(settings, front_page_galleries_cover, templates)
-    CACHE.cache_dump()
+    if arguments['build']:
+        if arguments['--test']:
+            DEFAULTS['test'] = True
+        if arguments['-d']:
+            gallery_path = arguments['<directory>']
+            gallery_settings = load_settings(gallery_path)
+            Path("build").joinpath(gallery_path).makedirs_p()
+            build_gallery(settings, gallery_settings, gallery_path, templates)
+        else:
+            for gallery in galleries_dirs:
+                front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+
+            if settings["rss"]:
+                feed_template = templates.get_template("feed.xml")
+
+                xml = feed_template.render(
+                    settings=settings,
+                    galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
+                    ).encode("Utf-8")
+
+                open(Path("build").joinpath("feed.xml"), "wb").write(xml)
+
+            build_index(settings, front_page_galleries_cover, templates)
+            CACHE.cache_dump()
 
     if DEFAULTS['test'] is True:
         okgreen("Succes", "HTML file building without error")

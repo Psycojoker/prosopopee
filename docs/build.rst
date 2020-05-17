@@ -27,7 +27,7 @@ Generate
 
 In a folder containing the **root** settings.yaml file, simply do::
 
-    prosopopee
+    prosopopee build
 
 A `build` folder will be created in the current directory, containing an
 index.html, static files (css & js) and pictures.
