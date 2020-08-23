@@ -26,6 +26,9 @@ import socketserver
 import subprocess
 import http.server
 
+from babel.core import default_locale
+from babel.dates import format_date
+
 from docopt import docopt
 
 from path import Path
@@ -350,7 +353,18 @@ def get_settings():
     return settings
 
 
-def get_gallery_templates(theme, gallery_path="", parent_templates=None):
+def get_local_date_filter(date_locale):
+    if date_locale is None:
+        date_locale = default_locale('LC_TIME')
+
+    def local_date(value, date_format="dd MMMM yyy"):
+        return format_date(date=value,
+                format=date_format,
+                locale=date_locale)
+    return local_date
+
+
+def get_gallery_templates(theme, gallery_path="", parent_templates=None, date_locale=None):
     theme_path = Path(__file__).parent.joinpath("themes", theme).exists()
 
     available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
@@ -367,6 +381,7 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
 
     subgallery_templates = Environment(loader=FileSystemLoader(templates_dir), trim_blocks=True)
     subgallery_templates.filters['rfc822'] = rfc822
+    subgallery_templates.filters['local_date'] = get_local_date_filter(date_locale)
 
     Path(".").joinpath("build", gallery_path, "static").rmtree_p()
 
@@ -413,7 +428,7 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
             # Sub galleries found, create index with them instead of a gallery
             theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
 
-            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates)
+            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates, settings["settings"].get("date_locale"))
             sub_page_galleries_cover = []
 
             for subgallery in sub_galleries:
@@ -505,7 +520,8 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         # Prepare light mode
         Path("build").joinpath(gallery_path, "light").makedirs_p()
         gallery_light_path = Path(gallery_path).joinpath("light")
-        light_templates = get_gallery_templates("light", gallery_light_path)
+        light_templates = get_gallery_templates("light", gallery_light_path,
+                date_locale=settings["settings"].get("date_locale"))
 
         Image.base_dir = Path(".").joinpath(gallery_path)
         Image.target_dir = Path(".").joinpath("build", gallery_path)
@@ -623,7 +639,8 @@ def main():
 
     Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
-    templates = get_gallery_templates(theme)
+    date_locale = settings["settings"].get("date_locale")
+    templates = get_gallery_templates(theme, date_locale=date_locale)
     templates.add_extension('jinja2.ext.with_')
 
     if Path("custom.js").exists():

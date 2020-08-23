@@ -20,11 +20,11 @@
     <h2>{{ section.text.sub_title }}</h2>
 
     {% if section.text.date_end %}
-    <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}  to {{ section.text.date_end.strftime("%d %B %Y") }}</div>
+    <div class="datetime">{{ section.text.date|local_date("dd MMMM yyyy") }}  to {{ section.text.date_end|local_date("dd MMMM yyyy") }}</div>
 
     {% else %}
     {% if section.text.date %}
-    <div class="datetime">{{ section.text.date.strftime("%d %B %Y") }}</div>
+    <div class="datetime">{{ section.text.date|local_date("dd MMMM yyyy") }}</div>
     {% endif %}
     {% endif %}
 
