@@ -251,7 +251,8 @@ For example, if your LC_TIME equals to en_US.utf8, then you get "23 August 2020"
 
 If you want to use non-based on LC_TIME locale for human-readable dates on gallery, use the "date_locale" key::
 
-  date_locale: ru_RU
+  settings:
+    date_locale: ru_RU
 
 Gallery settings.yaml
 ---------------------
