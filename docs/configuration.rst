@@ -242,6 +242,17 @@ If you want to protect all the website by password::
   title: Gallery
   password: my_super_password
 
+Date locale
+~~~~~~~~~~~
+
+By default, Prosopopee uses locale from LC_TIME environment variable to generate human-readable date.
+
+For example, if your LC_TIME equals to en_US.utf8, then you get "23 August 2020" as date on the gallery tile. If you are using ru_RU.utf8, then you get "23 Августа 2020".
+
+If you want to use non-based on LC_TIME locale for human-readable dates on gallery, use the "date_locale" key::
+
+  date_locale: ru_RU
+
 Gallery settings.yaml
 ---------------------
 
