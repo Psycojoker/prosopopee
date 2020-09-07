@@ -41,8 +41,8 @@ def get_exif(filename):
         for (tag, value) in exif.items():
             decoded = TAGS.get(tag, tag)
             exif_data[decoded] = value
-        if 'DateTime' in exif_data:
-            datetime = exif_data['DateTime']
+    if 'DateTime' in exif_data:
+        datetime = exif_data['DateTime']
     else:
         datetime = strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
     return datetime
