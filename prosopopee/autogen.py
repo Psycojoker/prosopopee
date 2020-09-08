@@ -17,14 +17,12 @@ sections:
 {% set nb = namespace(value=range(2,5)|random) %}
 {% set count = namespace(value=0) %}
 {% for file in files %}
-{% if count.value != nb.value %}
 {% set file = file.split('/') %}
          - {{ file[-1] }}
+{% if count.value != nb.value %}
 {% set count.value = count.value + 1 %}
-{% else %}
-{% if not loop.last %}
+{% elif not loop.last %}
       -
-{% endif %}
 {% set count.value = 0 %}
 {% set nb. value = range(2,5)|random %}
 {% endif %}
