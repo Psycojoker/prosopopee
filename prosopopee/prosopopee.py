@@ -122,9 +122,9 @@ class Video(object):
         warning("Generation", source)
 
         if options.get("resize"):
-            command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i '{source}' {resize} -vframes 1 -y '{target}'".format(**ffmpeg_switches)
         else:
-            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i '{source}' {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y '{target}'".format(**ffmpeg_switches)
         print(command)
         error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
@@ -155,8 +155,13 @@ class Video(object):
             binary = "ffprobe"
         else:
             binary = "avprobe"
-        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 " + self.base_dir.joinpath(self.name)
-        out = subprocess.check_output(command.split())
+        target = self.base_dir.joinpath(self.name)
+        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0"
+        command_list = command.split()
+        # target is Type path.Path, encodes to bytes, decodes to str, which we can append to the list
+        # disgusting, I know. But it works
+        command_list.append(target.encode().decode())
+        out = subprocess.check_output(command_list)
         width, height = out.decode("utf-8").split(',')
         return float(width) / int(height)
 
@@ -198,7 +203,7 @@ class Audio(object):
 
         warning("Generation", source)
 
-        command = "{binary} {loglevel} -i {source} {audio} -y {target}".format(**ffmpeg_switches)
+        command = "{binary} {loglevel} -i '{source}' {audio} -y '{target}'".format(**ffmpeg_switches)
         print(command)
         error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
 
