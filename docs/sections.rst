@@ -51,6 +51,17 @@ If you want a fixed background you can use this option (only with the exposure t
   - type: full-picture
     fixed: true
 
+The `background_position` setting can be used to control how the image is centered when
+it doesn't fit the screen width. This is useful for controlling the center accross different
+screen sizes (e.g. mobile), keeping the focal element of an image always visible.
+This sets the `background-position` css property.
+This feature is supported by the "exposure" theme.
+Example::
+
+  - type: full-picture
+    image: big_picture.jpg
+    background_position: 75%
+
 Bordered picture
 ________________
 
