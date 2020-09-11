@@ -47,6 +47,19 @@ entry like any other gallery.
 **NOTE**: expect the "static: " option to disappear quite soon for a more
 generic approach to "choose your page style".
 
+Include  Files
+______________
+
+You can include files with the `include` option.
+These files will be copied as is from the root of your project directory to the build directory.
+Example::
+
+    title: My photos
+    sub_title: wow
+    include:
+        - robots.txt
+        - .well-known/brave-rewards-verification.txt
+
 Global settings
 _______________
 

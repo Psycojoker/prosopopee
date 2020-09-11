@@ -43,6 +43,7 @@ DEFAULTS = {
     "settings": {},
     "show_date": True,
     "test": False,
+    "include": [],
 }
 
 SETTINGS = {
@@ -577,6 +578,7 @@ def main():
     front_page_galleries_cover = []
 
     galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
+    includes = [x for x in settings["include"] if Path(".").joinpath(x).exists()]
 
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
@@ -636,6 +638,13 @@ def main():
 
     for gallery in galleries_dirs:
         front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+
+    for i in includes:
+        srcdir = Path(i).dirname()
+        dstdir = Path(".").joinpath("build", srcdir)
+        if srcdir != '': os.makedirs(dstdir, exist_ok=True)
+        d = shutil.copy2(i, dstdir)
+        warning("copied", d)
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
