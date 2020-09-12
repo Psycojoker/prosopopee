@@ -34,7 +34,7 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
+from .utils import error, encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
 
 
@@ -99,7 +99,7 @@ class Video(object):
         else:
             target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
-            okgreen("Skipped", source + " is already generated")
+            logging.info("Skipped: %s is already generated", source)
             return
 
         ffmpeg_switches = {
@@ -117,7 +117,7 @@ class Video(object):
             "other": "%s" % options["other"]
         }
 
-        warning("Generation", source)
+        logging.warning("Generation: %s", source)
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
@@ -183,7 +183,7 @@ class Audio(object):
     def ffmpeg(self, source, target, options):
         target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
-            okgreen("Skipped", source + " is already generated")
+            logging.info("Skipped: %s is already generated", source)
             return
 
         ffmpeg_switches = {
@@ -194,7 +194,7 @@ class Audio(object):
             "audio": "-c:a %s" % options["audio"]
         }
 
-        warning("Generation", source)
+        logging.warning("Generation: %s", source)
 
         command = "{binary} {loglevel} -i {source} {audio} -y {target}".format(**ffmpeg_switches)
         print(command)
@@ -231,7 +231,7 @@ class Image(object):
 
     def gm(self, source, target, options):
         if not CACHE.needs_to_be_generated(source, target, options):
-            okgreen("Skipped", source + " is already generated")
+            logging.info("Skipped: %s is already generated", source)
             return
 
         if DEFAULTS['test']:
@@ -248,7 +248,7 @@ class Image(object):
         }
 
         command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-        warning("Generation", source)
+        logging.warning("Generation: %s", source)
 
         print(command)
         error(os.system(command) == 0, "gm command failed")
@@ -332,18 +332,19 @@ def get_settings():
     if os.system("which " + conv_video + " > /dev/null") != 0:
         if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
             SETTINGS["ffmpeg"]["binary"] = "avconv"
-            warning("Video", "I couldn't locate ffmpeg but I could find avconv, "
+            logging.warning("Video: I couldn't locate ffmpeg but I could find avconv, "
                              "switching to avconv for video conversion")
         else:
-            warning("Video", "I can't locate the " + conv_video + " binary, "
-                    "please install the '" + conv_video + "' package.\n")
-            warning("Video", "I won't be able to encode video and I will stop if I encounter a video to convert")
+            logging.warning("Video: I can't locate the %s binary, please install the '%s' package.",
+                    conv_video, conv_video)
+            logging.warning("Video: I won't be able to encode video and I will stop if I "
+                    "encounter a video to convert")
             SETTINGS["ffmpeg"] = False
 
     error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
     if (settings["rss"] or settings["share"]) and not settings.get("url"):
-        warning("warning", "If you want the rss and/or the social network share to work, "
+        logging.warning("warning: If you want the rss and/or the social network share to work, "
                 "you need to specify the website url in root settings")
         settings["rss"] = False
         settings["share"] = False
@@ -664,7 +665,7 @@ def main():
     CACHE.cache_dump()
 
     if DEFAULTS['test'] is True:
-        okgreen("Succes", "HTML file building without error")
+        logging.info("Success: HTML file building without error")
 
 
 if __name__ == '__main__':

@@ -1,9 +1,10 @@
+import logging
 import os
 from time import gmtime, strftime
 from glob import glob
 from jinja2 import Template
 from path import Path
-from .utils import error, warning, okgreen, load_settings
+from .utils import error, load_settings
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -54,7 +55,7 @@ def build_template(folder, force):
         error(False, "Can't open %s/settings.yaml" % folder)
 
     if 'static' in gallery_settings:
-        warning("Skipped", "Nothing to do in %s gallery" % folder)
+        logging.warning("Skipped: Nothing to do in %s gallery", folder)
         return
 
     if any(req not in gallery_settings for req in ['title', 'date', 'cover']):
@@ -62,7 +63,7 @@ def build_template(folder, force):
                 "use autogen" % folder)
 
     if 'sections' in gallery_settings and force is not True:
-        warning("Skipped", "%s gallery is already generated" % folder)
+        logging.warning("Skipped: %s gallery is already generated", folder)
         return
 
     for files in types:
@@ -75,7 +76,7 @@ def build_template(folder, force):
                     )
     f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
     f.write(msg)
-    okgreen("Generation", "%s gallery" % folder)
+    logging.info("Generation: %s gallery", folder)
 
 
 def autogen(folder=None, force=False):
