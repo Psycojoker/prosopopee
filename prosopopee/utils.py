@@ -1,13 +1,13 @@
 import logging
 import sys
 import base64
-
 from subprocess import check_output
-from path import Path
 from email.utils import formatdate
-from builtins import str
-import ruamel.yaml as yaml
 from datetime import datetime
+from builtins import str
+
+from path import Path
+import ruamel.yaml as yaml
 
 class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors"""
