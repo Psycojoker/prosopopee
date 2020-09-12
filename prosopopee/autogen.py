@@ -5,9 +5,10 @@ from time import gmtime, strftime
 from glob import glob
 from jinja2 import Template
 from path import Path
-from .utils import load_settings
 from PIL import Image
 from PIL.ExifTags import TAGS
+
+from .utils import load_settings
 
 DATA = '''title: {{ title }}
 date: {{ date }}
