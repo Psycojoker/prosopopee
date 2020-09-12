@@ -7,7 +7,6 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='prosopopee',
-      version='1.0.1',
       description='A static website generator that allows you to tell a story with your pictures',
       author='Laurent Peuch',
       long_description=long_description,
