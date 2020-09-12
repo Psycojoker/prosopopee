@@ -39,14 +39,6 @@ def error(test, error_message):
     sys.exit(1)
 
 
-def warning(category, warning_message):
-    logging.warning("%s: %s", category, warning_message)
-
-
-def okgreen(category, ok_message):
-    logging.info("%s: %s", category, ok_message)
-
-
 def makeform(template, settings, gallery_settings):
     from_template = template.get_template("form.html")
     form = base64.b64encode(from_template.render(settings=settings, gallery=gallery_settings).encode("Utf-8"))
