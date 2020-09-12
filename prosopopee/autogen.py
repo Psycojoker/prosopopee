@@ -47,38 +47,43 @@ def get_exif(filename):
 
 def build_template(folder, force):
     files_grabbed = []
+
     try:
         gallery_settings = load_settings(folder)
     except FileNotFoundError:
         error(False, "Can't open %s/settings.yaml" % folder)
-    if 'static' not in gallery_settings:
-        if all(req in gallery_settings for req in ['title', 'date', 'cover']):
-            if 'sections' in gallery_settings and force is not True:
-                warning("Skipped", "%s gallery is already generated" % folder)
-            else:
-                for files in types:
-                    files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
-                tm = Template(data, trim_blocks=True)
-                msg = tm.render(title=gallery_settings['title'],
-                                date=gallery_settings['date'],
-                                cover=gallery_settings['cover'],
-                                files=sorted(files_grabbed, key=get_exif)
-                                )
-                f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
-                f.write(msg)
-                okgreen("Generation", "%s gallery" % folder)
-        else:
-            error(False, "You need configure first, the title, date and cover in %s/settings.yaml for use autogen" % folder)
-    else:
+
+    if 'static' in gallery_settings:
         warning("Skipped", "Nothing to do in %s gallery" % folder)
+        return
+
+    if any(req not in gallery_settings for req in ['title', 'date', 'cover']):
+        error(False, "You need configure first, the title, date and cover in %s/settings.yaml to "
+                "use autogen" % folder)
+
+    if 'sections' in gallery_settings and force is not True:
+        warning("Skipped", "%s gallery is already generated" % folder)
+        return
+
+    for files in types:
+        files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
+    tm = Template(data, trim_blocks=True)
+    msg = tm.render(title=gallery_settings['title'],
+                    date=gallery_settings['date'],
+                    cover=gallery_settings['cover'],
+                    files=sorted(files_grabbed, key=get_exif)
+                    )
+    f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
+    f.write(msg)
+    okgreen("Generation", "%s gallery" % folder)
 
 
 def autogen(folder=None, force=False):
     if folder:
         build_template(folder, force)
-    else:
-        for x in glob("./*/**/settings.yaml", recursive=True):
-            folder = x.rsplit('/', 1)[0]
-            if not glob(folder + "/**/settings.yaml"):
-                build_template(folder, force)
-    return
+        return
+
+    for x in glob("./*/**/settings.yaml", recursive=True):
+        folder = x.rsplit('/', 1)[0]
+        if not glob(folder + "/**/settings.yaml"):
+            build_template(folder, force)
