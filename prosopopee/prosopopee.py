@@ -1,25 +1,6 @@
 #!/usr/bin/env python
 
-"""Prosopopee. Static site generator for your story.
-
-Usage:
-  prosopopee
-  prosopopee test
-  prosopopee preview
-  prosopopee deploy
-  prosopopee autogen (-d <folder> | --all ) [--force]
-  prosopopee (-h | --help)
-  prosopopee --version
-
-Options:
-  test          Verify all your yaml data
-  preview       Start preview webserver on port 9000
-  deploy        Deploy your website
-  autogen       Generate gallery automaticaly
-  -h, --help    Show this screen.
-  --version     Show version.
-"""
-
+from argparse import ArgumentParser, ArgumentTypeError
 import logging
 import os
 import shutil
@@ -28,8 +9,6 @@ import subprocess
 import sys
 import http.server
 
-from docopt import docopt
-
 from path import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -37,6 +16,23 @@ from jinja2 import Environment, FileSystemLoader
 from .cache import CACHE
 from .utils import encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
+from .__init__ import __version__
+
+parser = ArgumentParser(description='Static site generator for your story.')
+parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
+subparser = parser.add_subparsers(dest='cmd')
+subparser.add_parser('build', help='Generate static site')
+subparser.add_parser('test', help='Verify all your yaml data')
+subparser.add_parser('preview', help='Start preview webserver on port 9000')
+subparser.add_parser('deploy', help='Deploy your website')
+parser_autogen = subparser.add_parser('autogen', help='Generate gallery automaticaly')
+group = parser_autogen.add_mutually_exclusive_group(required=True)
+group.add_argument('-d', dest='folder', metavar='folder',
+        help='folder to use for automatic gallery generation')
+group.add_argument('--all', action='store_const', const=None, dest='folder',
+        help='find all folders with settings.yaml for automatic gallery generation')
+parser_autogen.add_argument('--force', action='store_true',
+        help='**DESTRUCTIVE** force regeneration of gallery even if sections are already defined.')
 
 
 DEFAULTS = {
@@ -586,7 +582,7 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 
 def main():
-    arguments = docopt(__doc__, version='1.0.1')
+    args = parser.parse_args()
 
     handler = logging.StreamHandler()
     handler.setFormatter(CustomFormatter())
@@ -606,10 +602,10 @@ def main():
                 "INSIDE A DIRECTORY in your current directory), you don't have any gallery?")
         sys.exit(1)
 
-    if arguments['test']:
+    if args.cmd == 'test':
         DEFAULTS['test'] = True
 
-    if arguments['preview']:
+    if args.cmd == 'preview':
         if not Path("build").exists():
             logging.error("Please build the website before launch preview")
             sys.exit(1)
@@ -625,7 +621,7 @@ def main():
             httpd.shutdown()
             raise
 
-    if arguments['deploy']:
+    if args.cmd == 'deploy':
         if os.system("which rsync > /dev/null") != 0:
             logging.error("I can't locate the rsync + please install the 'rsync' package.")
             sys.exit(1)
@@ -649,8 +645,8 @@ def main():
             sys.exit(1)
         return
 
-    if arguments['autogen']:
-        autogen(arguments['<folder>'], arguments['--force'])
+    if args.cmd == 'autogen':
+        autogen(args.folder, args.force)
         return
 
     Path("build").makedirs_p()

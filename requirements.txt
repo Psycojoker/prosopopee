@@ -1,6 +1,5 @@
 jinja2
 path.py
-docopt
 ruamel.yaml
 future
 pillow
