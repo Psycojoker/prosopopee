@@ -355,7 +355,7 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
 
     available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
 
-    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % available_themes)
+    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % (theme_path, available_themes))
 
     templates_dir = [
         Path(".").joinpath("templates").realpath(),
