@@ -254,7 +254,7 @@ class Image(object):
     def name(self):
         return self.options["name"]
 
-    def gm(self, source, target, options):
+    def convert(self, source, target, options):
         if not CACHE.needs_to_be_generated(source, target, options):
             logging.info("Skipped: %s is already generated", source)
             return
@@ -299,7 +299,7 @@ class Image(object):
                 # Do not consider quality settings here, since we aim to copy the input image
                 # better to preserve input encoding setting
                 del options["quality"]
-                self.gm(source, target, options)
+                self.convert(source, target, options)
 
         return ""
 
@@ -311,7 +311,7 @@ class Image(object):
             options = self.options.copy()
             options.update({"resize": gm_geometry})
 
-            self.gm(source, target, options)
+            self.convert(source, target, options)
 
         return thumbnail_name
 
@@ -515,9 +515,9 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     Audio.base_dir = Path(".").joinpath(gallery_path)
     Audio.target_dir = Path(".").joinpath("build", gallery_path)
     if gallery_settings.get("sections"):
-        for x in gallery_settings['sections']:
-            if x['type'] not in gallery_settings:
-                gallery_settings[x['type'] + '_enabled'] = True
+        for section in gallery_settings['sections']:
+            if section['type'] not in gallery_settings:
+                gallery_settings[section['type'] + '_enabled'] = True
 
     template_to_render = page_template if gallery_settings.get("static") else gallery_index_template
 
