@@ -130,9 +130,11 @@ class Video(object):
         logging.info("Generation: %s", source)
 
         if options.get("resize"):
-            command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i {source} {resize} -vframes 1 -y {target}"
+            command = command.format(**ffmpeg_switches)
         else:
-            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
+            command = "{binary} {loglevel} -i {source} {video} {vbitrate} {other} {audio} " \
+                    "{abitrate} {resolution} {format} -y {target}".format(**ffmpeg_switches)
         print(command)
         if os.system(command) != 0:
             logging.error("%s command failed", ffmpeg_switches["binary"])
@@ -150,7 +152,8 @@ class Video(object):
     def generate_thumbnail(self, gm_geometry):
         thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-%s.jpg" % gm_geometry
         if not DEFAULTS['test']:
-            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
+            source, target = self.base_dir.joinpath(self.name), \
+                    self.target_dir.joinpath(thumbnail_name)
 
             options = self.options.copy()
             options.update({"resize": gm_geometry})
@@ -165,7 +168,8 @@ class Video(object):
             binary = "ffprobe"
         else:
             binary = "avprobe"
-        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 " + self.base_dir.joinpath(self.name)
+        command = binary + " -v error -select_streams v:0 -show_entries stream=width,height -of " \
+                "csv=p=0 " + self.base_dir.joinpath(self.name)
         out = subprocess.check_output(command.split())
         width, height = out.decode("utf-8").split(',')
         return float(width) / int(height)
@@ -258,12 +262,15 @@ class Image(object):
             "target": target,
             "auto-orient": "-auto-orient" if options["auto-orient"] else "",
             "strip": "-strip" if options["strip"] else "",
-            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
+            "quality": "-quality %s" % options["quality"] if "quality" in options \
+                    else "-define jpeg:preserve-settings",
+            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None \
+                    else "",
             "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
 
-        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
+        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} " \
+                "'{target}'".format(**gm_switches)
         logging.info("Generation: %s", source)
 
         print(command)
@@ -295,9 +302,11 @@ class Image(object):
         return ""
 
     def generate_thumbnail(self, gm_geometry):
-        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-" + gm_geometry + "." + self.name.split(".")[-1]
+        thumbnail_name = ".".join(self.name.split(".")[:-1]) + "-" + gm_geometry + "." \
+                + self.name.split(".")[-1]
         if not DEFAULTS['test']:
-            source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(thumbnail_name)
+            source, target = self.base_dir.joinpath(self.name), \
+                    self.target_dir.joinpath(thumbnail_name)
 
             options = self.options.copy()
             options.update({"resize": gm_geometry})
@@ -391,7 +400,10 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None):
     Path(".").joinpath("build", gallery_path, "static").rmtree_p()
 
     if Path(".").joinpath("static").exists():
-        shutil.copytree(Path(".").joinpath("static"), Path(".").joinpath("build", gallery_path, "static"))
+        shutil.copytree(
+            Path(".").joinpath("static"),
+            Path(".").joinpath("build", gallery_path, "static")
+        )
 
     else:
         shutil.copytree(
@@ -412,7 +424,8 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
     gallery_cover = {}
 
-    sub_galleries = [x for x in Path(".").joinpath(gallery_path).listdir() if x.joinpath("settings.yaml").exists()]
+    sub_galleries = [x for x in Path(".").joinpath(gallery_path).listdir() \
+            if x.joinpath("settings.yaml").exists()]
 
     Path("build").joinpath(gallery_path).makedirs_p()
 
@@ -442,7 +455,8 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
             process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
         )
 
-    build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True, gallery_settings=gallery_settings)
+    build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path,
+            sub_index=True, gallery_settings=gallery_settings)
     gallery_cover['sub_gallery'] = sub_page_galleries_cover
 
     return gallery_cover
@@ -559,14 +573,16 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 
-def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):
+def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False,
+        gallery_settings={}):
     index_template = templates.get_template("index.html")
 
     reverse = gallery_settings.get('reverse', settings["settings"].get('reverse', False))
     if reverse:
         galleries_cover = sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"])
     else:
-        galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"]))
+        galleries_cover = reversed(sorted([x for x in galleries_cover if x != {}],
+            key=lambda x: x["date"]))
 
     # this should probably be a factory
     Image.base_dir = Path(".").joinpath(gallery_path)
@@ -648,7 +664,8 @@ def main():
         if settings["settings"]["deploy"]["ssh"]:
             r_username = settings["settings"]["deploy"]["username"]
             r_hostname = settings["settings"]["deploy"]["hostname"]
-            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
+            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname,
+                    r_dest)
         else:
             r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
         if os.system(r_cmd) != 0:
@@ -674,14 +691,16 @@ def main():
         settings["custom_css"] = True
 
     for gallery in galleries_dirs:
-        front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+        front_page_galleries_cover.append(process_directory(gallery.normpath(), settings,
+            templates))
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
 
         xml = feed_template.render(
             settings=settings,
-            galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
+            galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}],
+                key=lambda x: x["date"]))
             ).encode("Utf-8")
 
         open(Path("build").joinpath("feed.xml"), "wb").write(xml)
