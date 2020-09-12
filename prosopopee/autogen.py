@@ -53,7 +53,7 @@ def build_template(folder, force):
     except FileNotFoundError:
         error(False, "Can't open %s/settings.yaml" % folder)
     if 'static' not in gallery_settings:
-        if 'title' and 'date' and 'cover' in gallery_settings:
+        if all(req in gallery_settings for req in ['title', 'date', 'cover']):
             if 'sections' in gallery_settings and force is not True:
                 warning("Skipped", "%s gallery is already generated" % folder)
             else:
