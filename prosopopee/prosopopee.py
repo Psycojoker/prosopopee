@@ -606,74 +606,8 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
-def main():
-    args = parser.parse_args()
-
-    handler = logging.StreamHandler()
-    handler.setFormatter(CustomFormatter())
-    logger = logging.getLogger()
-    logger.addHandler(handler)
-    logger.setLevel(args.log_level)
-
-    settings = get_settings()
-
+def build(settings, galleries_dirs):
     front_page_galleries_cover = []
-
-    galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
-
-    if not galleries_dirs:
-        logging.error("I can't find at least one directory with a settings.yaml in the current "
-                "working directory (NOT the settings.yaml in your current directory, but one "
-                "INSIDE A DIRECTORY in your current directory), you don't have any gallery?")
-        sys.exit(1)
-
-    if args.cmd == 'test':
-        DEFAULTS['test'] = True
-
-    if args.cmd == 'preview':
-        if not Path("build").exists():
-            logging.error("Please build the website before launch preview")
-            sys.exit(1)
-
-        os.chdir('build')
-        handler = http.server.SimpleHTTPRequestHandler
-        httpd = TCPServerV4(("", 9000), handler)
-        print('Start server on http://localhost:9000')
-        try:
-            httpd.serve_forever()
-        except (KeyboardInterrupt, SystemExit):
-            print('\nShutdown server')
-            httpd.shutdown()
-            raise
-
-    if args.cmd == 'deploy':
-        if os.system("which rsync > /dev/null") != 0:
-            logging.error("I can't locate the rsync + please install the 'rsync' package.")
-            sys.exit(1)
-        if not Path("build").exists():
-            logging.error("Please build the website before launch deployment")
-            sys.exit(1)
-
-        r_dest = settings["settings"]["deploy"]["dest"]
-        if settings["settings"]["deploy"]["others"]:
-            r_others = settings["settings"]["deploy"]["others"]
-        else:
-            r_others = ''
-        if settings["settings"]["deploy"]["ssh"]:
-            r_username = settings["settings"]["deploy"]["username"]
-            r_hostname = settings["settings"]["deploy"]["hostname"]
-            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname,
-                    r_dest)
-        else:
-            r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
-        if os.system(r_cmd) != 0:
-            logging.error("deployment failed")
-            sys.exit(1)
-        return
-
-    if args.cmd == 'autogen':
-        autogen(args.folder, args.force)
-        return
 
     Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
@@ -706,8 +640,91 @@ def main():
     build_index(settings, front_page_galleries_cover, templates)
     CACHE.cache_dump()
 
-    if DEFAULTS['test'] is True:
-        logging.info("Success: HTML file building without error")
+
+def deploy(settings):
+    if os.system("which rsync > /dev/null") != 0:
+        logging.error("I can't locate the rsync + "
+                "please install the 'rsync' package.\n")
+        sys.exit(1)
+    if not Path("build").exists():
+        logging.error("Please build the website before launch deployment")
+        sys.exit(1)
+
+    r_dest = settings["settings"]["deploy"]["dest"]
+    if settings["settings"]["deploy"]["others"]:
+        r_others = settings["settings"]["deploy"]["others"]
+    else:
+        r_others = ''
+    if settings["settings"]["deploy"]["ssh"]:
+        r_username = settings["settings"]["deploy"]["username"]
+        r_hostname = settings["settings"]["deploy"]["hostname"]
+        r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname,
+                r_dest)
+    else:
+        r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
+    if os.system(r_cmd) != 0:
+        logging.error("deployment failed")
+        sys.exit(1)
+
+
+def preview():
+    if not Path("build").exists():
+        logging.error("Please build the website before launch preview")
+        sys.exit(1)
+
+    os.chdir('build')
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = TCPServerV4(("", 9000), handler)
+    print('Start server on http://localhost:9000')
+    try:
+        httpd.serve_forever()
+    except (KeyboardInterrupt, SystemExit):
+        print('\nShutdown server')
+        httpd.shutdown()
+        raise
+
+
+def main():
+    args = parser.parse_args()
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(CustomFormatter())
+    logger = logging.getLogger()
+    logger.addHandler(handler)
+    logger.setLevel(args.log_level)
+
+    settings = get_settings()
+
+    galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
+
+    if not galleries_dirs:
+        logging.error("I can't find at least one directory with a settings.yaml in the current "
+                "working directory (NOT the settings.yaml in your current directory, but one "
+                "INSIDE A DIRECTORY in your current directory), you don't have any gallery?")
+        sys.exit(1)
+
+    if args.cmd == 'preview':
+        preview()
+        return
+
+    if args.cmd == 'deploy':
+        deploy(settings)
+        return
+
+    if args.cmd == 'autogen':
+        autogen(args.folder, args.force)
+        return
+
+    if args.cmd in ['build', 'test', None]:
+        if args.cmd == 'test':
+            DEFAULTS['test'] = True
+
+        build(settings, galleries_dirs)
+
+        if args.cmd == 'test':
+            logging.info("Success: HTML file building without error")
+
+        return
 
 
 if __name__ == '__main__':
