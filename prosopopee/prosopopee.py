@@ -87,7 +87,7 @@ SETTINGS = {
 }
 
 
-class Video(object):
+class Video:
     base_dir = Path()
     target_dir = Path()
 
@@ -183,7 +183,7 @@ class Video(object):
         return self.name
 
 
-class Audio(object):
+class Audio:
     base_dir = Path()
     target_dir = Path()
 
@@ -238,7 +238,7 @@ class Audio(object):
         return self.name
 
 
-class Image(object):
+class Image:
     base_dir = ""
     target_dir = ""
 
