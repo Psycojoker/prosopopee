@@ -31,14 +31,6 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def error(test, error_message):
-    if test:
-        return
-
-    logging.error(error_message)
-    sys.exit(1)
-
-
 def makeform(template, settings, gallery_settings):
     from_template = template.get_template("form.html")
     form = base64.b64encode(from_template.render(settings=settings, gallery=gallery_settings).encode("Utf-8"))
@@ -71,19 +63,29 @@ def load_settings(folder):
         msg = "There is something wrong in %s/settings.yaml" % folder
         if isinstance(exc, yaml.error.MarkedYAMLError):
             msg = msg + str(exc.context_mark)
-        error(False, msg)
+        logging.error(msg)
+        sys.exit(1)
     except ValueError:
-        error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
+        logging.error("Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder)
+        sys.exit(1)
+    except Exception as e:
+        logging.exception(e)
+        sys.exit(1)
+
     if gallery_settings is None:
-        error(False, "The %s/settings.yaml file is empty" % folder)
+        logging.error("The %s/settings.yaml file is empty", folder)
+        sys.exit(1)
     elif not isinstance(gallery_settings, dict):
-        error(False, "%s/settings.yaml should be a dict" % folder)
+        logging.error("%s/settings.yaml should be a dict", folder)
+        sys.exit(1)
     elif not 'title' in gallery_settings:
-        error(False, "You should specify a title in %s/settings.yaml" % folder)
+        logging.error("You should specify a title in %s/settings.yaml", folder)
+        sys.exit(1)
 
     if gallery_settings.get("date"):
         try:
             datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
         except ValueError:
-            error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
+            logging.error("Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder)
+            sys.exit(1)
     return gallery_settings

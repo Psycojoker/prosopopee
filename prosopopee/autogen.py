@@ -1,10 +1,11 @@
 import logging
 import os
+import sys
 from time import gmtime, strftime
 from glob import glob
 from jinja2 import Template
 from path import Path
-from .utils import error, load_settings
+from .utils import load_settings
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -49,18 +50,16 @@ def get_exif(filename):
 def build_template(folder, force):
     files_grabbed = []
 
-    try:
-        gallery_settings = load_settings(folder)
-    except FileNotFoundError:
-        error(False, "Can't open %s/settings.yaml" % folder)
+    gallery_settings = load_settings(folder)
 
     if 'static' in gallery_settings:
         logging.warning("Skipped: Nothing to do in %s gallery", folder)
         return
 
     if any(req not in gallery_settings for req in ['title', 'date', 'cover']):
-        error(False, "You need configure first, the title, date and cover in %s/settings.yaml to "
-                "use autogen" % folder)
+        logging.error("You need configure first, the title, date and cover in %s/settings.yaml "
+                "to use autogen", folder)
+        sys.exit(1)
 
     if 'sections' in gallery_settings and force is not True:
         logging.warning("Skipped: %s gallery is already generated", folder)
