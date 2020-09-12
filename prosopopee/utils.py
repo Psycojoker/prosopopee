@@ -1,3 +1,4 @@
+import logging
 import sys
 import base64
 
@@ -8,30 +9,42 @@ from builtins import str
 import ruamel.yaml as yaml
 from datetime import datetime
 
-class bcolors:
+class CustomFormatter(logging.Formatter):
+    """Logging Formatter to add colors"""
+
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
+    fmt_nok = "%(asctime)s %(levelname)s (%(filename)s:%(lineno)d) - %(message)s"
+    fmt_ok = "%(asctime)s %(levelname)s - %(message)s"
+
+    FORMATS = {
+        logging.INFO: OKGREEN + fmt_ok + ENDC,
+        logging.WARNING: WARNING + fmt_nok + ENDC,
+        logging.ERROR: FAIL + fmt_nok + ENDC,
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
 
 
 def error(test, error_message):
     if test:
         return
 
-    sys.stderr.write(bcolors.FAIL + "Abort: " + bcolors.ENDC + error_message)
-    sys.stderr.write("\n")
+    logging.error(error_message)
     sys.exit(1)
 
 
-def warning(logging, warning_message):
-    sys.stderr.write("%s%s: %s%s" % (bcolors.WARNING, logging, bcolors.ENDC, warning_message))
-    sys.stderr.write("\n")
+def warning(category, warning_message):
+    logging.warning("%s: %s", category, warning_message)
 
 
-def okgreen(logging, ok_message):
-    sys.stderr.write("%s%s: %s%s" % (bcolors.OKGREEN, logging, bcolors.ENDC, ok_message))
-    sys.stderr.write("\n")
+def okgreen(category, ok_message):
+    logging.info("%s: %s", category, ok_message)
 
 
 def makeform(template, settings, gallery_settings):
