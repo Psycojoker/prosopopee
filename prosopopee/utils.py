@@ -60,13 +60,13 @@ def rfc822(dt):
 
 def load_settings(folder):
     try:
-        gallery_settings = yaml.safe_load(open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r"))
-    except yaml.YAMLError as exc:
-        if hasattr(exc, 'problem_mark'):
-            mark = exc.problem_mark
-            error(False, "There are something wrong in %s/settings.yaml line %s" % (folder, mark.line))
-        else:
-            error(False, "There are something wrong in %s/settings.yaml" % folder)
+        with open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r") as settings:
+            gallery_settings = yaml.safe_load(settings.read())
+    except (yaml.error.MarkedYAMLError, yaml.YAMLError) as exc:
+        msg = "There is something wrong in %s/settings.yaml" % folder
+        if isinstance(exc, yaml.error.MarkedYAMLError):
+            msg = msg + str(exc.context_mark)
+        error(False, msg)
     except ValueError:
         error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
     if gallery_settings is None:
