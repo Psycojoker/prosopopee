@@ -108,9 +108,7 @@ class Video:
         return self.options["name"]
 
     def ffmpeg(self, source, target, options):
-        if options.get("resize"):
-            target = target
-        else:
+        if not options.get("resize"):
             target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
             logging.info("Skipped: %s is already generated", source)
