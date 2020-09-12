@@ -71,10 +71,14 @@ def load_settings(folder):
         error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
     if gallery_settings is None:
         error(False, "The %s/settings.yaml file is empty" % folder)
-    else:
-        if gallery_settings.get("date"):
-            try:
-                datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
-            except ValueError:
-                error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
-        return gallery_settings
+    elif not isinstance(gallery_settings, dict):
+        error(False, "%s/settings.yaml should be a dict" % folder)
+    elif not 'title' in gallery_settings:
+        error(False, "You should specify a title in %s/settings.yaml" % folder)
+
+    if gallery_settings.get("date"):
+        try:
+            datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
+        except ValueError:
+            error(False, "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml" % folder)
+    return gallery_settings

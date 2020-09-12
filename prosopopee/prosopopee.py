@@ -242,6 +242,9 @@ class Image(object):
             okgreen("Skipped", source + " is already generated")
             return
 
+        if DEFAULTS['test']:
+            return
+
         gm_switches = {
             "source": source,
             "target": target,
@@ -251,14 +254,14 @@ class Image(object):
             "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
             "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
         }
-        if not DEFAULTS['test']:
-            command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-            warning("Generation", source)
 
-            print(command)
-            error(os.system(command) == 0, "gm command failed")
+        command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
+        warning("Generation", source)
 
-            CACHE.cache_picture(source, target, options)
+        print(command)
+        error(os.system(command) == 0, "gm command failed")
+
+        CACHE.cache_picture(source, target, options)
 
     def copy(self):
         source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(self.name)
@@ -421,30 +424,31 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
     if not gallery_settings.get("public", True):
         build_gallery(settings, gallery_settings, gallery_path, parent_templates)
-    else:
-        gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
+        return gallery_cover
 
-        if not sub_galleries:
-            build_gallery(settings, gallery_settings, gallery_path, parent_templates)
+    gallery_cover = create_cover(gallery_name, gallery_settings, gallery_path)
 
-        else:
-            error(gallery_settings.get("sections") is not False,
-                  "The gallery in %s can't have both sections and subgalleries" % gallery_name.joinpath("settings.yaml"))
+    if not sub_galleries:
+        build_gallery(settings, gallery_settings, gallery_path, parent_templates)
+        return gallery_cover
 
-            # Sub galleries found, create index with them instead of a gallery
-            theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
+    error(gallery_settings.get("sections") is not False, "The gallery in %s can't have both "
+          "sections and subgalleries" % gallery_name.joinpath("settings.yaml"))
 
-            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates,
-                                                         date_locale=settings["settings"].get("date_locale"))
-            sub_page_galleries_cover = []
+    # Sub galleries found, create index with them instead of a gallery
+    theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
 
-            for subgallery in sub_galleries:
-                sub_page_galleries_cover.append(
-                    process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
-                )
+    subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates,
+                                                 date_locale=settings["settings"].get("date_locale"))
+    sub_page_galleries_cover = []
 
-            build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True, gallery_settings=gallery_settings)
-            gallery_cover['sub_gallery'] = sub_page_galleries_cover
+    for subgallery in sub_galleries:
+        sub_page_galleries_cover.append(
+            process_directory(subgallery.name, settings, subgallery_templates, gallery_path)
+        )
+
+    build_index(settings, sub_page_galleries_cover, subgallery_templates, gallery_path, sub_index=True, gallery_settings=gallery_settings)
+    gallery_cover['sub_gallery'] = sub_page_galleries_cover
 
     return gallery_cover
 
@@ -518,46 +522,47 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
 
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
+    if not gallery_settings.get("light_mode", False) and (
+            not settings["settings"].get("light_mode", False) or
+            gallery_settings.get("light_mode")):
+        return
+
     # XXX shouldn't this be a call to build_gallery?
     # Build light mode gallery
-    if gallery_settings.get("light_mode", False) or (
-            settings["settings"].get("light_mode", False) and
-            gallery_settings.get("light_mode") is None):
+    # Prepare light mode
+    Path("build").joinpath(gallery_path, "light").makedirs_p()
+    gallery_light_path = Path(gallery_path).joinpath("light")
+    light_templates = get_gallery_templates("light", gallery_light_path,
+                                            date_locale=settings["settings"].get("date_locale"))
 
-        # Prepare light mode
-        Path("build").joinpath(gallery_path, "light").makedirs_p()
-        gallery_light_path = Path(gallery_path).joinpath("light")
-        light_templates = get_gallery_templates("light", gallery_light_path,
-                date_locale=settings["settings"].get("date_locale"))
+    Image.base_dir = Path(".").joinpath(gallery_path)
+    Image.target_dir = Path(".").joinpath("build", gallery_path)
 
-        Image.base_dir = Path(".").joinpath(gallery_path)
-        Image.target_dir = Path(".").joinpath("build", gallery_path)
+    Video.base_dir = Path(".").joinpath(gallery_path)
+    Video.target_dir = Path(".").joinpath("build", gallery_path)
 
-        Video.base_dir = Path(".").joinpath(gallery_path)
-        Video.target_dir = Path(".").joinpath("build", gallery_path)
+    Audio.base_dir = Path(".").joinpath(gallery_path)
+    Audio.target_dir = Path(".").joinpath("build", gallery_path)
 
-        Audio.base_dir = Path(".").joinpath(gallery_path)
-        Audio.target_dir = Path(".").joinpath("build", gallery_path)
+    light_template_to_render = light_templates.get_template("gallery-index.html")
 
-        light_template_to_render = light_templates.get_template("gallery-index.html")
+    html = light_template_to_render.render(
+        settings=settings,
+        gallery=gallery_settings,
+        Image=Image,
+        Video=Video,
+        Audio=Audio,
+        link=gallery_light_path,
+        name=gallery_path.split('/', 1)[-1]
+    ).encode("Utf-8")
 
-        html = light_template_to_render.render(
-            settings=settings,
-            gallery=gallery_settings,
-            Image=Image,
-            Video=Video,
-            Audio=Audio,
-            link=gallery_light_path,
-            name=gallery_path.split('/', 1)[-1]
-        ).encode("Utf-8")
+    open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
+
+    if gallery_settings.get("password") or settings.get("password"):
+        light_templates.get_template("form.html")
+        html = encrypt(password, light_templates, gallery_light_path, settings, gallery_settings)
 
         open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
-
-        if gallery_settings.get("password") or settings.get("password"):
-            light_templates.get_template("form.html")
-            html = encrypt(password, light_templates, gallery_light_path, settings, gallery_settings)
-
-            open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
 
 
 def build_index(settings, galleries_cover, templates, gallery_path='', sub_index=False, gallery_settings={}):
