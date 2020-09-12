@@ -35,17 +35,14 @@ types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg', '*.png', '*.PNG')
 
 
 def get_exif(filename):
-    exif_data = {}
     exif = Image.open(filename)._getexif()
     if exif is not None:
-        for (tag, value) in exif.items():
+        for tag in exif:
             decoded = TAGS.get(tag, tag)
-            exif_data[decoded] = value
-        if 'DateTime' in exif_data:
-            datetime = exif_data['DateTime']
-    else:
-        datetime = strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
-    return datetime
+            if decoded == 'DateTime':
+                return exif[tag]
+
+    return strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
 
 
 def build_template(folder, force):
