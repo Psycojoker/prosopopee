@@ -18,7 +18,7 @@ def remove_superficial_options(options):
     return cleaned_options
 
 
-class Cache(object):
+class Cache:
     cache_file_path = os.path.join(os.getcwd(), ".prosopopee_cache")
 
     def __init__(self, json):
