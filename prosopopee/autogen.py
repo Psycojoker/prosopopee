@@ -9,7 +9,7 @@ from .utils import load_settings
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-data = '''title: {{ title }}
+DATA = '''title: {{ title }}
 date: {{ date }}
 cover: {{ cover }}
 sections:
@@ -67,14 +67,14 @@ def build_template(folder, force):
 
     for files in types:
         files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
-    tm = Template(data, trim_blocks=True)
-    msg = tm.render(title=gallery_settings['title'],
+    template = Template(DATA, trim_blocks=True)
+    msg = template.render(title=gallery_settings['title'],
                     date=gallery_settings['date'],
                     cover=gallery_settings['cover'],
                     files=sorted(files_grabbed, key=get_exif)
                     )
-    f = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
-    f.write(msg)
+    settings = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
+    settings.write(msg)
     logging.info("Generation: %s gallery", folder)
 
 
@@ -83,7 +83,7 @@ def autogen(folder=None, force=False):
         build_template(folder, force)
         return
 
-    for x in glob("./*/**/settings.yaml", recursive=True):
-        folder = x.rsplit('/', 1)[0]
+    for settings in glob("./*/**/settings.yaml", recursive=True):
+        folder = settings.rsplit('/', 1)[0]
         if not glob(folder + "/**/settings.yaml"):
             build_template(folder, force)

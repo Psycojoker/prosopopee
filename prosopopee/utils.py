@@ -52,9 +52,9 @@ def encrypt(password, template, gallery_path, settings, gallery_settings):
     return html
 
 
-def rfc822(dt):
+def rfc822(date):
     epoch = datetime.utcfromtimestamp(0).date()
-    return formatdate((dt - epoch).total_seconds())
+    return formatdate((date - epoch).total_seconds())
 
 
 def load_settings(folder):
@@ -70,8 +70,8 @@ def load_settings(folder):
     except ValueError:
         logging.error("Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder)
         sys.exit(1)
-    except Exception as e:
-        logging.exception(e)
+    except Exception as exc:
+        logging.exception(exc)
         sys.exit(1)
 
     if gallery_settings is None:
