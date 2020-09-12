@@ -131,7 +131,7 @@ class Video(object):
             "other": "%s" % options["other"]
         }
 
-        logging.warning("Generation: %s", source)
+        logging.info("Generation: %s", source)
 
         if options.get("resize"):
             command = "{binary} {loglevel} -i '{source}' {resize} -vframes 1 -y '{target}'".format(**ffmpeg_switches)
@@ -217,7 +217,7 @@ class Audio(object):
             "audio": "-c:a %s" % options["audio"]
         }
 
-        logging.warning("Generation: %s", source)
+        logging.info("Generation: %s", source)
 
         command = "{binary} {loglevel} -i '{source}' {audio} -y '{target}'".format(**ffmpeg_switches)
         print(command)
@@ -273,7 +273,7 @@ class Image(object):
         }
 
         command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-        logging.warning("Generation: %s", source)
+        logging.info("Generation: %s", source)
 
         print(command)
         if os.system(command) != 0:

@@ -51,7 +51,7 @@ def build_template(folder, force):
     gallery_settings = load_settings(folder)
 
     if 'static' in gallery_settings:
-        logging.warning("Skipped: Nothing to do in %s gallery", folder)
+        logging.info("Skipped: Nothing to do in %s gallery", folder)
         return
 
     if any(req not in gallery_settings for req in ['title', 'date', 'cover']):
@@ -60,7 +60,7 @@ def build_template(folder, force):
         sys.exit(1)
 
     if 'sections' in gallery_settings and force is not True:
-        logging.warning("Skipped: %s gallery is already generated", folder)
+        logging.info("Skipped: %s gallery is already generated", folder)
         return
 
     for files in types:
