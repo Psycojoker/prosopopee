@@ -237,8 +237,8 @@ class Audio:
 
 
 class Image:
-    base_dir = ""
-    target_dir = ""
+    base_dir = Path()
+    target_dir = Path()
 
     def __init__(self, options):
         # assuming string
