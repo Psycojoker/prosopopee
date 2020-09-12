@@ -18,8 +18,19 @@ from .utils import encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
 from .__init__ import __version__
 
+def loglevel(string):
+    try:
+        return int(string)
+    except ValueError:
+        pass
+    if hasattr(logging, string):
+        return getattr(logging, string)
+    raise ArgumentTypeError("takes an integer or a predefined log level from logging module.")
+
 parser = ArgumentParser(description='Static site generator for your story.')
 parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
+parser.add_argument("--log-level", default=logging.NOTSET, type=loglevel,
+        help="Configure the logging level")
 subparser = parser.add_subparsers(dest='cmd')
 subparser.add_parser('build', help='Generate static site')
 subparser.add_parser('test', help='Verify all your yaml data')
@@ -588,7 +599,7 @@ def main():
     handler.setFormatter(CustomFormatter())
     logger = logging.getLogger()
     logger.addHandler(handler)
-    logger.setLevel(logging.NOTSET)
+    logger.setLevel(args.log_level)
 
     settings = get_settings()
 
