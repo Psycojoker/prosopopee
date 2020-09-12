@@ -20,6 +20,7 @@ Options:
   --version     Show version.
 """
 
+import logging
 import os
 import shutil
 import socketserver
@@ -36,7 +37,7 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
+from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
 
 
@@ -600,6 +601,13 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
 
 def main():
     arguments = docopt(__doc__, version='1.0.1')
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(CustomFormatter())
+    logger = logging.getLogger()
+    logger.addHandler(handler)
+    logger.setLevel(logging.NOTSET)
+
     settings = get_settings()
 
     front_page_galleries_cover = []
