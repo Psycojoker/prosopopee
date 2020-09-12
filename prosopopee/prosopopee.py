@@ -25,6 +25,7 @@ import os
 import shutil
 import socketserver
 import subprocess
+import sys
 import http.server
 
 from babel.core import default_locale
@@ -37,7 +38,7 @@ from path import Path
 from jinja2 import Environment, FileSystemLoader
 
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, CustomFormatter
+from .utils import encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
 
 
@@ -84,7 +85,9 @@ class Video(object):
     target_dir = Path()
 
     def __init__(self, options):
-        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert video and I ask to do so, abort")
+        if SETTINGS["ffmpeg"] is False:
+            logging.error("I couldn't find a binary to convert video and I ask to do so + abort")
+            sys.exit(1)
 
         # assuming string
         if not isinstance(options, dict):
@@ -128,7 +131,9 @@ class Video(object):
         else:
             command = "{binary} {loglevel} -i '{source}' {video} {vbitrate} {other} {audio} {abitrate} {resolution} {format} -y '{target}'".format(**ffmpeg_switches)
         print(command)
-        error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
+        if os.system(command) != 0:
+            logging.error("%s command failed", ffmpeg_switches["binary"])
+            sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
 
@@ -176,7 +181,9 @@ class Audio(object):
     target_dir = Path()
 
     def __init__(self, options):
-        error(SETTINGS["ffmpeg"] is not False, "I couldn't find a binary to convert audio and I ask to do so, abort")
+        if SETTINGS["ffmpeg"] is False:
+            logging.error("I couldn't find a binary to convert audio and I ask to do so + abort")
+            sys.exit(1)
 
         # assuming string
         if not isinstance(options, dict):
@@ -207,7 +214,9 @@ class Audio(object):
 
         command = "{binary} {loglevel} -i '{source}' {audio} -y '{target}'".format(**ffmpeg_switches)
         print(command)
-        error(os.system(command) == 0, "%s command failed" % ffmpeg_switches["binary"])
+        if os.system(command) != 0:
+            logging.error("%s command failed", ffmpeg_switches["binary"])
+            sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
 
@@ -260,7 +269,9 @@ class Image(object):
         logging.warning("Generation: %s", source)
 
         print(command)
-        error(os.system(command) == 0, "gm command failed")
+        if os.system(command) != 0:
+            logging.error("gm command failed")
+            sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
 
@@ -313,12 +324,7 @@ class TCPServerV4(socketserver.TCPServer):
 
 
 def get_settings():
-    error(Path("settings.yaml").exists(), "I can't find a "
-          "settings.yaml in the current working directory")
-
     settings = load_settings(".")
-
-    error(isinstance(settings, dict), "Your settings.yaml should be a dict")
 
     for key, value in list(DEFAULTS.items()):
         if key not in settings:
@@ -335,8 +341,9 @@ def get_settings():
     else:
         conv_video = "ffmpeg"
 
-    error(os.system("which gm > /dev/null") == 0, "I can't locate the gm binary, "
-          "please install the 'graphicsmagick' package.\n")
+    if os.system("which gm > /dev/null") != 0:
+        logging.error("I can't locate the gm binary + please install the 'graphicsmagick' package.")
+        sys.exit(1)
 
     if os.system("which " + conv_video + " > /dev/null") != 0:
         if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
@@ -349,8 +356,6 @@ def get_settings():
             logging.warning("Video: I won't be able to encode video and I will stop if I "
                     "encounter a video to convert")
             SETTINGS["ffmpeg"] = False
-
-    error(settings.get("title"), "You need to specify a title in your main settings.yaml")
 
     if (settings["rss"] or settings["share"]) and not settings.get("url"):
         logging.warning("warning: If you want the rss and/or the social network share to work, "
@@ -380,7 +385,10 @@ def get_gallery_templates(theme, gallery_path="", parent_templates=None, date_lo
 
     available_themes = theme, "', '".join(Path(__file__).parent.joinpath("themes").listdir())
 
-    error(theme_path, "'%s' is not an existing theme, available themes are '%s'" % (theme_path, available_themes))
+    if not theme_path:
+        logging.error("'%s' is not an existing theme + available themes are '%s'",
+                theme_path, available_themes)
+        sys.exit(1)
 
     templates_dir = [
         Path(".").joinpath("templates").realpath(),
@@ -415,8 +423,6 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
         gallery_path = gallery_name
 
     gallery_settings = load_settings(gallery_path)
-    error(isinstance(gallery_settings, dict), "Your %s should be a dict" % gallery_name.joinpath("settings.yaml"))
-    error(gallery_settings.get("title"), "You should specify a title in %s" % gallery_name.joinpath("settings.yaml"))
 
     gallery_cover = {}
 
@@ -434,8 +440,10 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
         build_gallery(settings, gallery_settings, gallery_path, parent_templates)
         return gallery_cover
 
-    error(gallery_settings.get("sections") is not False, "The gallery in %s can't have both "
-          "sections and subgalleries" % gallery_name.joinpath("settings.yaml"))
+    if gallery_settings.get("sections", False):
+        logging.error("The gallery in %s can't have both sections and subgalleries",
+                gallery_name.joinpath("settings.yaml"))
+        sys.exit(1)
 
     # Sub galleries found, create index with them instead of a gallery
     theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
@@ -456,11 +464,10 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
 
 
 def create_cover(gallery_name, gallery_settings, gallery_path):
-    error(gallery_settings.get("title"), "Your gallery describe in %s need to have a "
-                                         "title" % gallery_name.joinpath("settings.yaml"))
-
-    error(gallery_settings.get("cover"), "You should specify a path to a cover picture "
-                                         "in %s" % gallery_name.joinpath("settings.yaml"))
+    if not gallery_settings.get("cover"):
+        logging.error("You should specify a path to a cover picture in %s",
+                gallery_name.joinpath("settings.yaml"))
+        sys.exit(1)
 
     if isinstance(gallery_settings["cover"], dict):
         cover_image_path = gallery_path.joinpath(gallery_settings["cover"]["name"])
@@ -471,8 +478,9 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
         cover_image_url = gallery_name.joinpath(gallery_settings["cover"])
         cover_image_type = "image"
 
-    error(cover_image_path.exists(), "File for %s cover image doesn't exist at "
-          "%s" % (gallery_name, cover_image_path))
+    if not cover_image_path.exists():
+        logging.error("File for %s cover image doesn't exist at %s", gallery_name, cover_image_path)
+        sys.exit(1)
 
     gallery_cover = {
         "title": gallery_settings["title"],
@@ -616,14 +624,19 @@ def main():
     galleries_dirs = [x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()]
     includes = [x for x in settings["include"] if Path(".").joinpath(x).exists()]
 
-    error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
-          "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
-          "DIRECTORY in your current working directory), you don't have any gallery?")
+    if not galleries_dirs:
+        logging.error("I can't find at least one directory with a settings.yaml in the current "
+                "working directory (NOT the settings.yaml in your current directory, but one "
+                "INSIDE A DIRECTORY in your current directory), you don't have any gallery?")
+        sys.exit(1)
+
     if arguments['test']:
         DEFAULTS['test'] = True
 
     if arguments['preview']:
-        error(Path("build").exists(), "Please build the website before launch preview")
+        if not Path("build").exists():
+            logging.error("Please build the website before launch preview")
+            sys.exit(1)
 
         os.chdir('build')
         handler = http.server.SimpleHTTPRequestHandler
@@ -637,9 +650,12 @@ def main():
             raise
 
     if arguments['deploy']:
-        error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
-              "please install the 'rsync' package.\n")
-        error(Path("build").exists(), "Please build the website before launch deployment")
+        if os.system("which rsync > /dev/null") != 0:
+            logging.error("I can't locate the rsync + please install the 'rsync' package.")
+            sys.exit(1)
+        if not Path("build").exists():
+            logging.error("Please build the website before launch deployment")
+            sys.exit(1)
 
         r_dest = settings["settings"]["deploy"]["dest"]
         if settings["settings"]["deploy"]["others"]:
@@ -652,7 +668,9 @@ def main():
             r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
         else:
             r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
-        error(os.system(r_cmd) == 0, "deployment failed")
+        if os.system(r_cmd) != 0:
+            logging.error("deployment failed")
+            sys.exit(1)
         return
 
     if arguments['autogen']:
