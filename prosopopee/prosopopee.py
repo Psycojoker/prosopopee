@@ -29,7 +29,7 @@ def loglevel(string):
 
 parser = ArgumentParser(description='Static site generator for your story.')
 parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
-parser.add_argument("--log-level", default=logging.NOTSET, type=loglevel,
+parser.add_argument("--log-level", default=logging.WARNING, type=loglevel,
         help="Configure the logging level")
 subparser = parser.add_subparsers(dest='cmd')
 subparser.add_parser('build', help='Generate static site')
