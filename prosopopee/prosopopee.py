@@ -3,21 +3,31 @@
 """Prosopopee. Static site generator for your story.
 
 Usage:
-  prosopopee
-  prosopopee test
-  prosopopee preview
+  prosopopee build [-d <directory>] [--test]
+  prosopopee preview [-p <port>]
   prosopopee deploy
-  prosopopee autogen (-d <folder> | --all ) [--force]
+  prosopopee autogen (-d <directory> | --all ) [--force]
   prosopopee (-h | --help)
-  prosopopee --version
+  prosopopee (-v | --version)
 
 Options:
-  test          Verify all your yaml data
-  preview       Start preview webserver on port 9000
-  deploy        Deploy your website
-  autogen       Generate gallery automaticaly
-  -h, --help    Show this screen.
-  --version     Show version.
+  build             Build website or test data
+  preview           Start preview webserver
+  deploy            Deploy your website
+  autogen           Generate gallery automaticaly
+  -d                Generate HTML or YAML data from specific folder
+  -h, --help        Show this screen.
+  -v, --version     Show version.
+
+Build options:
+  --test            Verify all your yaml data
+
+Preview options:
+  -p INT            Set webserver port [default: 9000]
+
+Auto generation options:
+  --all             Generate all YAML data
+  --force           Force generata YAML data
 """
 
 import os
@@ -26,14 +36,12 @@ import socketserver
 import subprocess
 import http.server
 
+from PIL import Image as Plop
 from docopt import docopt
-
 from path import Path
-
 from jinja2 import Environment, FileSystemLoader
-
 from .cache import CACHE
-from .utils import error, warning, okgreen, encrypt, rfc822, load_settings
+from .utils import error, warning, okgreen, encrypt, rfc822, load_settings, check_version, rotate_jpeg
 from .autogen import autogen
 
 
@@ -233,21 +241,23 @@ class Image(object):
             okgreen("Skipped", source + " is already generated")
             return
 
-        gm_switches = {
-            "source": source,
-            "target": target,
-            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-            "strip": "-strip" if options["strip"] else "",
-            "quality": "-quality %s" % options["quality"] if "quality" in options else "-define jpeg:preserve-settings",
-            "resize": "-resize %s" % options["resize"] if options.get("resize", None) is not None else "",
-            "progressive": "-interlace Line" if options.get("progressive", None) is True else ""
-        }
         if not DEFAULTS['test']:
-            command = "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} '{target}'".format(**gm_switches)
-            warning("Generation", source)
-
-            print(command)
-            error(os.system(command) == 0, "gm command failed")
+            progressive = True
+            quality = options.get("quality", int("75"))
+            rotate_jpeg(source)
+            try:
+                with Plop.open(source) as im:
+                    if "resize" in options and options["resize"] is not None:
+                        basewidth = int(options.get("resize").strip("x"))
+                        wsize = int((float(basewidth)*float(im.size[0]))/float(im.size[1]))
+                        im = im.resize((wsize, basewidth), Plop.ANTIALIAS)
+                    if "quality" in options:
+                        im.save(target, "JPEG", quality=quality, optimize=True, progressive=progressive)
+                    else:
+                        im.save(target, "JPEG", optimize=True, progressive=progressive)
+                    warning("Generation", target)
+            except OSError:
+                error(True, "cannot create thumbnail for %s" % target)
 
             CACHE.cache_picture(source, target, options)
 
@@ -286,10 +296,8 @@ class Image(object):
 
     @property
     def ratio(self):
-        command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
-        out = subprocess.check_output(command.split())
-        width, height = out.decode("utf-8").split(',')
-        return float(width) / int(height)
+        with Plop.open(self.base_dir.joinpath(self.name)) as im:
+            return float(im.size[0]) / float(im.size[1])
 
     def __repr__(self):
         return self.name
@@ -570,8 +578,43 @@ def build_index(settings, galleries_cover, templates, gallery_path='', sub_index
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
+def server(port):
+    print("Start preview")
+    error(Path("build").exists(), "Please build the website before launch preview")
+    os.chdir('build')
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = TCPServerV4(("", port), handler)
+    print('Start server on http://localhost:%s' % port)
+    try:
+        httpd.serve_forever()
+    except (KeyboardInterrupt, SystemExit):
+        print('\nShutdown server')
+        httpd.shutdown()
+        raise
+
+
+def deploy(settings):
+    error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
+          "please install the 'rsync' package.\n")
+    error(Path("build").exists(), "Please build the website before launch deployment")
+
+    r_dest = settings["settings"]["deploy"]["dest"]
+    if settings["settings"]["deploy"]["others"]:
+        r_others = settings["settings"]["deploy"]["others"]
+    else:
+        r_others = ''
+    if settings["settings"]["deploy"]["ssh"]:
+        r_username = settings["settings"]["deploy"]["username"]
+        r_hostname = settings["settings"]["deploy"]["hostname"]
+        r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
+    else:
+        r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
+    error(os.system(r_cmd) == 0, "deployment failed")
+    return
+
+
 def main():
-    arguments = docopt(__doc__, version='1.0.1')
+    arguments = docopt(__doc__, version='1.1.0')
     settings = get_settings()
 
     front_page_galleries_cover = []
@@ -581,45 +624,6 @@ def main():
     error(galleries_dirs, "I can't find at least one directory with a settings.yaml in the current working "
           "directory (NOT the settings.yaml in your current directory, but one INSIDE A "
           "DIRECTORY in your current working directory), you don't have any gallery?")
-    if arguments['test']:
-        DEFAULTS['test'] = True
-
-    if arguments['preview']:
-        error(Path("build").exists(), "Please build the website before launch preview")
-
-        os.chdir('build')
-        handler = http.server.SimpleHTTPRequestHandler
-        httpd = TCPServerV4(("", 9000), handler)
-        print('Start server on http://localhost:9000')
-        try:
-            httpd.serve_forever()
-        except (KeyboardInterrupt, SystemExit):
-            print('\nShutdown server')
-            httpd.shutdown()
-            raise
-
-    if arguments['deploy']:
-        error(os.system("which rsync > /dev/null") == 0, "I can't locate the rsync, "
-              "please install the 'rsync' package.\n")
-        error(Path("build").exists(), "Please build the website before launch deployment")
-
-        r_dest = settings["settings"]["deploy"]["dest"]
-        if settings["settings"]["deploy"]["others"]:
-            r_others = settings["settings"]["deploy"]["others"]
-        else:
-            r_others = ''
-        if settings["settings"]["deploy"]["ssh"]:
-            r_username = settings["settings"]["deploy"]["username"]
-            r_hostname = settings["settings"]["deploy"]["hostname"]
-            r_cmd = "rsync -avz --progress %s build/* %s@%s:%s" % (r_others, r_username, r_hostname, r_dest)
-        else:
-            r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
-        error(os.system(r_cmd) == 0, "deployment failed")
-        return
-
-    if arguments['autogen']:
-        autogen(arguments['<folder>'], arguments['--force'])
-        return
 
     Path("build").makedirs_p()
     theme = settings["settings"].get("theme", "exposure")
@@ -634,24 +638,49 @@ def main():
         shutil.copy(Path("custom.css"), Path(".").joinpath("build", "", "static", "css"))
         settings["custom_css"] = True
 
-    for gallery in galleries_dirs:
-        front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+    print(arguments)
 
-    if settings["rss"]:
-        feed_template = templates.get_template("feed.xml")
+    if arguments['preview']:
+        port = int(arguments['-p'])
+        server(port)
 
-        xml = feed_template.render(
-            settings=settings,
-            galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
-            ).encode("Utf-8")
+    if arguments['deploy']:
+        deploy(settings)
+        return
 
-        open(Path("build").joinpath("feed.xml"), "wb").write(xml)
+    if arguments['autogen']:
+        autogen(arguments['<directory>'], arguments['--force'])
+        return
 
-    build_index(settings, front_page_galleries_cover, templates)
-    CACHE.cache_dump()
+    if arguments['build']:
+        if arguments['--test']:
+            DEFAULTS['test'] = True
+        if arguments['-d']:
+            gallery_path = arguments['<directory>']
+            gallery_settings = load_settings(gallery_path)
+            Path("build").joinpath(gallery_path).makedirs_p()
+            build_gallery(settings, gallery_settings, gallery_path, templates)
+        else:
+            for gallery in galleries_dirs:
+                front_page_galleries_cover.append(process_directory(gallery.normpath(), settings, templates))
+
+            if settings["rss"]:
+                feed_template = templates.get_template("feed.xml")
+
+                xml = feed_template.render(
+                    settings=settings,
+                    galleries=reversed(sorted([x for x in front_page_galleries_cover if x != {}], key=lambda x: x["date"]))
+                    ).encode("Utf-8")
+
+                open(Path("build").joinpath("feed.xml"), "wb").write(xml)
+
+            build_index(settings, front_page_galleries_cover, templates)
+            CACHE.cache_dump()
 
     if DEFAULTS['test'] is True:
         okgreen("Succes", "HTML file building without error")
+
+    check_version()
 
 
 if __name__ == '__main__':

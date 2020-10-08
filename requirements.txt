@@ -3,4 +3,6 @@ path.py
 docopt
 ruamel.yaml
 future
-pillow
+pillow-simd
+importlib-metadata
+piexif
