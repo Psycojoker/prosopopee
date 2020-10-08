@@ -47,7 +47,6 @@ You can find example usages here:
 * http://media.faimaison.net/photos/galerie/
 * https://www.thebrownianmovement.org/
 * http://outside.browny.pink
-* http://such.life
 * http://www.street-art.me
  
  ## Code example
