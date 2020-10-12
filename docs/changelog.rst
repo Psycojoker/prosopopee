@@ -1,6 +1,18 @@
 Changelog
 =========
 
+1.1 (unreleased)
+
+* move to tox with check-manifest, flake8 and black
+* move to the logging module
+* move to argparse
+* localise date formating https://prosopopee.readthedocs.io/en/latest/configuration.html#date-locale
+* allow to customize background-position for full-picture https://prosopopee.readthedocs.io/en/latest/sections.html#full-screen-picture
+* add include option https://prosopopee.readthedocs.io/en/latest/configuration.html#include-files
+* various bug fixes
+
+Thx to all new contributors!
+
 1.0.1 (2020-05-08)
  
  * Fix check date format
