@@ -10,3 +10,5 @@ By chronological order:
         Titoko
         0x010C
         Eugene Andrienko
+        George Angelopoulos
+        Quentin Schulz
