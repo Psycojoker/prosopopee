@@ -859,7 +859,7 @@ def main():
         if srcdir != "":
             os.makedirs(dstdir, exist_ok=True)
         d = shutil.copy2(i, dstdir)
-        warning("copied", d)
+        logging.warning("copied", d)
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
