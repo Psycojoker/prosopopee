@@ -45,15 +45,21 @@ class Cache:
 
         cached_picture = self.cache[target]
 
-        if cached_picture["size"] != os.path.getsize(source) or cached_picture["options"] != remove_superficial_options(options):
+        if cached_picture["size"] != os.path.getsize(source) or cached_picture[
+            "options"
+        ] != remove_superficial_options(options):
             return True
 
         return False
 
     def cache_picture(self, source, target, options):
-        self.cache[target] = {"size": os.path.getsize(source), "options": remove_superficial_options(options)}
+        self.cache[target] = {
+            "size": os.path.getsize(source),
+            "options": remove_superficial_options(options),
+        }
 
     def cache_dump(self):
         self.json.dump(self.cache, open(self.cache_file_path, "w"))
+
 
 CACHE = Cache(json=json)

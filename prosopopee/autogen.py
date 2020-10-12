@@ -10,7 +10,7 @@ from PIL.ExifTags import TAGS
 
 from .utils import load_settings
 
-DATA = '''title: {{ title }}
+DATA = """title: {{ title }}
 date: {{ date }}
 cover: {{ cover }}
 sections:
@@ -30,9 +30,9 @@ sections:
 {% set nb. value = range(2,5)|random %}
 {% endif %}
 {% endfor %}
-'''
+"""
 
-types = ('*.JPG', '*.jpg', '*.JPEG', '*.jpeg', '*.png', '*.PNG')
+types = ("*.JPG", "*.jpg", "*.JPEG", "*.jpeg", "*.png", "*.PNG")
 
 
 def get_exif(filename):
@@ -40,7 +40,7 @@ def get_exif(filename):
     if exif is not None:
         for tag in exif:
             decoded = TAGS.get(tag, tag)
-            if decoded == 'DateTime':
+            if decoded == "DateTime":
                 return exif[tag]
 
     return strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
@@ -51,27 +51,31 @@ def build_template(folder, force):
 
     gallery_settings = load_settings(folder)
 
-    if 'static' in gallery_settings:
+    if "static" in gallery_settings:
         logging.info("Skipped: Nothing to do in %s gallery", folder)
         return
 
-    if any(req not in gallery_settings for req in ['title', 'date', 'cover']):
-        logging.error("You need configure first, the title, date and cover in %s/settings.yaml "
-                "to use autogen", folder)
+    if any(req not in gallery_settings for req in ["title", "date", "cover"]):
+        logging.error(
+            "You need configure first, the title, date and cover in %s/settings.yaml "
+            "to use autogen",
+            folder,
+        )
         sys.exit(1)
 
-    if 'sections' in gallery_settings and force is not True:
+    if "sections" in gallery_settings and force is not True:
         logging.info("Skipped: %s gallery is already generated", folder)
         return
 
     for files in types:
         files_grabbed.extend(glob(Path(".").joinpath(folder, files)))
     template = Template(DATA, trim_blocks=True)
-    msg = template.render(title=gallery_settings['title'],
-                    date=gallery_settings['date'],
-                    cover=gallery_settings['cover'],
-                    files=sorted(files_grabbed, key=get_exif)
-                    )
+    msg = template.render(
+        title=gallery_settings["title"],
+        date=gallery_settings["date"],
+        cover=gallery_settings["cover"],
+        files=sorted(files_grabbed, key=get_exif),
+    )
     settings = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
     settings.write(msg)
     logging.info("Generation: %s gallery", folder)
@@ -83,6 +87,6 @@ def autogen(folder=None, force=False):
         return
 
     for settings in glob("./*/**/settings.yaml", recursive=True):
-        folder = settings.rsplit('/', 1)[0]
+        folder = settings.rsplit("/", 1)[0]
         if not glob(folder + "/**/settings.yaml"):
             build_template(folder, force)

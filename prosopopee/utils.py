@@ -9,13 +9,14 @@ from builtins import str
 from path import Path
 import ruamel.yaml as yaml
 
+
 class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors"""
 
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
     fmt_nok = "%(asctime)s %(levelname)s (%(filename)s:%(lineno)d) - %(message)s"
     fmt_ok = "%(asctime)s %(levelname)s - %(message)s"
 
@@ -33,18 +34,26 @@ class CustomFormatter(logging.Formatter):
 
 def makeform(template, settings, gallery_settings):
     from_template = template.get_template("form.html")
-    form = base64.b64encode(from_template.render(settings=settings, gallery=gallery_settings).encode("Utf-8"))
-    return str(form, 'utf-8')
+    form = base64.b64encode(
+        from_template.render(settings=settings, gallery=gallery_settings).encode(
+            "Utf-8"
+        )
+    )
+    return str(form, "utf-8")
 
 
 def encrypt(password, template, gallery_path, settings, gallery_settings):
     encrypted_template = template.get_template("encrypted.html")
     index_plain = Path("build").joinpath(gallery_path, "index.html")
-    encrypted = check_output('cat %s | openssl enc -e -base64 -A -aes-256-cbc -md md5 -pass pass:"%s"' % (index_plain, password), shell=True)
+    encrypted = check_output(
+        'cat %s | openssl enc -e -base64 -A -aes-256-cbc -md md5 -pass pass:"%s"'
+        % (index_plain, password),
+        shell=True,
+    )
     html = encrypted_template.render(
         settings=settings,
         form=makeform(template, settings, gallery_settings),
-        ciphertext=str(encrypted, 'utf-8'),
+        ciphertext=str(encrypted, "utf-8"),
         gallery=gallery_settings,
     ).encode("Utf-8")
     return html
@@ -57,7 +66,9 @@ def rfc822(date):
 
 def load_settings(folder):
     try:
-        with open(Path(".").joinpath(folder, "settings.yaml").abspath(), "r") as settings:
+        with open(
+            Path(".").joinpath(folder, "settings.yaml").abspath(), "r"
+        ) as settings:
             gallery_settings = yaml.safe_load(settings.read())
     except (yaml.error.MarkedYAMLError, yaml.YAMLError) as exc:
         msg = "There is something wrong in %s/settings.yaml" % folder
@@ -66,7 +77,9 @@ def load_settings(folder):
         logging.error(msg)
         sys.exit(1)
     except ValueError:
-        logging.error("Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder)
+        logging.error(
+            "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder
+        )
         sys.exit(1)
     except Exception as exc:
         logging.exception(exc)
@@ -78,14 +91,17 @@ def load_settings(folder):
     elif not isinstance(gallery_settings, dict):
         logging.error("%s/settings.yaml should be a dict", folder)
         sys.exit(1)
-    elif not 'title' in gallery_settings:
+    elif "title" not in gallery_settings:
         logging.error("You should specify a title in %s/settings.yaml", folder)
         sys.exit(1)
 
     if gallery_settings.get("date"):
         try:
-            datetime.strptime(str(gallery_settings.get("date")), '%Y-%m-%d')
+            datetime.strptime(str(gallery_settings.get("date")), "%Y-%m-%d")
         except ValueError:
-            logging.error("Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder)
+            logging.error(
+                "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml",
+                folder,
+            )
             sys.exit(1)
     return gallery_settings
