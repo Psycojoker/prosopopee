@@ -357,7 +357,7 @@ def get_local_date_filter(date_locale):
     if date_locale is None:
         date_locale = default_locale('LC_TIME')
 
-    def local_date(value, date_format="dd MMMM yyy"):
+    def local_date(value, date_format="dd MMMM yyyy"):
         return format_date(date=value,
                            format=date_format,
                            locale=date_locale)
