@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2020-10-12)
 
 * move to tox with check-manifest, flake8 and black
 * move to the logging module
