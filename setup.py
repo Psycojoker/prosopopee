@@ -16,16 +16,16 @@ setup(name='prosopopee',
       url='https://github.com/Psycojoker/prosopopee',
       install_requires=open("./requirements.txt", "r").read().split(),
       py_modules=[],
-      license= 'GPLv3+',
+      license='GPLv3+',
       scripts=[],
       entry_points={
-        'console_scripts': ['prosopopee = prosopopee.prosopopee:main']
+          'console_scripts': ['prosopopee = prosopopee.prosopopee:main']
       },
       keywords='',
       include_package_data=True,
       packages=['prosopopee'],
       package_dir={'prosopopee': 'prosopopee'},
       package_data={
-            'prosopopee': ['themes/*/*/*/*', 'themes/*/templates/*.html', 'themes/*/templates/feed.xml', 'themes/*/templates/section/*.html'],
+          'prosopopee': ['themes/*/*/*/*', 'themes/*/templates/*.html', 'themes/*/templates/feed.xml', 'themes/*/templates/section/*.html'],
       },
-)
+      )

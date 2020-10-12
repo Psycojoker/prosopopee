@@ -359,8 +359,8 @@ def get_local_date_filter(date_locale):
 
     def local_date(value, date_format="dd MMMM yyy"):
         return format_date(date=value,
-                format=date_format,
-                locale=date_locale)
+                           format=date_format,
+                           locale=date_locale)
     return local_date
 
 
@@ -428,7 +428,8 @@ def process_directory(gallery_name, settings, parent_templates, parent_gallery_p
             # Sub galleries found, create index with them instead of a gallery
             theme = gallery_settings.get("theme", settings.get("theme", "exposure"))
 
-            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates, settings["settings"].get("date_locale"))
+            subgallery_templates = get_gallery_templates(theme, gallery_path, parent_templates,
+                                                         date_locale=settings["settings"].get("date_locale"))
             sub_page_galleries_cover = []
 
             for subgallery in sub_galleries:
