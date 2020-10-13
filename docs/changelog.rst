@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.2 (2020-10-13)
+
+* fix weird upload bug on pypi
+
 1.1.1 (2020-10-13)
 
 * upgrade baguetteBox.js to 1.11.1 for its bug fix
