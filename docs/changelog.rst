@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.1 (2020-10-13)
+
+* upgrade baguetteBox.js to 1.11.1 for its bug fix
+
 1.1 (2020-10-12)
 
 * move to tox with check-manifest, flake8 and black
