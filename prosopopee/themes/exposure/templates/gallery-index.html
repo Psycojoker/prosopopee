@@ -44,7 +44,7 @@
     {% if settings.custom_css %}
     <link type="text/css" rel="stylesheet" href="../static/css/custom.css"  media="screen,projection"/>
     {% endif %}
-    {% if gallery.panorama_enabled or gallery.audio_enabled %}
+    {% if gallery.panorama_enabled or gallery.audio_enabled or settings.settings.night_mode %}
     <script type="text/javascript" src="../static/js/jquery.min.js" charset="utf-8"></script>
     {% endif %}
     <link type="text/css" rel="stylesheet" href="../static/css/baguetteBox.min.css"  media="screen,projection"/>
