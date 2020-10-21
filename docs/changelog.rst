@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.3 (2020-10-21)
+
+* Jquery fixes for issues #121 and #126 by QShulz
+
 1.1.2 (2020-10-13)
 
 * fix weird upload bug on pypi
