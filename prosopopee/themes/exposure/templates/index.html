@@ -32,7 +32,7 @@
   <div class="galleries-line covers-{{ galleries_line|length }}">
     {% for gallery in galleries_line|reverse %}<!-- comment tricks against space between inline-block
     --><div class="gallery-square">
-      <a href="{{ gallery.link }}">
+      <a href="{{ gallery.name }}">
         <div class="gallery-title">
           <h2>{{ gallery.title }}</h2>
           {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
@@ -51,11 +51,11 @@
         <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
       </div>
       {% else %}
-      {% set cover = Image(gallery.cover) %}
+      {% set cover = Image.get(gallery.link, gallery.cover) %}
       {% if no_big_gallery_cover %}
-      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}'), url('{{ cover.generate_thumbnail("x150") }}');"></div>
+      <div class="gallery-cover" style="background-image: url('{{ gallery.name }}/{{ cover.thumbnail((None, 900)) }}'), url('{{ gallery.name }}/{{ cover.thumbnail((None, 150)) }}');"></div>
       {% else %}
-      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x1366") }}'), url('{{ cover.generate_thumbnail("x900") }}');"></div>
+      <div class="gallery-cover" style="background-image: url('{{ gallery.name }}/{{ cover.thumbnail((None, 1366)) }}'), url('{{ gallery.name }}/{{ cover.thumbnail((None, 900)) }}');"></div>
       {% endif %}
       {% endif %}
     </div><!-- comment tricks against space between inline-block

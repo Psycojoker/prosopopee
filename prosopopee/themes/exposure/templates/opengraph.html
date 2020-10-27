@@ -1,7 +1,7 @@
 {% set absolute_url = settings.url + "/" + link + "/" %}
-{% set cover = Image(gallery.cover) %}
+{% set cover = Image.get(link, gallery.cover) %}
 <meta property="og:title" content="{{ gallery.title }}"/>
-<meta property="og:image" content="{{ absolute_url }}{{ cover.generate_thumbnail("x900") }}"/>
+<meta property="og:image" content="{{ absolute_url }}{{ cover.thumbnail((None, 900)) }}"/>
 <meta property="og:site_name" content="{{ settings.title }}"/>
 {% if gallery.description %}
 <meta property="og:description" content="{{ gallery.description }}"/>

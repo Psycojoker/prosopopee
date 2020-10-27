@@ -3,7 +3,7 @@
 {% else %}
 {% set pathstatic = "." %}
 {% endif %}
-{% set image = Image(section.image) %}
+{% set image = Image.get(link + "/" + pathstatic, section.image) %}
 <section class="panorama">
-  <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
+  <img src="{{ pathstatic }}/{{ image.thumbnail((None, 800)) }}">
 </section>

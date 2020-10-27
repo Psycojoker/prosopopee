@@ -8,9 +8,8 @@
       <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
     </video>
     {% else %}
-    {% set image = Image(section.image) %}
-    {{ image.copy() }}
-    <img class="responsive-img" src="{{ image }}">
+    {% set image = Image.get(link, section.image) %}
+    <img class="responsive-img" src="{{ image.copy() }}">
     {% endif %}
   </div>
 

@@ -6,7 +6,7 @@ from multiprocessing import Manager
 
 from .utils import remove_superficial_options
 
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 
 
 logger = logging.getLogger("prosopopee." + __name__)
@@ -34,14 +34,19 @@ class Cache:
 
     def needs_to_be_generated(self, source, target, options):
         if not os.path.exists(target):
+            logger.debug("%s does not exist. Requesting generation...", target)
             return True
 
         if target not in self.cache:
+            logger.debug("%s not in cache. Requesting generation...", target)
             return True
 
         cached_picture = self.cache[target]
 
         if cached_picture["size"] != os.path.getsize(source):
+            logger.debug(
+                "%s has different size than in cache. Requesting generation...", target
+            )
             return True
 
         options = remove_superficial_options(options)
@@ -50,8 +55,13 @@ class Cache:
         options = json.loads(json.dumps(options))
 
         if cached_picture["options"] != options:
+            logger.debug(
+                "%s has different options than in cache. Requesting generation...",
+                target,
+            )
             return True
 
+        logger.debug("(%s) Skipping cached thumbnail %s", source, target)
         return False
 
     def cache_picture(self, source, target, options):

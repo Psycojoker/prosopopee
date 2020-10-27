@@ -11,7 +11,7 @@
     {% set format = settings.ffmpeg.extension %}
     {{ video.copy() }}
     {% else %}
-    {% set image = Image(image) %}
+    {% set image = Image.get(link + "/" + pathstatic, image) %}
     {% endif %}
     {% set caption = image.text %}
     <div class="image">
@@ -21,7 +21,7 @@
         </video>
         {% set video = "" %}
         {% else %}
-        <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
+        <img src="{{ pathstatic }}/{{ image.thumbnail((None, 800)) }}" alt="{% if caption %}{{ caption }}{% endif %}">
         {% endif %}
     </div>
     {% endfor %}

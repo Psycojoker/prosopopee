@@ -8,9 +8,12 @@ import socketserver
 import subprocess
 import sys
 import http.server
+import struct
 
 from babel.core import default_locale
 from babel.dates import format_date
+from multiprocessing import Pool
+from PIL import Image, ImageOps, JpegImagePlugin, ImageFile
 
 from path import Path
 
@@ -20,6 +23,7 @@ from .cache import CACHE
 from .utils import encrypt, rfc822, load_settings, CustomFormatter
 from .autogen import autogen
 from .__init__ import __version__
+from .image import ImageFactory
 
 
 def loglevel(string):
@@ -105,6 +109,9 @@ SETTINGS = {
         "extension": "mp3",
     },
 }
+
+
+ImageFactory.global_options = SETTINGS["gm"]
 
 
 class Video:
@@ -281,118 +288,6 @@ class Audio:
         return self.name
 
 
-class Image:
-    base_dir = Path()
-    target_dir = Path()
-
-    def __init__(self, options):
-        # assuming string
-        if not isinstance(options, dict):
-            options = {"name": options}
-
-        self.options = SETTINGS[
-            "gm"
-        ].copy()  # used for caching, if it's modified -> regenerate
-        self.options.update(options)
-
-    @property
-    def name(self):
-        return self.options["name"]
-
-    def convert(self, source, target, options):
-        if not CACHE.needs_to_be_generated(source, target, options):
-            logger.info("Skipped: %s is already generated", source)
-            return
-
-        if DEFAULTS["test"]:
-            return
-
-        gm_switches = {
-            "source": source,
-            "target": target,
-            "auto-orient": "-auto-orient" if options["auto-orient"] else "",
-            "strip": "-strip" if options["strip"] else "",
-            "quality": "-quality %s" % options["quality"]
-            if "quality" in options
-            else "-define jpeg:preserve-settings",
-            "resize": "-resize %s" % options["resize"]
-            if options.get("resize", None) is not None
-            else "",
-            "progressive": "-interlace Line"
-            if options.get("progressive", None) is True
-            else "",
-        }
-
-        command = (
-            "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} "
-            "'{target}'"
-        ).format(**gm_switches)
-        logger.info("Generation: %s", source)
-
-        print(command)
-        if os.system(command) != 0:
-            logger.error("gm command failed")
-            sys.exit(1)
-
-        CACHE.cache_picture(source, target, options)
-
-    def copy(self):
-        source, target = self.base_dir.joinpath(self.name), self.target_dir.joinpath(
-            self.name
-        )
-
-        # XXX doing this DOESN'T improve perf at all (or something like 0.1%)
-        # if os.path.exists(target) and os.path.getsize(source) == os.path.getsize(target):
-        # print "Skipped %s since the file hasn't been modified based on file size" % source
-        # return ""
-        if not DEFAULTS["test"]:
-            options = self.options.copy()
-
-            if not options["auto-orient"] and not options["strip"]:
-                shutil.copyfile(source, target)
-                print(("%s%s%s" % (source, "->", target)))
-            else:
-                # Do not consider quality settings here, since we aim to copy the input image
-                # better to preserve input encoding setting
-                del options["quality"]
-                self.convert(source, target, options)
-
-        return ""
-
-    def generate_thumbnail(self, gm_geometry):
-        thumbnail_name = (
-            ".".join(self.name.split(".")[:-1])
-            + "-"
-            + gm_geometry
-            + "."
-            + self.name.split(".")[-1]
-        )
-        if not DEFAULTS["test"]:
-            source, target = (
-                self.base_dir.joinpath(self.name),
-                self.target_dir.joinpath(thumbnail_name),
-            )
-
-            options = self.options.copy()
-            options.update({"resize": gm_geometry})
-
-            self.convert(source, target, options)
-
-        return thumbnail_name
-
-    @property
-    def ratio(self):
-        command = "gm identify -format %w,%h"
-        command_list = command.split()
-        command_list.append(str(self.base_dir.joinpath(self.name)))
-        out = subprocess.check_output(command_list)
-        width, height = out.decode("utf-8").split(",")
-        return float(width) / int(height)
-
-    def __repr__(self):
-        return self.name
-
-
 class TCPServerV4(socketserver.TCPServer):
     allow_reuse_address = True
 
@@ -414,12 +309,6 @@ def get_settings():
         conv_video = settings["settings"]["ffmpeg"]["binary"]
     else:
         conv_video = "ffmpeg"
-
-    if os.system("which gm > /dev/null") != 0:
-        logger.error(
-            "I can't locate the gm binary + please install the 'graphicsmagick' package."
-        )
-        sys.exit(1)
 
     if os.system("which " + conv_video + " > /dev/null") != 0:
         if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
@@ -595,11 +484,9 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
 
     if isinstance(gallery_settings["cover"], dict):
         cover_image_path = gallery_path.joinpath(gallery_settings["cover"]["name"])
-        cover_image_url = gallery_name.joinpath(gallery_settings["cover"]["name"])
         cover_image_type = gallery_settings["cover"]["type"]
     else:
         cover_image_path = gallery_path.joinpath(gallery_settings["cover"])
-        cover_image_url = gallery_name.joinpath(gallery_settings["cover"])
         cover_image_type = "image"
 
     if not cover_image_path.exists():
@@ -612,12 +499,13 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
 
     gallery_cover = {
         "title": gallery_settings["title"],
-        "link": gallery_name + "/",
+        "link": gallery_path,
+        "name": gallery_name + "/",
         "sub_title": gallery_settings.get("sub_title", ""),
         "date": gallery_settings.get("date", ""),
         "tags": gallery_settings.get("tags", ""),
         "cover_type": cover_image_type,
-        "cover": cover_image_url,
+        "cover": gallery_settings["cover"],
     }
     return gallery_cover
 
@@ -625,10 +513,6 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
 def build_gallery(settings, gallery_settings, gallery_path, template):
     gallery_index_template = template.get_template("gallery-index.html")
     page_template = template.get_template("page.html")
-
-    # this should probably be a factory
-    Image.base_dir = Path(".").joinpath(gallery_path)
-    Image.target_dir = Path(".").joinpath("build", gallery_path)
 
     Video.base_dir = Path(".").joinpath(gallery_path)
     Video.target_dir = Path(".").joinpath("build", gallery_path)
@@ -647,7 +531,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     html = template_to_render.render(
         settings=settings,
         gallery=gallery_settings,
-        Image=Image,
+        Image=ImageFactory,
         Video=Video,
         Audio=Audio,
         link=gallery_path,
@@ -677,9 +561,6 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         "light", gallery_light_path, date_locale=settings["settings"].get("date_locale")
     )
 
-    Image.base_dir = Path(".").joinpath(gallery_path)
-    Image.target_dir = Path(".").joinpath("build", gallery_path)
-
     Video.base_dir = Path(".").joinpath(gallery_path)
     Video.target_dir = Path(".").joinpath("build", gallery_path)
 
@@ -691,7 +572,7 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     html = light_template_to_render.render(
         settings=settings,
         gallery=gallery_settings,
-        Image=Image,
+        Image=ImageFactory,
         Video=Video,
         Audio=Audio,
         link=gallery_light_path,
@@ -731,10 +612,6 @@ def build_index(
             sorted([x for x in galleries_cover if x != {}], key=lambda x: x["date"])
         )
 
-    # this should probably be a factory
-    Image.base_dir = Path(".").joinpath(gallery_path)
-    Image.target_dir = Path(".").joinpath("build", gallery_path)
-
     Video.base_dir = Path(".").joinpath(gallery_path)
     Video.target_dir = Path(".").joinpath("build", gallery_path)
 
@@ -742,7 +619,7 @@ def build_index(
         settings=settings,
         galleries=galleries_cover,
         sub_index=sub_index,
-        Image=Image,
+        Image=ImageFactory,
         Video=Video,
     ).encode("Utf-8")
 
@@ -753,6 +630,163 @@ def build_index(
         html = encrypt(password, templates, gallery_path, settings, None)
 
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
+
+
+def image_params(img, options):
+    format = img.format
+
+    params = {"format": format}
+    if "progressive" in options:
+        params["progressive"] = options["progressive"]
+    if "quality" in options:
+        params["quality"] = options["quality"]
+    if "dpi" in img.info:
+        params["dpi"] = img.info["dpi"]
+    if format == "JPEG" or format == "MPO":
+        params["subsampling"] = JpegImagePlugin.get_sampling(img)
+
+    exif = img.getexif()
+    if exif:
+        params["exif"] = exif
+
+    return params
+
+
+def noncached_images(base):
+    img = Image.open(base.filepath)
+    params = image_params(img, base.options)
+
+    if params.get("exif") and base.options.get("strip", False):
+        del params["exif"]
+
+    for thumbnail in base.thumbnails.values():
+        filepath = Path("build") / thumbnail.filepath
+
+        if CACHE.needs_to_be_generated(base.filepath, str(filepath), params):
+            return base
+
+
+def render_thumbnails(base):
+    logger.debug("(%s) Rendering thumbnails", base.filepath)
+
+    img = Image.open(base.filepath)
+    params = image_params(img, base.options)
+
+    exif = params.get("exif")
+
+    # Re-orient if requested and if Orientation EXIF metadata stored in 0x0112 states that
+    # it's not upright.
+    if exif and base.options.get("auto-orient", False) and exif.get(0x0112, 1) != 1:
+        orientation = exif.get(0x0112)
+
+        logger.debug(
+            "(%s) Orientation EXIF tag set to %d: rotating thumbnails",
+            base.filepath,
+            orientation,
+        )
+
+        try:
+            img = ImageOps.exif_transpose(img)
+        except (TypeError, struct.error) as e:
+            # Work-around for Pillow < 7.2.0 because of broken handling of some exif metadata
+            # Fixed with https://github.com/python-pillow/Pillow/pull/4637
+            # Work-around for Pillow < 7.0.0 not handling StripByteCounts being of type long
+            # Fixed with https://github.com/python-pillow/Pillow/pull/4626
+            method = {
+                2: Image.FLIP_LEFT_RIGHT,
+                3: Image.ROTATE_180,
+                4: Image.FLIP_TOP_BOTTOM,
+                5: Image.TRANSPOSE,
+                6: Image.ROTATE_270,
+                7: Image.TRANSVERSE,
+                8: Image.ROTATE_90,
+            }.get(orientation)
+            img = img.transpose(method)
+            if not base.options.get("strip", False):
+                logger.warning(
+                    "(%s) Original image contains EXIF metadata that Pillow < %s cannot "
+                    "handle. Consider upgrading to a newer release. The image will be "
+                    "forcefully stripped of its EXIF metadata as a work-around.",
+                    base.filepath,
+                    "7.2.0" if isinstance(e, TypeError) else "7.0.0",
+                )
+                del params["exif"]
+
+    if params.get("exif") and base.options.get("strip", False):
+        del params["exif"]
+
+    for thumbnail in base.thumbnails.values():
+        filepath = Path("build") / thumbnail.filepath
+
+        if not CACHE.needs_to_be_generated(base.filepath, str(filepath), params):
+            continue
+
+        # Needed because im.thumbnail replaces the original image
+        im = img.copy()
+
+        width, height = thumbnail.size
+
+        if not width or not height:
+            # im.thumbnail() needs both valid values in the size tuple.
+            # Moreover, the function creates a thumbnail whose dimensions are
+            # within the provided size.
+            # When only one dimension is specified, the other should thus be
+            # outrageously big so that the thumbnail dimension will always be
+            # of the specified value.
+            IGNORE_DIM = 65596
+            height = height if height is not None else IGNORE_DIM
+            width = width if width is not None else IGNORE_DIM
+            im.thumbnail((width, height), Image.LANCZOS)
+
+        logger.debug(
+            "(%s) Creating thumbnail %s: size=%s",
+            base.filepath,
+            filepath,
+            thumbnail.size,
+        )
+        try:
+            im.save(filepath, **params)
+        except OSError as e:
+            # Work-around for:
+            # https://github.com/python-pillow/Pillow/issues/148
+            logger.warning(
+                '(%s) Failed to save "%s". This usually happens when progressive is set to True and'
+                " quality set to a too high value (> 90). Please lower quality or disable"
+                ' progressive, globally or for "%s". As a work-around, increase buffer size. This'
+                " might result in side-effects.\n"
+                'The original error is "%s"',
+                base.filepath,
+                filepath,
+                base.filepath,
+                e,
+            )
+            width, height = (width, height) if width and height else thumbnail.size
+            ImageFile.MAXBLOCK = max(
+                ImageFile.MAXBLOCK,
+                (4 * width * height) + len(im.info.get("icc_profile", "")) + 10,
+            )
+            im.save(filepath, **params)
+        except TypeError as e:
+            # Work-around for Pillow < 7.2.0 because of broken handling of some exif metadata
+            # Fixed with https://github.com/python-pillow/Pillow/pull/4637
+            logger.warning(
+                "(%s) Original image contains EXIF metadata that Pillow < 7.2.0 cannot handle. "
+                "Consider upgrading to a newer release. The image will be forcefully stripped of "
+                "its EXIF metadata as a work-around.\n"
+                'The original error is "%s"',
+                base.filepath,
+                e,
+            )
+            del params["exif"]
+            im.save(filepath, **params)
+
+        logger.debug(
+            "(%s) Done creating thumbnail %s: size=%s",
+            base.filepath,
+            filepath,
+            thumbnail.size,
+        )
+        CACHE.cache_picture(base.filepath, str(filepath), params)
 
 
 logger = logging.getLogger("prosopopee")
@@ -853,6 +887,8 @@ def main():
         )
         settings["custom_css"] = True
 
+    logger.info("Building galleries...")
+
     for gallery in galleries_dirs:
         front_page_galleries_cover.append(
             process_directory(gallery.normpath(), settings, templates)
@@ -886,6 +922,27 @@ def main():
     if DEFAULTS["test"] is True:
         logger.info("Success: HTML file building without error")
         sys.exit(0)
+
+    with Pool() as pool:
+        # Pool splits the iterable into pre-defined chunks which are then assigned to processes.
+        # There is no other scheduling in play after that. This is an issue when chunks are
+        # outrageously unbalanced in terms of CPU time which happens when most galleries are
+        # already built and thus hit the cache but not some, in which case, only a few processes
+        # will run and not the full CPU power will be used, wasting time.
+        # In order to optimize this, a first very quick run through the list of images is done
+        # to list only those which actually need to be generated.
+        # In the following implementation, the first pool.map function will be slightly
+        # unbalanced because some images will hit the cache directly while some won't at all,
+        # iterating over all the thumbnails it needs to create. But it is **much** less
+        # unbalanced than sending to render_thumbnails all images even those which would hit the
+        # cache. After the first pool.map, the second will only contain images with at least one
+        # thumbnail to create.
+        logger.info("Generating list of thumbnails to create...")
+        base_imgs = pool.map(noncached_images, ImageFactory.base_imgs.values())
+        base_imgs = [img for img in base_imgs if img]
+        if base_imgs:
+            logger.info("Generating thumbnails...")
+            pool.map(render_thumbnails, base_imgs)
 
     CACHE.cache_dump()
 

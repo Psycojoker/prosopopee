@@ -7,8 +7,8 @@
 {% endif %}
 <meta property="og:title" content="{{ gallery.title }}"/>
 {% if gallery.cover %}
-{% set cover = Image(gallery.cover) %}
-<meta property="og:image" content="{{ absolute_url }}{{ cover.generate_thumbnail("x900") }}"/>
+{% set cover = Image.get(link + "/" + pathstatic, gallery.cover) %}
+<meta property="og:image" content="{{ absolute_url }}{{ cover.thumbnail((None, 900)) }}"/>
 {% endif %}
 <meta property="og:site_name" content="{{ settings.title }}"/>
 {% if gallery.description %}

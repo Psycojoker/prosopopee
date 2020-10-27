@@ -38,7 +38,7 @@
       {% set video = Video(gallery.cover) %}
       {{ video.copy() }}
       {% else %}
-      {% set cover = Image(gallery.cover) %}
+      {% set cover = Image.get(gallery.link, gallery.cover) %}
       {% endif %}
       {% if video %}
       <div class="gallery-cover">
@@ -49,7 +49,7 @@
       </div>
       {% set video = "" %}
       {% else %}
-      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}');"></div>
+      <div class="gallery-cover" style="background-image: url('{{ gallery.link }}/{{ cover.thumbnail((None, 900)) }}');"></div>
       {% endif %}
     </div><!-- comment tricks against space between inline-block
     -->{% endfor %}

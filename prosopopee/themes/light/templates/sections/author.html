@@ -3,9 +3,9 @@
 {% else %}
 {% set pathstatic = "." %}
 {% endif %}
-{% set image = Image(section.image) %}
+{% set image = Image.get(link + "/" + pathstatic, section.image) %}
 <div class="author-meta">
-  <img src="{{ pathstatic }}/{{ image.generate_thumbnail("200x200") }}" alt="" class="circle">
+  <img src="{{ pathstatic }}/{{ image.thumbnail((200, 200)) }}" alt="" class="circle">
     <div>
         <span class=author-info>Story by
         <h4>{{ section.name }}</h4>

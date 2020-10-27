@@ -15,7 +15,10 @@ logger = logging.getLogger("prosopopee." + __name__)
 
 def remove_superficial_options(options):
     cleaned_options = options.copy()
-    del cleaned_options["name"]
+    if "name" in cleaned_options:
+        del cleaned_options["name"]
+    if "exif" in cleaned_options:
+        del cleaned_options["exif"]
     if "text" in cleaned_options:
         del cleaned_options["text"]
     if "type" in cleaned_options:
@@ -24,6 +27,12 @@ def remove_superficial_options(options):
         del cleaned_options["size"]
     if "float" in cleaned_options:
         del cleaned_options["float"]
+    # "resize" only applies to image.copy() in templates, no need to propagate it to the cache since
+    # the actual size of the "copy" thumbnail is part of the filename and will trigger a
+    # regeneration if changed (thus "resize" setting is appropriately watched without regenerating
+    # non-copy thumbnails).
+    if "resize" in cleaned_options:
+        del cleaned_options["resize"]
     return cleaned_options
 
 
