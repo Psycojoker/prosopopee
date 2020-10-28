@@ -122,7 +122,7 @@ a {
 }
 
 .paragraph p {
-  line-height: 39.6px;
+  line-height: 1.5em;
 }
 
 footer {
@@ -216,7 +216,7 @@ footer a {
   left: 0;
   padding: 20px 0 30px 0;
   color: white;
-  transform: translateY(-100%);
+  transform: translateY(-400%);
   transition: transform .35s ease-out;
   background: -moz-linear-gradient(top, rgba(0,0,0,0.85) 0%, transparent 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0.85)), color-stop(100%, transparent));
