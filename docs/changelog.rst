@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.4 (2020-11-04)
+
+* Make Exposure theme work better on mobile by toki
+
 1.1.3 (2020-10-21)
 
 * Jquery fixes for issues #121 and #126 by QShulz
