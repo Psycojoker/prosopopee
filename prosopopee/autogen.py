@@ -36,12 +36,12 @@ types = ("*.JPG", "*.jpg", "*.JPEG", "*.jpeg", "*.png", "*.PNG")
 
 
 def get_exif(filename):
-    exif = Image.open(filename)._getexif()
+    exif = Image.open(filename).getexif()
     if exif is not None:
-        for tag in exif:
-            decoded = TAGS.get(tag, tag)
-            if decoded == "DateTime":
-                return exif[tag]
+        # DateTimeOriginal, DateTimeDigitized, DateTime(DateTimeModified)
+        ctime = exif.get(0x9003, exif.get(0x9004, exif.get(0x0132)))
+        if ctime is not None:
+            return ctime
 
     return strftime("%Y:%m:%d %H:%M:00", gmtime(os.path.getmtime(filename)))
 
