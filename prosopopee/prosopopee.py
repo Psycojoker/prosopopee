@@ -210,9 +210,7 @@ class Video:
             + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0"
         )
         command_list = command.split()
-        # target is Type path.Path, encodes to bytes, decodes to str, which we can append to the
-        # list disgusting, I know. But it works
-        command_list.append(target.encode().decode())
+        command_list.append(str(target))
         out = subprocess.check_output(command_list)
         width, height = out.decode("utf-8").split(",")
         return float(width) / int(height)
@@ -384,8 +382,10 @@ class Image:
 
     @property
     def ratio(self):
-        command = "gm identify -format %w,%h " + self.base_dir.joinpath(self.name)
-        out = subprocess.check_output(command.split())
+        command = "gm identify -format %w,%h"
+        command_list = command.split()
+        command_list.append(str(self.base_dir.joinpath(self.name)))
+        out = subprocess.check_output(command_list)
         width, height = out.decode("utf-8").split(",")
         return float(width) / int(height)
 
