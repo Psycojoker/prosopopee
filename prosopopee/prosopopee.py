@@ -609,7 +609,7 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
 
     gallery_cover = {
         "title": gallery_settings["title"],
-        "link": gallery_name,
+        "link": gallery_name + "/",
         "sub_title": gallery_settings.get("sub_title", ""),
         "date": gallery_settings.get("date", ""),
         "tags": gallery_settings.get("tags", ""),
