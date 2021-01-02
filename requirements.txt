@@ -3,4 +3,4 @@ jinja2
 path.py
 ruamel.yaml
 future
-pillow
+pillow>=6
