@@ -7,7 +7,7 @@ Changelog
 
 1.1.3 (2020-10-21)
 
-* Jquery fixes for issues #121 and #126 by QShulz
+* Jquery fixes for issues #121 and #126 by QSchulz
 
 1.1.2 (2020-10-13)
 
@@ -66,7 +66,7 @@ Thx to all new contributors!
 0.8.2 (2019-09-25)
 
  * Fix encryption page
- * Fix URI local (Thanks QShulz)
+ * Fix URI local (Thanks QSchulz)
 
 0.8.1 (2018-03-28)
 
