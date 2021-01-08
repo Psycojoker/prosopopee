@@ -440,13 +440,16 @@ def get_settings():
             )
             SETTINGS["ffmpeg"] = False
 
-    if (settings["rss"] or settings["share"]) and not settings.get("url"):
+    if (
+        settings["rss"] or settings["share"] or settings["settings"].get("og")
+    ) and not settings.get("url"):
         logging.warning(
-            "warning: If you want the rss and/or the social network share to work, "
+            "warning: If you want the rss, OpenGraph and/or the social network share to work, "
             "you need to specify the website url in root settings"
         )
         settings["rss"] = False
         settings["share"] = False
+        settings["settings"]["og"] = False
 
     if settings["settings"].get("gm"):
         SETTINGS["gm"].update(settings["settings"]["gm"])
