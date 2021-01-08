@@ -213,6 +213,7 @@ Open Graph Meta
 To activate the Open Graph Meta you need to add the "og" key in **root** settings.yaml::
 
   title: Sur les chemins
+  url: "http://prosopopee.com"
   settings:
     og: true
 
