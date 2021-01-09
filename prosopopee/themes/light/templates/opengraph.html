@@ -1,4 +1,10 @@
 {% set absolute_url = settings.url + "/" + link + "/" %}
+{% if settings.settings.light_mode %}
+{% set pathstatic = ".." %}
+{% set absolute_url = absolute_url + pathstatic + "/" %}
+{% else %}
+{% set pathstatic = "." %}
+{% endif %}
 <meta property="og:title" content="{{ gallery.title }}"/>
 {% if gallery.cover %}
 {% set cover = Image(gallery.cover) %}
