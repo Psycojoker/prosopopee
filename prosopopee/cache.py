@@ -1,21 +1,9 @@
 import os
 import json
 
+from .utils import remove_superficial_options
+
 CACHE_VERSION = 2
-
-
-def remove_superficial_options(options):
-    cleaned_options = options.copy()
-    del cleaned_options["name"]
-    if "text" in cleaned_options:
-        del cleaned_options["text"]
-    if "type" in cleaned_options:
-        del cleaned_options["type"]
-    if "size" in cleaned_options:
-        del cleaned_options["size"]
-    if "float" in cleaned_options:
-        del cleaned_options["float"]
-    return cleaned_options
 
 
 class Cache:
