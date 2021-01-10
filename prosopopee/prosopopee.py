@@ -210,7 +210,9 @@ class Video:
             + " -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0"
         )
         command_list = command.split()
-        command_list.append(str(target))
+        # target is Type path.Path, encodes to bytes, decodes to str, which we can append to the
+        # list disgusting, I know. But it works
+        command_list.append(target.encode().decode())
         out = subprocess.check_output(command_list)
         width, height = out.decode("utf-8").split(",")
         return float(width) / int(height)
