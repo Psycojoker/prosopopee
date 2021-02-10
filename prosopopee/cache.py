@@ -41,9 +41,15 @@ class Cache:
 
         cached_picture = self.cache[target]
 
-        if cached_picture["size"] != os.path.getsize(source) or cached_picture[
-            "options"
-        ] != remove_superficial_options(options):
+        if cached_picture["size"] != os.path.getsize(source):
+            return True
+
+        options = remove_superficial_options(options)
+        # json.dumps() transforms tuples into list, so to be able to compare options
+        # same transformation needs to be done on runtime dict.
+        options = json.loads(json.dumps(options))
+
+        if cached_picture["options"] != options:
             return True
 
         return False
