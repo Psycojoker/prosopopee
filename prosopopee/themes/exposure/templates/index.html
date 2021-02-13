@@ -52,7 +52,6 @@
       </div>
       {% else %}
       {% set cover = Image(gallery.cover) %}
-      {{ cover.copy() }}
       {% if no_big_gallery_cover %}
       <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}'), url('{{ cover.generate_thumbnail("x150") }}');"></div>
       {% else %}

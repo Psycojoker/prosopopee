@@ -4,7 +4,6 @@
 {% set pathstatic = "." %}
 {% endif %}
 {% set image = Image(section.image) %}
-{{ image.copy() }}
 <section class="panorama">
   <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
 </section>

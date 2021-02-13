@@ -15,7 +15,6 @@
   {% else %}
   {% set float = 'left' %}
   {% endif %}
-  {{ image.copy() }}
   <span class="{{ float }}">
     <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x150") }}" alt=""/>
   </span>

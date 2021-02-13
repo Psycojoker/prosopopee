@@ -8,7 +8,6 @@
 <meta property="og:title" content="{{ gallery.title }}"/>
 {% if gallery.cover %}
 {% set cover = Image(gallery.cover) %}
-{{ cover.copy() }}
 <meta property="og:image" content="{{ absolute_url }}{{ cover.generate_thumbnail("x900") }}"/>
 {% endif %}
 <meta property="og:site_name" content="{{ settings.title }}"/>

@@ -12,7 +12,6 @@
     {{ video.copy() }}
     {% else %}
     {% set image = Image(image) %}
-    {{ image.copy() }}
     {% endif %}
     {% set caption = image.text %}
     <div class="image">
