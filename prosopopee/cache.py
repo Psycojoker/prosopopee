@@ -1,9 +1,13 @@
-import os
 import json
+import logging
+import os
 
 from .utils import remove_superficial_options
 
 CACHE_VERSION = 2
+
+
+logger = logging.getLogger("prosopopee." + __name__)
 
 
 class Cache:

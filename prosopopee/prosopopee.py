@@ -38,7 +38,7 @@ parser = ArgumentParser(description="Static site generator for your story.")
 parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
 parser.add_argument(
     "--log-level",
-    default=logging.NOTSET,
+    default=logging.DEBUG,
     type=loglevel,
     help="Configure the logging level",
 )
@@ -113,7 +113,7 @@ class Video:
 
     def __init__(self, options):
         if SETTINGS["ffmpeg"] is False:
-            logging.error(
+            logger.error(
                 "I couldn't find a binary to convert video and I ask to do so + abort"
             )
             sys.exit(1)
@@ -133,7 +133,7 @@ class Video:
         if not options.get("resize"):
             target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
-            logging.info("Skipped: %s is already generated", source)
+            logger.info("Skipped: %s is already generated", source)
             return
 
         ffmpeg_switches = {
@@ -151,7 +151,7 @@ class Video:
             "other": "%s" % options["other"],
         }
 
-        logging.info("Generation: %s", source)
+        logger.info("Generation: %s", source)
 
         if options.get("resize"):
             command = (
@@ -168,7 +168,7 @@ class Video:
         print(command)
 
         if os.system(command) != 0:
-            logging.error("%s command failed", ffmpeg_switches["binary"])
+            logger.error("%s command failed", ffmpeg_switches["binary"])
             sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
@@ -225,7 +225,7 @@ class Audio:
 
     def __init__(self, options):
         if SETTINGS["ffmpeg"] is False:
-            logging.error(
+            logger.error(
                 "I couldn't find a binary to convert audio and I ask to do so + abort"
             )
             sys.exit(1)
@@ -244,7 +244,7 @@ class Audio:
     def ffmpeg(self, source, target, options):
         target = target + "." + options["extension"]
         if not CACHE.needs_to_be_generated(source, target, options):
-            logging.info("Skipped: %s is already generated", source)
+            logger.info("Skipped: %s is already generated", source)
             return
 
         ffmpeg_switches = {
@@ -255,14 +255,14 @@ class Audio:
             "audio": "-c:a %s" % options["audio"],
         }
 
-        logging.info("Generation: %s", source)
+        logger.info("Generation: %s", source)
 
         command = "{binary} {loglevel} -i '{source}' {audio} -y '{target}'".format(
             **ffmpeg_switches
         )
         print(command)
         if os.system(command) != 0:
-            logging.error("%s command failed", ffmpeg_switches["binary"])
+            logger.error("%s command failed", ffmpeg_switches["binary"])
             sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
@@ -301,7 +301,7 @@ class Image:
 
     def convert(self, source, target, options):
         if not CACHE.needs_to_be_generated(source, target, options):
-            logging.info("Skipped: %s is already generated", source)
+            logger.info("Skipped: %s is already generated", source)
             return
 
         if DEFAULTS["test"]:
@@ -327,11 +327,11 @@ class Image:
             "gm convert '{source}' {auto-orient} {strip} {progressive} {quality} {resize} "
             "'{target}'"
         ).format(**gm_switches)
-        logging.info("Generation: %s", source)
+        logger.info("Generation: %s", source)
 
         print(command)
         if os.system(command) != 0:
-            logging.error("gm command failed")
+            logger.error("gm command failed")
             sys.exit(1)
 
         CACHE.cache_picture(source, target, options)
@@ -416,7 +416,7 @@ def get_settings():
         conv_video = "ffmpeg"
 
     if os.system("which gm > /dev/null") != 0:
-        logging.error(
+        logger.error(
             "I can't locate the gm binary + please install the 'graphicsmagick' package."
         )
         sys.exit(1)
@@ -424,17 +424,17 @@ def get_settings():
     if os.system("which " + conv_video + " > /dev/null") != 0:
         if conv_video == "ffmpeg" and os.system("which avconv > /dev/null") == 0:
             SETTINGS["ffmpeg"]["binary"] = "avconv"
-            logging.warning(
+            logger.warning(
                 "Video: I couldn't locate ffmpeg but I could find avconv, "
                 "switching to avconv for video conversion"
             )
         else:
-            logging.warning(
+            logger.warning(
                 "Video: I can't locate the %s binary, please install the '%s' package.",
                 conv_video,
                 conv_video,
             )
-            logging.warning(
+            logger.warning(
                 "Video: I won't be able to encode video and I will stop if I "
                 "encounter a video to convert"
             )
@@ -443,7 +443,7 @@ def get_settings():
     if (
         settings["rss"] or settings["share"] or settings["settings"].get("og")
     ) and not settings.get("url"):
-        logging.warning(
+        logger.warning(
             "warning: If you want the rss, OpenGraph and/or the social network share to work, "
             "you need to specify the website url in root settings"
         )
@@ -477,7 +477,7 @@ def get_gallery_templates(
     )
 
     if not theme_path:
-        logging.error(
+        logger.error(
             "'%s' is not an existing theme + available themes are '%s'",
             theme_path,
             available_themes,
@@ -548,7 +548,7 @@ def process_directory(
         return gallery_cover
 
     if gallery_settings.get("sections", False):
-        logging.error(
+        logger.error(
             "The gallery in %s can't have both sections and subgalleries",
             gallery_name.joinpath("settings.yaml"),
         )
@@ -587,7 +587,7 @@ def process_directory(
 
 def create_cover(gallery_name, gallery_settings, gallery_path):
     if not gallery_settings.get("cover"):
-        logging.error(
+        logger.error(
             "You should specify a path to a cover picture in %s",
             gallery_name.joinpath("settings.yaml"),
         )
@@ -603,7 +603,7 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
         cover_image_type = "image"
 
     if not cover_image_path.exists():
-        logging.error(
+        logger.error(
             "File for %s cover image doesn't exist at %s",
             gallery_name,
             cover_image_path,
@@ -755,12 +755,14 @@ def build_index(
         open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
 
 
+logger = logging.getLogger("prosopopee")
+
+
 def main():
     args = parser.parse_args()
 
     handler = logging.StreamHandler()
     handler.setFormatter(CustomFormatter())
-    logger = logging.getLogger()
     logger.addHandler(handler)
     logger.setLevel(args.log_level)
 
@@ -774,7 +776,7 @@ def main():
     includes = [x for x in settings["include"] if Path(".").joinpath(x).exists()]
 
     if not galleries_dirs:
-        logging.error(
+        logger.error(
             "I can't find at least one directory with a settings.yaml in the current "
             "working directory (NOT the settings.yaml in your current directory, but one "
             "INSIDE A DIRECTORY in your current directory), you don't have any gallery?"
@@ -786,7 +788,7 @@ def main():
 
     if args.cmd == "preview":
         if not Path("build").exists():
-            logging.error("Please build the website before launch preview")
+            logger.error("Please build the website before launch preview")
             sys.exit(1)
 
         os.chdir("build")
@@ -802,12 +804,12 @@ def main():
 
     if args.cmd == "deploy":
         if os.system("which rsync > /dev/null") != 0:
-            logging.error(
+            logger.error(
                 "I can't locate the rsync + please install the 'rsync' package."
             )
             sys.exit(1)
         if not Path("build").exists():
-            logging.error("Please build the website before launch deployment")
+            logger.error("Please build the website before launch deployment")
             sys.exit(1)
 
         r_dest = settings["settings"]["deploy"]["dest"]
@@ -827,7 +829,7 @@ def main():
         else:
             r_cmd = "rsync -avz --progress %s build/* %s" % (r_others, r_dest)
         if os.system(r_cmd) != 0:
-            logging.error("deployment failed")
+            logger.error("deployment failed")
             sys.exit(1)
         return
 
@@ -862,7 +864,7 @@ def main():
         if srcdir != "":
             os.makedirs(dstdir, exist_ok=True)
         d = shutil.copy2(i, dstdir)
-        logging.warning("copied", d)
+        logger.warning("copied", d)
 
     if settings["rss"]:
         feed_template = templates.get_template("feed.xml")
@@ -882,7 +884,7 @@ def main():
     build_index(settings, front_page_galleries_cover, templates)
 
     if DEFAULTS["test"] is True:
-        logging.info("Success: HTML file building without error")
+        logger.info("Success: HTML file building without error")
         sys.exit(0)
 
     CACHE.cache_dump()

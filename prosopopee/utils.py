@@ -10,6 +10,9 @@ from path import Path
 import ruamel.yaml as yaml
 
 
+logger = logging.getLogger("prosopopee." + __name__)
+
+
 def remove_superficial_options(options):
     cleaned_options = options.copy()
     del cleaned_options["name"]
@@ -88,32 +91,32 @@ def load_settings(folder):
         msg = "There is something wrong in %s/settings.yaml" % folder
         if isinstance(exc, yaml.error.MarkedYAMLError):
             msg = msg + str(exc.context_mark)
-        logging.error(msg)
+        logger.error(msg)
         sys.exit(1)
     except ValueError:
-        logging.error(
+        logger.error(
             "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml", folder
         )
         sys.exit(1)
     except Exception as exc:
-        logging.exception(exc)
+        logger.exception(exc)
         sys.exit(1)
 
     if gallery_settings is None:
-        logging.error("The %s/settings.yaml file is empty", folder)
+        logger.error("The %s/settings.yaml file is empty", folder)
         sys.exit(1)
     elif not isinstance(gallery_settings, dict):
-        logging.error("%s/settings.yaml should be a dict", folder)
+        logger.error("%s/settings.yaml should be a dict", folder)
         sys.exit(1)
     elif "title" not in gallery_settings:
-        logging.error("You should specify a title in %s/settings.yaml", folder)
+        logger.error("You should specify a title in %s/settings.yaml", folder)
         sys.exit(1)
 
     if gallery_settings.get("date"):
         try:
             datetime.strptime(str(gallery_settings.get("date")), "%Y-%m-%d")
         except ValueError:
-            logging.error(
+            logger.error(
                 "Incorrect data format, should be YYYY-MM-DD in %s/settings.yaml",
                 folder,
             )
