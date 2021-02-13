@@ -880,10 +880,12 @@ def main():
         open(Path("build").joinpath("feed.xml"), "wb").write(xml)
 
     build_index(settings, front_page_galleries_cover, templates)
-    CACHE.cache_dump()
 
     if DEFAULTS["test"] is True:
         logging.info("Success: HTML file building without error")
+        sys.exit(0)
+
+    CACHE.cache_dump()
 
 
 if __name__ == "__main__":
