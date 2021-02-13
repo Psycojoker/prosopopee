@@ -26,7 +26,7 @@
 {% block content %}
 <div class="galleries-grid">
   {% for galleries_line in galleries|reverse|batch(3)|reverse %}
-  {% if loop.index is divisibleby 3 or loop.index is divisibleby 2 %}
+  {% if galleries_line|length > 1 %}
   {% set no_big_gallery_cover = true %}
   {% endif %}
   <div class="galleries-line covers-{{ galleries_line|length }}">
