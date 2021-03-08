@@ -26,10 +26,9 @@ a {
 }
 
 .full-picture {
-  height: 100%;
-  width: 100%;
   min-height: 250px;
   margin-top: 0;
+  display: flex;
 }
 
 .full-picture > .picture-text {
@@ -398,7 +397,7 @@ padding-bottom: 7em;
   z-index: 0;
   bottom: 0;
 }
-.video-container video.fillWidth {
+.video-container .fillWidth {
   width: 100%;
 }
 
