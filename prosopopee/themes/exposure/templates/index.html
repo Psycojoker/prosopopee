@@ -42,10 +42,11 @@
       </a>
       {% if gallery.cover_type == "video" %}
       {% set video = Video(gallery.cover) %}
+      {% set format = settings.ffmpeg.extension %}
       {{ video.copy() }}
       <div class="gallery-cover">
         <video autoplay loop muted class="fillWidth">
-          <source src="{{ video }}" type="video/webm" data-source="{{ video }}" data-format="vp8" data-extension="webm">
+          <source src="{{ video }}.{{ format }}" type="video/{{ format }}">
         </video>
         <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
       </div>
