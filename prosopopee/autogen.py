@@ -31,6 +31,8 @@ sections:
 {% endfor %}
 """
 
+logger = logging.getLogger("prosopopee." + __name__)
+
 types = ("*.JPG", "*.jpg", "*.JPEG", "*.jpeg", "*.png", "*.PNG")
 
 
@@ -51,11 +53,11 @@ def build_template(folder, force):
     gallery_settings = load_settings(folder)
 
     if "static" in gallery_settings:
-        logging.info("Skipped: Nothing to do in %s gallery", folder)
+        logger.info("Skipped: Nothing to do in %s gallery", folder)
         return
 
     if any(req not in gallery_settings for req in ["title", "date", "cover"]):
-        logging.error(
+        logger.error(
             "You need configure first, the title, date and cover in %s/settings.yaml "
             "to use autogen",
             folder,
@@ -63,7 +65,7 @@ def build_template(folder, force):
         sys.exit(1)
 
     if "sections" in gallery_settings and force is not True:
-        logging.info("Skipped: %s gallery is already generated", folder)
+        logger.info("Skipped: %s gallery is already generated", folder)
         return
 
     for files in types:
@@ -77,7 +79,7 @@ def build_template(folder, force):
     )
     settings = open(Path(".").joinpath(folder, "settings.yaml").abspath(), "w")
     settings.write(msg)
-    logging.info("Generation: %s gallery", folder)
+    logger.info("Generation: %s gallery", folder)
 
 
 def autogen(folder=None, force=False):

@@ -1,5 +1,4 @@
-{% set image = Image(section.image) %}
-{{ image.copy() }}
+{% set image = Image.get(link, section.image) %}
 <div class="container author">
     <div class="section">
         <div class="row">
@@ -8,7 +7,7 @@
                 <div class="section">
                     <div class="row valign-wrapper">
                         <div class="col s2">
-                            <img src={{ image.generate_thumbnail("200x200") }} alt="" class="circle responsive-img"> 
+                            <img src={{ image.thumbnail((200, 200)) }} alt="" class="circle responsive-img">
                         </div>
                         <div class="col s10">
                             <div class="section">

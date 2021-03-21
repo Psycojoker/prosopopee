@@ -9,7 +9,7 @@
     {% endif %}
     <p>
     {% if section.image %}
-    {% set image = Image(section.image) %}
+    {% set image = Image.get(link, section.image) %}
     {% if section.image.float %}
     {% set float = section.image.float %}
     {% else %}
@@ -20,15 +20,14 @@
     {% else %}
     {% set image_resize = '250px' %}
     {% endif %}
-    {{ image.copy() }}
     <span class="{{ float }} baguette">
-      <a href="{{ image }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
-         data-at-450="{{ image.generate_thumbnail("x450") }}"
-         data-at-800="{{ image.generate_thumbnail("x800") }}"
-         data-at-1366="{{ image.generate_thumbnail("x1366") }}"
-         data-at-1920="{{ image.generate_thumbnail("x1920") }}"
+      <a href="{{ image.copy() }}" {% if caption %}data-caption="{{ caption }}"{% endif %}
+         data-at-450="{{ image.thumbnail((None, 450)) }}"
+         data-at-800="{{ image.thumbnail((None, 800)) }}"
+         data-at-1366="{{ image.thumbnail((None, 1366)) }}"
+         data-at-1920="{{ image.thumbnail((None, 1920)) }}"
          >
-         <img class="lazy" style="width: {{ image_resize }};" src="./../static/img/11-14.svg" data-src="{{ image.generate_thumbnail("x600") }}" alt=""/>
+         <img class="lazy" style="width: {{ image_resize }};" src="./../static/img/11-14.svg" data-src="{{ image.thumbnail((None, 600)) }}" alt=""/>
       </a>
     </span>
     {% endif %}

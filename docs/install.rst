@@ -11,12 +11,7 @@ We need Python, pip and virtualenv::
 
     apt-get install python3-pip python3-virtualenv
 
-and graphicsmagick library for building the gallery::
-
-    # graphicsmagick requires to have the 5.3.1 version of gcc-5-base
-    apt-get install graphicsmagick
-
-A video converter like ffmpeg::
+And a video converter like ffmpeg::
 
     apt-get install ffmpeg
 
@@ -35,11 +30,7 @@ We need Brew::
 
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-and graphicsmagick library for building the gallery::
-
-  brew install graphicsmagick 
-  
-A video converter like ffmpeg::  
+And a video converter like ffmpeg::
   
   brew install ffmpeg
 

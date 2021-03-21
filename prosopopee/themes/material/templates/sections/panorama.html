@@ -1,5 +1,4 @@
-{% set image = Image(section.image) %}
-{{ image.copy() }}
+{% set image = Image.get(link, section.image) %}
 <div class="panorama">
-    <img src="{{ image }}">
+    <img src="{{ image.copy() }}">
 </div>
