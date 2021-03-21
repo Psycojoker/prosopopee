@@ -80,6 +80,7 @@ a {
     background-position: center center;
     background-size: cover;
     overflow: hidden;
+    display: flex;
 }
 
 .gallery-title {
@@ -258,20 +259,12 @@ nav ul li > a.item-menu::before {
     font-style: normal;
 }
 
-.gallery-cover video.fillWidth {
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
 .gallery-cover img.fillWidth,
 .gallery-cover video.fillWidth {
-  top: 0;bottom: 0;right: 0;left: 0;margin: auto;
-}
-
-.gallery-cover video.fillWidth {
-  min-width: 50%;
+  margin: auto;
+  min-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
 }
 
 .back-to-home {
