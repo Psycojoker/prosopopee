@@ -71,11 +71,16 @@ a {
   letter-spacing: 2px;
 }
 
-.bordered-picture img {
-  height: 77%;
-  width: 77%;
+.bordered-picture {
+  display: flex;
+  justify-content: center;
   margin-left: 11.5%;
   margin-right: 11.5%;
+}
+
+.bordered-picture img {
+  max-height: 100vh;
+  max-width: 100%;
 }
 
 .pictures-line {
