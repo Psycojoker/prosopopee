@@ -9,15 +9,14 @@
   {% endif %}
   <p>
   {% if section.image %}
-  {% set image = Image(section.image) %}
+  {% set image = Image.get(link + "/" + pathstatic, section.image) %}
   {% if section.image.float %}
   {% set float = section.image.float %}
   {% else %}
   {% set float = 'left' %}
   {% endif %}
-  {{ image.copy() }}
   <span class="{{ float }}">
-    <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x150") }}" alt=""/>
+    <img src="{{ pathstatic }}/{{ image.thumbnail((None, 150)) }}" alt=""/>
   </span>
   {% endif %}
   {{ section.text }}

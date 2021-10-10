@@ -68,7 +68,7 @@ Global settings can be put in your root `settings.yaml`, under the `settings` ke
 GM
 ~~
 
-Currently a `gm` setting key allows to customize the default GraphicsMagick's behaviour. It looks like::
+Currently a `gm` setting key allows to customize the default behaviour for thumbnail creation. It looks like::
 
   title: Gallery
   settings:
@@ -79,7 +79,7 @@ Currently a `gm` setting key allows to customize the default GraphicsMagick's be
       resize: 50%
       progressive: True
 
-The meaning of the currently supported GraphicsMagick's settings is as follows:
+The meaning of the currently supported settings is as follows:
 
  * `quality` allows to customize the compression level of thumbnails (between 0 and 100)
  * `auto-orient` changes the orientation of pictures so they are upright (based on corresponding EXIF tags if present)
@@ -87,7 +87,7 @@ The meaning of the currently supported GraphicsMagick's settings is as follows:
  * `resize` can be used to resize the full-size version of pictures. By default, input image size is preserved
  * `progressive` converts classic baseline JPEG files to progressive JPEG, and interlaces PNG/GIF files (improves the page loading impression, slightly reduces file size)
 
-Any GraphicsMagick setting can be customized on a per-image basis (either `cover` or `image`, see below).
+Any of thumbnail creation settings can be customized on a per-image basis (either `cover` or `image`, see below).
 
 Video converter
 ~~~~~~~~~~~~~~~

@@ -8,8 +8,7 @@
 {% set format = settings.ffmpeg.extension %}
 {{ video.copy() }}
 {% else %}
-{% set image = Image(section.image) %}
-{{ image.copy() }}
+{% set image = Image.get(link + "/" + pathstatic, section.image) %}
 {% endif %}
 <div class="full-picture">
     <div class="image">
@@ -18,7 +17,7 @@
           <source src="{{ pathstatic }}/{{ video }}.{{ format }}" type="video/{{ format}}">
         </video>
         {% else %}
-        <img  src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}">
+        <img  src="{{ pathstatic }}/{{ image.thumbnail((None, 800)) }}">
         {% endif %}
     </div>
     {% if section.text %}

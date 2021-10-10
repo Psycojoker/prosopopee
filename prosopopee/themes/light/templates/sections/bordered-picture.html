@@ -8,8 +8,7 @@
 {% set format = settings.ffmpeg.extension %}
 {{ video.copy() }}
 {% else %}
-{% set image = Image(section.image) %}
-{{ image.copy() }}
+{% set image = Image.get(link + "/" + pathstatic, section.image) %}
 {% endif %}
 {% set caption = section.text %}
 {% if video %}
@@ -20,7 +19,7 @@
 </section>
 {% else %}
 <section class="bordered-picture">
-  <img src="{{ pathstatic }}/{{ image.generate_thumbnail("x800") }}" alt="{% if caption %}{{ caption }}{% endif %}">
+  <img src="{{ pathstatic }}/{{ image.thumbnail((None, 800)) }}" alt="{% if caption %}{{ caption }}{% endif %}">
 </section>
 {% endif %}
 

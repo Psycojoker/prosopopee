@@ -34,9 +34,8 @@
         <img class="fillWidth" alt="" src="{{ video.generate_thumbnail("900") }}">
       </div>
       {% else %}
-      {% set cover = Image(gallery.cover) %}
-      {{ cover.copy() }}
-      <div class="gallery-cover" style="background-image: url('{{ cover.generate_thumbnail("x900") }}'), url('{{ cover.generate_thumbnail("x150") }}');"></div>
+      {% set cover = Image.get(gallery.link, gallery.cover) %}
+      <div class="gallery-cover" style="background-image: url('{{ cover.thumbnail((None, 900)) }}'), url('{{ cover.thumbnail((None, 150)) }}');"></div>
       {% endif %}
     </div><!-- comment tricks against space between inline-block
     -->{% endfor %}
