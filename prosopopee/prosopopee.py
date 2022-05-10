@@ -45,7 +45,16 @@ parser.add_argument(
 subparser = parser.add_subparsers(dest="cmd")
 subparser.add_parser("build", help="Generate static site")
 subparser.add_parser("test", help="Verify all your yaml data")
-subparser.add_parser("preview", help="Start preview webserver on port 9000")
+parser_preview = subparser.add_parser("preview", help="Start preview webserver")
+parser_preview.add_argument(
+    "-p",
+    dest="preview_port",
+    metavar="port",
+    help="port for preview webserver",
+    type=int,
+    default=9000,
+)
+
 subparser.add_parser("deploy", help="Deploy your website")
 parser_autogen = subparser.add_parser("autogen", help="Generate gallery automaticaly")
 group = parser_autogen.add_mutually_exclusive_group(required=True)
@@ -791,8 +800,8 @@ def main():
 
         os.chdir("build")
         handler = http.server.SimpleHTTPRequestHandler
-        httpd = TCPServerV4(("", 9000), handler)
-        print("Start server on http://localhost:9000")
+        httpd = TCPServerV4(("", args.preview_port), handler)
+        print(f"Starting server on http://localhost:{args.preview_port}")
         try:
             httpd.serve_forever()
         except (KeyboardInterrupt, SystemExit):

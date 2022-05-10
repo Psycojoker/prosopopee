@@ -41,6 +41,12 @@ In a root folder launch this command::
 
 Then, you can check your website at http://localhost:9000
 
+You can also provide custom port for the webserver:
+
+  prosopopee preview -p 8080
+
+And proceed to http://localhost:8080
+
 Deployment
 ----------
 
