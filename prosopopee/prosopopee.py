@@ -631,7 +631,9 @@ def create_cover(gallery_name, gallery_settings, gallery_path):
     return gallery_cover
 
 
-def build_gallery(settings, gallery_settings, gallery_path, template):
+def __build_gallery(
+    settings, gallery_settings, gallery_path, target_gallery_path, template
+):
     gallery_index_template = template.get_template("gallery-index.html")
     page_template = template.get_template("page.html")
 
@@ -659,17 +661,25 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
         Image=Image,
         Video=Video,
         Audio=Audio,
-        link=gallery_path,
+        link=target_gallery_path,
         name=gallery_path.split("/", 1)[-1],
     ).encode("Utf-8")
 
-    open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
+    open(Path("build").joinpath(target_gallery_path, "index.html"), "wb").write(html)
 
     if gallery_settings.get("password") or settings.get("password"):
         password = gallery_settings.get("password", settings.get("password"))
-        html = encrypt(password, template, gallery_path, settings, gallery_settings)
+        html = encrypt(
+            password, template, target_gallery_path, settings, gallery_settings
+        )
 
-        open(Path("build").joinpath(gallery_path, "index.html"), "wb").write(html)
+        open(Path("build").joinpath(target_gallery_path, "index.html"), "wb").write(
+            html
+        )
+
+
+def build_gallery(settings, gallery_settings, gallery_path, template):
+    __build_gallery(settings, gallery_settings, gallery_path, gallery_path, template)
 
     if not gallery_settings.get("light_mode", False) and (
         not settings["settings"].get("light_mode", False)
@@ -677,45 +687,15 @@ def build_gallery(settings, gallery_settings, gallery_path, template):
     ):
         return
 
-    # XXX shouldn't this be a call to build_gallery?
-    # Build light mode gallery
-    # Prepare light mode
     Path("build").joinpath(gallery_path, "light").makedirs_p()
     gallery_light_path = Path(gallery_path).joinpath("light")
     light_templates = get_gallery_templates(
         "light", gallery_light_path, date_locale=settings["settings"].get("date_locale")
     )
 
-    Image.base_dir = Path(".").joinpath(gallery_path)
-    Image.target_dir = Path(".").joinpath("build", gallery_path)
-
-    Video.base_dir = Path(".").joinpath(gallery_path)
-    Video.target_dir = Path(".").joinpath("build", gallery_path)
-
-    Audio.base_dir = Path(".").joinpath(gallery_path)
-    Audio.target_dir = Path(".").joinpath("build", gallery_path)
-
-    light_template_to_render = light_templates.get_template("gallery-index.html")
-
-    html = light_template_to_render.render(
-        settings=settings,
-        gallery=gallery_settings,
-        Image=Image,
-        Video=Video,
-        Audio=Audio,
-        link=gallery_light_path,
-        name=gallery_path.split("/", 1)[-1],
-    ).encode("Utf-8")
-
-    open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
-
-    if gallery_settings.get("password") or settings.get("password"):
-        light_templates.get_template("form.html")
-        html = encrypt(
-            password, light_templates, gallery_light_path, settings, gallery_settings
-        )
-
-        open(Path("build").joinpath(gallery_light_path, "index.html"), "wb").write(html)
+    __build_gallery(
+        settings, gallery_settings, gallery_path, gallery_light_path, light_templates
+    )
 
 
 def build_index(
