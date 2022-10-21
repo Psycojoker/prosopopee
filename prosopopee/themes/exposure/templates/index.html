@@ -36,7 +36,8 @@
         <div class="gallery-title">
           <h2>{{ gallery.title }}</h2>
           {% if gallery.sub_title %}<h3>{{ gallery.sub_title }}</h3>{% endif %}
-          {% if settings.show_date and gallery.date %}<div class="gallery-datetime">{{ gallery.date|local_date("dd MMMM yyyy") }} - {{ gallery.date_end|local_date("dd MMMM yyyy") }}</div>{% endif %}
+          {% if settings.show_date and gallery.date and gallery.date_end %}<div class="gallery-datetime">{{ gallery.date|local_date("dd MMMM yyyy") }} - {{ gallery.date_end|local_date("dd MMMM yyyy") }}</div>{% endif %}
+          {% if settings.show_date and gallery.date and not gallery.date_end %}<div class="gallery-datetime">{{ gallery.date|local_date("dd MMMM yyyy") }}</div>{% endif %}
           {% if gallery.tags %}<div class="gallery-tag">IN {% for tag in gallery.tags -%} <span> {{ tag }}</span> {% endfor -%}</div>{% endif %}
         </div>
       </a>
