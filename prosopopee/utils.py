@@ -66,10 +66,11 @@ def rfc822(date):
 
 def load_settings(folder):
     try:
+        set_yaml = yaml.YAML(typ='safe', pure=True)
         with open(
             Path(".").joinpath(folder, "settings.yaml").abspath(), "r"
         ) as settings:
-            gallery_settings = yaml.safe_load(settings.read())
+            gallery_settings = set_yaml.load(settings.read())
     except (yaml.error.MarkedYAMLError, yaml.YAMLError) as exc:
         msg = "There is something wrong in %s/settings.yaml" % folder
         if isinstance(exc, yaml.error.MarkedYAMLError):
