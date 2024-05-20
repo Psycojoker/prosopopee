@@ -1,6 +1,6 @@
 Babel
 jinja2
-path.py
+path
 ruamel.yaml
 future
 pillow>=6
