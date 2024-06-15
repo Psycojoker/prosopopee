@@ -1,6 +1,6 @@
 # Prosopopee[flex]
 
-A fork of [Prosopopee](https://github.com/Psycojoker/prosopopee/) with the intention of improving flexibility in site structure and presentation.
+A fork of [Prosopopee](https://github.com/Psycojoker/prosopopee/) with the intention of improving flexibility in site structure and presentation - primarily to allow custom content sections to be added on the root page.
 
 ---
 
