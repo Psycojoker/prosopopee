@@ -1,5 +1,5 @@
 Babel
-jinja2
+jinja2<3.1
 path
 ruamel.yaml
 future
