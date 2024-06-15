@@ -1,4 +1,4 @@
-# Prosopopee-flex
+# Prosopopee[flex]
 
 A fork of [Prosopopee](https://github.com/Psycojoker/prosopopee/) with the intention of improving flexibility in site structure and presentation.
 
