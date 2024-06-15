@@ -1,8 +1,8 @@
-<p align="center">
-<img src="logo.png">
-</p>
+# Prosopopee-flex
 
-# Prosopopee
+A fork of [Prosopopee](https://github.com/Psycojoker/prosopopee/) with the intention of improving flexibility in site structure and presentation.
+
+---
 
 Prosopopee. Static site generator for your story.
 
