@@ -482,7 +482,7 @@ def get_gallery_templates(
     theme_path = Path(__file__).parent.joinpath("themes", theme).exists()
 
     available_themes = theme, "', '".join(
-        Path(__file__).parent.joinpath("themes").listdir()
+        Path(__file__).parent.joinpath("themes").iterdir()
     )
 
     if not theme_path:
@@ -540,7 +540,7 @@ def process_directory(
 
     sub_galleries = [
         x
-        for x in Path(".").joinpath(gallery_path).listdir()
+        for x in Path(".").joinpath(gallery_path).iterdir()
         if x.joinpath("settings.yaml").exists()
     ]
 
@@ -758,7 +758,7 @@ def main():
     front_page_galleries_cover = []
 
     galleries_dirs = [
-        x for x in Path(".").listdir() if x.joinpath("settings.yaml").exists()
+        x for x in Path(".").iterdir() if x.joinpath("settings.yaml").exists()
     ]
     includes = [x for x in settings["include"] if Path(".").joinpath(x).exists()]
 
@@ -828,7 +828,6 @@ def main():
     theme = settings["settings"].get("theme", "exposure")
     date_locale = settings["settings"].get("date_locale")
     templates = get_gallery_templates(theme, date_locale=date_locale)
-    templates.add_extension("jinja2.ext.with_")
 
     if Path("custom.js").exists():
         shutil.copy(Path("custom.js"), Path(".").joinpath("build", "", "static", "js"))
