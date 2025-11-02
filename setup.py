@@ -31,4 +31,5 @@ setup(
             "themes/*/templates/section/*.html",
         ],
     },
+    python_requires=">=3.12",
 )

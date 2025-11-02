@@ -68,7 +68,7 @@ def load_settings(folder):
     try:
         set_yaml = yaml.YAML(typ='safe', pure=True)
         with open(
-            Path(".").joinpath(folder, "settings.yaml").abspath(), "r"
+            Path(".").joinpath(folder, "settings.yaml").absolute(), "r"
         ) as settings:
             gallery_settings = set_yaml.load(settings.read())
     except (yaml.error.MarkedYAMLError, yaml.YAMLError) as exc:
